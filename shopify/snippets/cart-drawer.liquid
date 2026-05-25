@@ -73,9 +73,18 @@
               <!-- Price & Quantity row -->
               <div class="item-price-row">
                 <span class="item-price">{{ item.final_line_price | money }}</span>
-                {%- if item.quantity > 1 -%}
-                  <span class="item-quantity">x{{ item.quantity }}</span>
-                {%- endif -%}
+                
+                <div class="qty-selector">
+                  <button type="button" class="qty-btn minus" data-qty-change="-1">-</button>
+                  <input
+                    type="number"
+                    value="{{ item.quantity }}"
+                    min="0"
+                    class="qty-input"
+                    data-key="{{ item.key }}"
+                  >
+                  <button type="button" class="qty-btn plus" data-qty-change="1">+</button>
+                </div>
               </div>
             </div>
 

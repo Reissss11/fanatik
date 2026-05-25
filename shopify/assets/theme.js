@@ -4,6 +4,7 @@
 
 document.addEventListener('DOMContentLoaded', () => {
   initThemeToggler();
+  initQuantitySelectors();
   initSlideshows();
   initPredictiveSearch();
   initCartDrawer();
@@ -231,12 +232,9 @@ function initCartDrawer() {
     productForm.addEventListener('submit', (e) => {
       e.preventDefault();
       
-      const formData = new FormData(productForm);
-      
-      fetch(window.routes.cart_add_url, {
+      fetch('/cart/add.js', {
         method: 'POST',
-        body: formData,
-        headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        body: formData
       })
       .then(response => response.json())
       .then(item => {
@@ -336,7 +334,17 @@ function reloadCartAndRender() {
                 ${patchesHtml}
                 <div class="item-price-row">
                   <span class="item-price">${formatShopCurrency(item.final_line_price)}</span>
-                  ${item.quantity > 1 ? `<span class="item-quantity">x${item.quantity}</span>` : ''}
+                  <div class="qty-selector">
+                    <button type="button" class="qty-btn minus" data-qty-change="-1">-</button>
+                    <input
+                      type="number"
+                      value="${item.quantity}"
+                      min="0"
+                      class="qty-input"
+                      data-key="${item.key}"
+                    >
+                    <button type="button" class="qty-btn plus" data-qty-change="1">+</button>
+                  </div>
                 </div>
               </div>
               <button class="remove-btn" data-key="${item.key}" aria-label="Remover artigo">
@@ -372,7 +380,7 @@ function reloadCartAndRender() {
 }
 
 function updateCartItemQuantity(key, quantity) {
-  fetch(window.routes.cart_change_url, {
+  fetch('/cart/change.js', {
     method: 'POST',
     body: JSON.stringify({ id: key, quantity: quantity }),
     headers: {
@@ -395,6 +403,46 @@ function updateCartItemQuantity(key, quantity) {
 
 function formatShopCurrency(cents) {
   return new Intl.NumberFormat('pt-PT', { style: 'currency', currency: 'EUR' }).format(cents / 100.0);
+}
+
+/* --------------------------------------------------------------------------
+   4b. Dynamic Quantity Selector Event Listeners
+   -------------------------------------------------------------------------- */
+function initQuantitySelectors() {
+  // 1. Handle Plus and Minus click events (Event Delegation)
+  document.body.addEventListener('click', (e) => {
+    const qtyBtn = e.target.closest('.qty-btn');
+    if (!qtyBtn) return;
+
+    const parent = qtyBtn.closest('.qty-selector');
+    const input = parent ? parent.querySelector('.qty-input') : null;
+    if (!input) return;
+
+    const currentVal = parseInt(input.value) || 0;
+    const change = parseInt(qtyBtn.getAttribute('data-qty-change')) || 0;
+    const newVal = Math.max(0, currentVal + change);
+
+    input.value = newVal;
+
+    const key = input.getAttribute('data-key');
+    updateCartItemQuantity(key, newVal);
+  });
+
+  // 2. Handle manual number inputs/typing (Event Delegation)
+  document.body.addEventListener('change', (e) => {
+    const input = e.target.closest('.qty-input');
+    if (!input) return;
+
+    const val = parseInt(input.value);
+    if (isNaN(val) || val < 0) {
+      // Revert or default to 0 if invalid
+      input.value = 0;
+      return;
+    }
+
+    const key = input.getAttribute('data-key');
+    updateCartItemQuantity(key, val);
+  });
 }
 
 /* --------------------------------------------------------------------------

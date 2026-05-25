@@ -19,8 +19,12 @@
         {%- for product in featured_collection.products limit: section.settings.products_to_show -%}
           {% render 'product-card', card_product: product %}
         {%- endfor -%}
+      {%- elsif collections.all.products.size > 0 -%}
+        {%- for product in collections.all.products limit: section.settings.products_to_show -%}
+          {% render 'product-card', card_product: product %}
+        {%- endfor -%}
       {%- else -%}
-        <!-- Show 4 placeholder product cards if collection is empty -->
+        <!-- Show 4 placeholder product cards if collection and catalog are empty -->
         {%- for i in (1..4) -%}
           <div class="jersey-card placeholder-card">
             <div class="jersey-image-container">
