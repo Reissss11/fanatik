@@ -1,0 +1,47 @@
+{
+  "name": "Homepage",
+  "sections": {
+    "slideshow": {
+      "type": "slideshow",
+      "blocks": {
+        "slide_1": {
+          "type": "slide",
+          "settings": {
+            "subheading": "NOVIDADES DA TEMPORADA",
+            "heading": "As Nossas Camisolas Oficialmente Fanáticas",
+            "button_label": "Ver Catálogo",
+            "button_link": "/collections/all"
+          }
+        }
+      },
+      "block_order": [
+        "slide_1"
+      ],
+      "settings": {
+        "autoplay": true,
+        "autoplay_speed": 5
+      }
+    },
+    "featured_popular": {
+      "type": "featured-collection",
+      "settings": {
+        "title": "Mais Procurados",
+        "products_to_show": 8,
+        "view_all_label": "Ver Tudo"
+      }
+    },
+    "featured_new": {
+      "type": "featured-collection",
+      "settings": {
+        "title": "Novidades",
+        "products_to_show": 8,
+        "view_all_label": "Ver Tudo"
+      }
+    }
+  },
+  "order": [
+    "slideshow",
+    "featured_popular",
+    "featured_new"
+  ]
+}

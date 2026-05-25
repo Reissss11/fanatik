@@ -1,0 +1,28 @@
+{
+  "current": {
+    "sections": {
+      "header": {
+        "type": "header",
+        "settings": {}
+      },
+      "footer": {
+        "type": "footer",
+        "settings": {}
+      }
+    },
+    "settings": {
+      "color_bg_light": "#ffffff",
+      "color_text_light": "#1a1a1a",
+      "color_surface_light": "#ffffff",
+      "color_border_light": "#e5e5e5",
+      "color_bg_dark": "#121212",
+      "color_text_dark": "#ffffff",
+      "color_surface_dark": "#1e1e1e",
+      "color_border_dark": "#333333",
+      "color_primary": "#000000",
+      "color_accent": "#E11931",
+      "social_instagram_link": "https://www.instagram.com/fanatik_jersey/",
+      "social_tiktok_link": "https://www.tiktok.com/@drible.wear"
+    }
+  }
+}

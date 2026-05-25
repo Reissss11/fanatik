@@ -1,0 +1,85 @@
+<div class="jersey-section-wrapper">
+  <section class="jersey-section">
+    <div class="section-header">
+      <h2>{{ section.settings.title | escape }}</h2>
+      {%- if section.settings.collection != blank -%}
+        <a href="{{ section.settings.collection.url }}" class="view-all-link">
+          {{ section.settings.view_all_label | escape }}
+        </a>
+      {%- else -%}
+        <a href="/collections/all" class="view-all-link">
+          {{ section.settings.view_all_label | escape }}
+        </a>
+      {%- endif -%}
+    </div>
+
+    <div class="horizontal-scroll-container">
+      {%- assign featured_collection = section.settings.collection -%}
+      {%- if featured_collection != blank and featured_collection.products.size > 0 -%}
+        {%- for product in featured_collection.products limit: section.settings.products_to_show -%}
+          {% render 'product-card', card_product: product %}
+        {%- endfor -%}
+      {%- else -%}
+        <!-- Show 4 placeholder product cards if collection is empty -->
+        {%- for i in (1..4) -%}
+          <div class="jersey-card placeholder-card">
+            <div class="jersey-image-container">
+              <div class="placeholder-svg-wrapper">
+                {{ 'product-' | append: i | placeholder_svg_tag: 'placeholder-svg' }}
+              </div>
+            </div>
+            <div class="jersey-info">
+              <span class="jersey-season">Temporada 26/27</span>
+              <h3 class="jersey-team">Camisola Exemplo {{ i }}</h3>
+              <div class="price-row">
+                <span class="price-val">59,90 €</span>
+              </div>
+            </div>
+          </div>
+        {%- endfor -%}
+      {%- endif -%}
+    </div>
+  </section>
+</div>
+
+{% schema %}
+{
+  "name": "Coleção em Destaque",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Título da Secção",
+      "default": "Mais Procurados"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Selecionar Coleção"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "min": 4,
+      "max": 12,
+      "step": 1,
+      "label": "Produtos a Mostrar",
+      "default": 8
+    },
+    {
+      "type": "text",
+      "id": "view_all_label",
+      "label": "Etiqueta 'Ver Tudo'",
+      "default": "Ver Tudo"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Coleção em Destaque",
+      "settings": {
+        "title": "Mais Procurados"
+      }
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,15 @@
+{
+  "name": "Collections Directory",
+  "sections": {
+    "main": {
+      "type": "featured-collection",
+      "settings": {
+        "title": "Todas as Coleções",
+        "view_all_label": "Ver Catálogo"
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

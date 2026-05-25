@@ -1,0 +1,129 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "FanatikJersey Theme",
+    "theme_version": "1.0.0",
+    "theme_author": "Antigravity AI",
+    "theme_documentation_url": "https://github.com/Reissss11/DribleWear",
+    "theme_support_url": "https://github.com/Reissss11/DribleWear"
+  },
+  {
+    "name": "Cores",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Esquema Claro (Light Mode)"
+      },
+      {
+        "type": "color",
+        "id": "color_bg_light",
+        "label": "Cor de Fundo",
+        "default": "#ffffff"
+      },
+      {
+        "type": "color",
+        "id": "color_text_light",
+        "label": "Cor do Texto",
+        "default": "#1a1a1a"
+      },
+      {
+        "type": "color",
+        "id": "color_surface_light",
+        "label": "Cor da Superfície (Cards/Dropdowns)",
+        "default": "#ffffff"
+      },
+      {
+        "type": "color",
+        "id": "color_border_light",
+        "label": "Cor das Bordas",
+        "default": "#e5e5e5"
+      },
+      {
+        "type": "header",
+        "content": "Esquema Escuro (Dark Mode)"
+      },
+      {
+        "type": "color",
+        "id": "color_bg_dark",
+        "label": "Cor de Fundo",
+        "default": "#121212"
+      },
+      {
+        "type": "color",
+        "id": "color_text_dark",
+        "label": "Cor do Texto",
+        "default": "#ffffff"
+      },
+      {
+        "type": "color",
+        "id": "color_surface_dark",
+        "label": "Cor da Superfície (Cards/Dropdowns)",
+        "default": "#1e1e1e"
+      },
+      {
+        "type": "color",
+        "id": "color_border_dark",
+        "label": "Cor das Bordas",
+        "default": "#333333"
+      },
+      {
+        "type": "header",
+        "content": "Cores Globais"
+      },
+      {
+        "type": "color",
+        "id": "color_primary",
+        "label": "Cor Primária",
+        "default": "#000000"
+      },
+      {
+        "type": "color",
+        "id": "color_accent",
+        "label": "Cor de Destaque (Accent)",
+        "default": "#E11931"
+      }
+    ]
+  },
+  {
+    "name": "Logótipo e Favicon",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "logo",
+        "label": "Logótipo Principal"
+      },
+      {
+        "type": "image_picker",
+        "id": "favicon",
+        "label": "Favicon do Site"
+      }
+    ]
+  },
+  {
+    "name": "Redes Sociais",
+    "settings": [
+      {
+        "type": "text",
+        "id": "social_instagram_link",
+        "label": "Link do Instagram",
+        "default": "https://www.instagram.com/fanatik_jersey/"
+      },
+      {
+        "type": "text",
+        "id": "social_tiktok_link",
+        "label": "Link do TikTok",
+        "default": "https://www.tiktok.com/@drible.wear"
+      },
+      {
+        "type": "text",
+        "id": "social_facebook_link",
+        "label": "Link do Facebook"
+      },
+      {
+        "type": "text",
+        "id": "social_twitter_link",
+        "label": "Link do Twitter/X"
+      }
+    ]
+  }
+]

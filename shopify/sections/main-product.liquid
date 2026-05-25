@@ -1,0 +1,167 @@
+<div class="jersey-details-container" id="MainProduct-{{ section.id }}" data-section="{{ section.id }}">
+  <a href="/collections/all" class="back-link">← Voltar</a>
+
+  <div class="jersey-content">
+    <!-- Left: Thumbnails -->
+    <div class="thumbnails-column">
+      {%- for media in product.media -%}
+        <div
+          class="thumbnail {% if forloop.first %}active{% endif %}"
+          data-media-id="{{ media.id }}"
+          data-image-url="{{ media | image_url: width: 800 }}"
+        >
+          <img src="{{ media | image_url: width: 100, height: 100, crop: 'center' }}" alt="{{ media.alt | escape }}" loading="lazy" width="80" height="80">
+        </div>
+      {%- endfor -%}
+    </div>
+
+    <!-- Middle: Main Image -->
+    <div class="main-image-column" id="MainImageColumn">
+      {%- if product.selected_or_first_available_variant.featured_media != blank -%}
+        {%- assign main_media = product.selected_or_first_available_variant.featured_media -%}
+      {%- else -%}
+        {%- assign main_media = product.featured_media -%}
+      {%- endif -%}
+
+      <div class="image-wrapper" id="MainImageWrapper">
+        {%- if main_media != blank -%}
+          <img
+            src="{{ main_media | image_url: width: 800 }}"
+            alt="{{ product.title | escape }} Main"
+            class="main-image"
+            id="ProductMainImage"
+            width="600"
+            height="600"
+          >
+        {%- else -%}
+          <div class="no-image">Sem Imagem</div>
+        {%- endif -%}
+      </div>
+
+      <button class="zoom-toggle-btn" id="ZoomToggleBtn" title="Ativar Zoom">🔍</button>
+    </div>
+
+    <!-- Right: Info and Cart Form -->
+    <div class="info-column">
+      <h1 class="jersey-title">{{ product.title | escape }}</h1>
+      <h2 class="jersey-subtitle">
+        {%- assign season_value = product.metafields.custom.season -%}
+        {%- if season_value != blank -%}
+          {{ season_value }}
+        {%- else -%}
+          {{ product.vendor }}
+        {%- endif -%}
+        - {{ product.type | default: 'Camisola' }}
+      </h2>
+
+      <!-- Price -->
+      <div class="price-container">
+        {%- if product.compare_at_price > product.price -%}
+          <span class="original-price" id="ComparePrice">{{ product.compare_at_price | money }}</span>
+        {%- endif -%}
+        <span class="current-price" id="ProductPrice" data-base-price="{{ product.price | divided_by: 100.0 }}">
+          {{ product.price | money }}
+        </span>
+      </div>
+
+      <p class="description">{{ product.description }}</p>
+
+      <!-- Cart Add Form -->
+      {%- form 'product', product, id: 'ProductForm', class: 'product-form' -%}
+        <!-- Variant Selectors -->
+        <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}" id="ProductVariantId">
+
+        {%- if product.variants.size > 1 -%}
+          <div class="size-selector">
+            <label for="SizeSelect">{{ 'product.size' | t }}:</label>
+            <select name="options[Tamanho]" id="SizeSelect" class="size-select">
+              {%- for variant in product.variants -%}
+                <option
+                  value="{{ variant.title | escape }}"
+                  data-variant-id="{{ variant.id }}"
+                  data-price="{{ variant.price | divided_by: 100.0 }}"
+                  {% if variant.compare_at_price %}data-compare-price="{{ variant.compare_at_price | divided_by: 100.0 }}"{% endif %}
+                  {% if variant == product.selected_or_first_available_variant %}selected="selected"{% endif %}
+                  {% unless variant.available %}disabled="disabled"{% endunless %}
+                >
+                  {{ variant.title | escape }} {%- unless variant.available %} (Esgotado){% endunless -%}
+                </option>
+              {%- endfor -%}
+            </select>
+          </div>
+        {%- endif -%}
+
+        <!-- Customizations (Line Item Properties) -->
+        <div class="customization-section">
+          <h3>{{ 'product.personalization' | t }}</h3>
+          <div class="custom-input-group">
+            <input
+              type="text"
+              name="properties[Nome]"
+              placeholder="{{ 'product.custom_name' | t }}"
+              class="custom-input"
+              id="CustomNameInput"
+              maxlength="20"
+              autocomplete="off"
+            >
+            <input
+              type="text"
+              name="properties[Número]"
+              placeholder="{{ 'product.custom_number' | t }}"
+              class="custom-input number"
+              id="CustomNumberInput"
+              maxlength="3"
+              autocomplete="off"
+            >
+          </div>
+
+          <h3>{{ 'product.patches' | t }}</h3>
+          <div class="patches-container">
+            {%- assign patch_options = "Liga, Liga Europa, Liga dos Campeões, Campeão da Liga" | split: ", " -%}
+            {%- for patch in patch_options -%}
+              <label class="patch-checkbox">
+                <input
+                  type="checkbox"
+                  name="properties[Patch - {{ patch }}]"
+                  value="Sim"
+                  class="patch-checkbox-input"
+                  data-patch-name="{{ patch }}"
+                >
+                <span>{{ patch }}</span>
+              </label>
+            {%- endfor -%}
+          </div>
+        </div>
+
+        <!-- Add to Cart Button -->
+        <button
+          type="submit"
+          name="add"
+          class="add-to-cart-btn"
+          id="AddToCartBtn"
+          {% unless product.selected_or_first_available_variant.available %}disabled="disabled"{% endunless %}
+        >
+          <span>
+            {%- if product.selected_or_first_available_variant.available -%}
+              {{ 'product.add_to_cart' | t }}
+            {%- else -%}
+              {{ 'product.out_of_stock' | t }}
+            {%- endif -%}
+          </span>
+          <span class="custom-price-addition" id="SurchargeText" style="display: none;"></span>
+        </button>
+      {%- endform -%}
+
+      <div class="details-extra">
+        <p><strong>{{ 'product.main_color' | t }}:</strong> {{ product.metafields.custom.main_color | default: 'Padrão' }}</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Detalhes do Produto",
+  "settings": []
+}
+{% endschema %}

@@ -1,0 +1,160 @@
+<div class="slideshow-section slideshow-{{ section.id }}" data-autoplay="{{ section.settings.autoplay }}" data-speed="{{ section.settings.autoplay_speed | times: 1000 }}">
+  <div class="slideshow-container">
+    {%- if section.blocks.size > 0 -%}
+      {%- for block in section.blocks -%}
+        <div class="slide {% if forloop.first %}active{% endif %}" {{ block.shopify_attributes }} data-index="{{ forloop.index0 }}">
+          {%- if block.settings.image != blank -%}
+            <picture>
+              {%- if block.settings.image_mobile != blank -%}
+                <source media="(max-width: 768px)" srcset="{{ block.settings.image_mobile | image_url: width: 768 }}">
+              {%- endif -%}
+              <img
+                src="{{ block.settings.image | image_url: width: 1920 }}"
+                alt="{{ block.settings.image.alt | escape }}"
+                class="slide-img"
+                loading="{% if forloop.first %}eager{% else %}lazy{% endif %}"
+                width="{{ block.settings.image.width }}"
+                height="{{ block.settings.image.height }}"
+              >
+            </picture>
+          {%- else -%}
+            <!-- Fallback generic banner SVG if no image is uploaded -->
+            <div class="placeholder-svg-wrapper">
+              {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg' }}
+            </div>
+          {%- endif -%}
+
+          {%- if block.settings.heading != blank or block.settings.subheading != blank -%}
+            <div class="slide-content-overlay align-{{ block.settings.content_align }}">
+              <div class="slide-content-box">
+                {%- if block.settings.subheading != blank -%}
+                  <span class="slide-subheading">{{ block.settings.subheading | escape }}</span>
+                {%- endif -%}
+                {%- if block.settings.heading != blank -%}
+                  <h2 class="slide-heading">{{ block.settings.heading | escape }}</h2>
+                {%- endif -%}
+                {%- if block.settings.button_label != blank and block.settings.button_link != blank -%}
+                  <a href="{{ block.settings.button_link }}" class="slide-btn">
+                    {{ block.settings.button_label | escape }}
+                  </a>
+                {%- endif -%}
+              </div>
+            </div>
+          {%- endif -%}
+        </div>
+      {%- endfor -%}
+    {%- else -%}
+      <!-- Fallback slideshow card -->
+      <div class="slide active">
+        <div class="placeholder-svg-wrapper">
+          {{ 'lifestyle-2' | placeholder_svg_tag: 'placeholder-svg' }}
+        </div>
+      </div>
+    {%- endif -%}
+
+    {%- if section.blocks.size > 1 -%}
+      <!-- Navigation controls -->
+      <button class="slide-arrow prev-arrow" aria-label="Anterior">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="15 18 9 12 15 6"></polyline>
+        </svg>
+      </button>
+      <button class="slide-arrow next-arrow" aria-label="Seguinte">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="9 18 15 12 9 6"></polyline>
+        </svg>
+      </button>
+
+      <!-- Dots Indicators -->
+      <div class="slide-dots">
+        {%- for block in section.blocks -%}
+          <button class="slide-dot {% if forloop.first %}active{% endif %}" data-index="{{ forloop.index0 }}" aria-label="Ver slide {{ forloop.index }}"></button>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Carrossel de Slides",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "autoplay",
+      "label": "Auto-rotação de Slides",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "autoplay_speed",
+      "min": 3,
+      "max": 10,
+      "step": 1,
+      "unit": "s",
+      "label": "Mudar a cada",
+      "default": 5
+    }
+  ],
+  "blocks": [
+    {
+      "type": "slide",
+      "name": "Slide",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Imagem para Desktop (Recomendado 1920x800px)"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_mobile",
+          "label": "Imagem para Telemóvel (Opcional)"
+        },
+        {
+          "type": "text",
+          "id": "subheading",
+          "label": "Subtítulo",
+          "default": "NOVIDADES DA TEMPORADA"
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Título Principal",
+          "default": "As Nossas Camisolas Oficialmente Fanáticas"
+        },
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "Etiqueta do Botão",
+          "default": "Ver Coleção"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "Link do Botão"
+        },
+        {
+          "type": "select",
+          "id": "content_align",
+          "label": "Alinhamento do Conteúdo",
+          "options": [
+            { "value": "left", "label": "Esquerda" },
+            { "value": "center", "label": "Centro" },
+            { "value": "right", "label": "Direita" }
+          ],
+          "default": "center"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Carrossel de Slides",
+      "blocks": [
+        { "type": "slide" }
+      ]
+    }
+  ]
+}
+{% endschema %}

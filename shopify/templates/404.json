@@ -1,0 +1,12 @@
+{
+  "name": "Page Not Found",
+  "sections": {
+    "main": {
+      "type": "main-cart",
+      "settings": {}
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

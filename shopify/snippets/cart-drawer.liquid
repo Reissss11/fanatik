@@ -1,0 +1,135 @@
+<!-- Slideout Cart Drawer Container -->
+<div class="cart-overlay" id="CartDrawerOverlay" style="display: none;">
+  <div class="cart-drawer" id="CartDrawerElement">
+    <!-- Header -->
+    <div class="cart-header">
+      <h2>Carrinho (<span id="CartDrawerCount">{{ cart.item_count }}</span>)</h2>
+      <button class="close-btn" id="CartDrawerCloseBtn" aria-label="Fechar carrinho">✕</button>
+    </div>
+
+    <!-- Items Container -->
+    <div class="cart-items" id="CartDrawerItems">
+      {%- if cart.item_count == 0 -%}
+        <div class="empty-cart">
+          <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="empty-icon">
+            <circle cx="9" cy="21" r="1"></circle>
+            <circle cx="20" cy="21" r="1"></circle>
+            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+          </svg>
+          <p>{{ 'general.cart.empty' | t }}</p>
+          <button class="start-shopping-btn" id="CartDrawerStartShoppingBtn">Começar a comprar</button>
+        </div>
+      {%- else -%}
+        {%- for item in cart.items -%}
+          <div class="cart-item" data-key="{{ item.key }}">
+            <!-- Item Image -->
+            <div class="cart-item-image">
+              {%- if item.image -%}
+                <img src="{{ item.image | image_url: width: 120 }}" alt="{{ item.product.title | escape }}">
+              {%- endif -%}
+            </div>
+
+            <!-- Item Info -->
+            <div class="cart-item-info">
+              <h4>{{ item.product.title | escape }}</h4>
+              
+              <!-- Meta (Size / Season) -->
+              <p class="item-meta">
+                {%- unless item.product.has_only_default_variant -%}
+                  Tamanho: {{ item.variant.title | escape }}
+                {%- endunless -%}
+                {%- assign season_value = item.product.metafields.custom.season -%}
+                {%- if season_value != blank -%}
+                  | {{ season_value }}
+                {%- endif -%}
+              </p>
+
+              <!-- Personalization properties -->
+              {%- assign custom_name = item.properties['Nome'] -%}
+              {%- assign custom_number = item.properties['Número'] -%}
+              {%- if custom_name != blank or custom_number != blank -%}
+                <p class="item-customization">
+                  Personalização: {{ custom_name }} {{ custom_number }} (+3.00€)
+                </p>
+              {%- endif -%}
+
+              <!-- Patches list -->
+              {%- assign patches_shown = false -%}
+              {%- for property in item.properties -%}
+                {%- if property.first contains 'Patch -' and property.last == 'Sim' -%}
+                  {%- if patches_shown == false -%}
+                    <div class="item-patches-list">
+                    {%- assign patches_shown = true -%}
+                  {%- endif -%}
+                  <span class="item-patch">
+                    {{ property.first | remove: 'Patch -' }} (+2.00€)
+                  </span>
+                {%- endif -%}
+              {%- endfor -%}
+              {%- if patches_shown -%}
+                </div>
+              {%- endif -%}
+
+              <!-- Price & Quantity row -->
+              <div class="item-price-row">
+                <span class="item-price">{{ item.final_line_price | money }}</span>
+                {%- if item.quantity > 1 -%}
+                  <span class="item-quantity">x{{ item.quantity }}</span>
+                {%- endif -%}
+              </div>
+            </div>
+
+            <!-- Remove Button -->
+            <button
+              class="remove-btn"
+              data-key="{{ item.key }}"
+              aria-label="Remover artigo"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="3 6 5 6 21 6"></polyline>
+                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+              </svg>
+            </button>
+          </div>
+        {%- endfor -%}
+      {%- endif -%}
+    </div>
+
+    <!-- Footer Summary (Only visible if items in cart) -->
+    <div class="cart-footer" id="CartDrawerFooter" {% if cart.item_count == 0 %}style="display: none;"{% endif %}>
+      {%- if cart.item_count >= 3 -%}
+        <!-- Multi-item discount notice -->
+        <div class="discount-message" id="CartDrawerDiscountMessage">
+          🎉 Desconto aplicado: Poupa na compra conjunta das tuas camisolas!
+        </div>
+      {%- endif -%}
+
+      <div class="summary-row">
+        <span>Subtotal</span>
+        <span id="CartDrawerSubtotal">{{ cart.total_price | money }}</span>
+      </div>
+
+      {%- if cart.cart_level_discount_applications.size > 0 -%}
+        <div id="CartDrawerDiscountsContainer">
+          {%- for discount in cart.cart_level_discount_applications -%}
+            <div class="summary-row discount">
+              <span>Desconto ({{ discount.title }})</span>
+              <span>-{{ discount.total_allocated_amount | money }}</span>
+            </div>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+
+      <div class="summary-row total">
+        <span>Total</span>
+        <span id="CartDrawerTotal">{{ cart.total_price | money }}</span>
+      </div>
+
+      <a href="/checkout" class="checkout-link">
+        <button class="checkout-btn" id="CartDrawerCheckoutBtn">
+          Finalizar Compra
+        </button>
+      </a>
+    </div>
+  </div>
+</div>

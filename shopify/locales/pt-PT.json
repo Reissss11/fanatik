@@ -1,0 +1,45 @@
+{
+  "general": {
+    "search": {
+      "placeholder": "Procurar camisolas...",
+      "submit": "Procurar",
+      "results_count": {
+        "one": "1 resultado",
+        "other": "{{ count }} resultados"
+      },
+      "view_all": "Ver todos os resultados",
+      "no_results": "Não foram encontrados resultados."
+    },
+    "cart": {
+      "title": "Carrinho",
+      "empty": "O seu carrinho está vazio",
+      "start_shopping": "Começar a comprar",
+      "subtotal": "Subtotal",
+      "total": "Total",
+      "discount": "Desconto",
+      "checkout": "Finalizar Compra",
+      "login_required": "Login para Finalizar",
+      "remove": "Remover",
+      "item_added": "Artigo adicionado ao carrinho!",
+      "discount_applied": "Desconto aplicado: -{{ discount }}€ por artigo!"
+    }
+  },
+  "catalog": {
+    "filters": "Filtros",
+    "clear_all": "Limpar Filtros",
+    "items_per_page": "Itens por página:",
+    "no_results": "Não foram encontrados resultados.",
+    "previous": "Anterior",
+    "next": "Próximo"
+  },
+  "product": {
+    "add_to_cart": "Adicionar ao Carrinho",
+    "out_of_stock": "Esgotado",
+    "size": "Tamanho",
+    "personalization": "Personalização (+3.00€)",
+    "custom_name": "Nome",
+    "custom_number": "Número",
+    "patches": "Patches (+2.00€ cada)",
+    "main_color": "Cor Principal"
+  }
+}

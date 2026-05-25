@@ -1,0 +1,115 @@
+<!doctype html>
+<html class="no-js" lang="{{ request.locale.iso_code }}" data-theme="light">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="theme-color" content="">
+    <link rel="canonical" href="{{ canonical_url }}">
+    <link rel="preconnect" href="https://cdn.shopify.com" crossorigin>
+
+    {%- if settings.favicon != blank -%}
+      <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 32, height: 32 }}">
+    {%- endif -%}
+
+    <title>
+      {{ page_title }}
+      {%- if current_tags %} &ndash; tagged "{{ current_tags | join: ', ' }}"{% endif -%}
+      {%- if current_page != 1 %} &ndash; Page {{ current_page }}{% endif -%}
+      {%- unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless -%}
+    </title>
+
+    {% if page_description %}
+      <meta name="description" content="{{ page_description | escape }}">
+    {% endif %}
+
+    {% render 'meta-tags' %}
+
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Pre-render Theme Toggler to Prevent Flashing (FOUC) -->
+    <script>
+      (function() {
+        const storedTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', storedTheme);
+      })();
+    </script>
+
+    <!-- Dynamic CSS Variables from Shopify Settings -->
+    <style>
+      :root {
+        --color-bg: {{ settings.color_bg_light | default: '#ffffff' }};
+        --color-text: {{ settings.color_text_light | default: '#1a1a1a' }};
+        --color-text-light: #707070;
+        --color-primary: {{ settings.color_primary | default: '#000000' }};
+        --color-secondary: #f3f3f3;
+        --color-accent: {{ settings.color_accent | default: '#E11931' }};
+        --color-border: {{ settings.color_border_light | default: '#e5e5e5' }};
+        --color-surface: {{ settings.color_surface_light | default: '#ffffff' }};
+        --color-surface-hover: #f9f9f9;
+        --color-primary-rgb: 0, 0, 0;
+        --font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        --card-bg: #ffffff;
+      }
+
+      [data-theme='dark'] {
+        --color-bg: {{ settings.color_bg_dark | default: '#121212' }};
+        --color-text: {{ settings.color_text_dark | default: '#ffffff' }};
+        --color-text-light: #a0a0a0;
+        --color-primary: {{ settings.color_primary_dark | default: '#ffffff' }};
+        --color-secondary: #1e1e1e;
+        --color-border: {{ settings.color_border_dark | default: '#333333' }};
+        --color-surface: {{ settings.color_surface_dark | default: '#1e1e1e' }};
+        --color-surface-hover: #2a2a2a;
+        --color-primary-rgb: 255, 255, 255;
+        --card-bg: #1e1e1e;
+      }
+    </style>
+
+    {{ content_for_header }}
+
+    <!-- Theme CSS -->
+    {{ 'theme.css' | asset_url | stylesheet_tag }}
+  </head>
+
+  <body>
+    <a class="skip-to-content-link button visually-hidden" href="#MainContent">
+      Voltar para o conteúdo
+    </a>
+
+    <!-- Header Section -->
+    {% section 'header' %}
+
+    <main id="MainContent" class="content-for-layout focus-none" role="main" tabindex="-1">
+      {{ content_for_layout }}
+    </main>
+
+    <!-- Footer Section -->
+    {% section 'footer' %}
+
+    <!-- Slideout Cart Drawer snippet -->
+    {% render 'cart-drawer' %}
+
+    <!-- JavaScript Variables passed from Liquid to theme.js -->
+    <script>
+      window.shopUrl = '{{ request.origin }}';
+      window.routes = {
+        cart_add_url: '{{ routes.cart_add_url }}',
+        cart_change_url: '{{ routes.cart_change_url }}',
+        cart_update_url: '{{ routes.cart_update_url }}',
+        cart_url: '{{ routes.cart_url }}',
+        predictive_search_url: '{{ routes.predictive_search_url }}'
+      };
+      window.cartStrings = {
+        error: `Erro ao atualizar carrinho. Tente novamente.`,
+        quantityError: `Quantidade limite excedida.`
+      };
+    </script>
+
+    <!-- Theme JS -->
+    <script src="{{ 'theme.js' | asset_url }}" defer="defer"></script>
+  </body>
+</html>

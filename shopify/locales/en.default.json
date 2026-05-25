@@ -1,0 +1,45 @@
+{
+  "general": {
+    "search": {
+      "placeholder": "Search jerseys...",
+      "submit": "Search",
+      "results_count": {
+        "one": "1 result",
+        "other": "{{ count }} results"
+      },
+      "view_all": "View all results",
+      "no_results": "No results found."
+    },
+    "cart": {
+      "title": "Cart",
+      "empty": "Your cart is empty",
+      "start_shopping": "Start Shopping",
+      "subtotal": "Subtotal",
+      "total": "Total",
+      "discount": "Discount",
+      "checkout": "Checkout",
+      "login_required": "Login to Checkout",
+      "remove": "Remove",
+      "item_added": "Item added to cart!",
+      "discount_applied": "Discount applied: -{{ discount }}€ per item!"
+    }
+  },
+  "catalog": {
+    "filters": "Filters",
+    "clear_all": "Clear Filters",
+    "items_per_page": "Items per page:",
+    "no_results": "No results found.",
+    "previous": "Previous",
+    "next": "Next"
+  },
+  "product": {
+    "add_to_cart": "Add to Cart",
+    "out_of_stock": "Out of stock",
+    "size": "Size",
+    "personalization": "Personalization (+3.00€)",
+    "custom_name": "Name",
+    "custom_number": "Number",
+    "patches": "Patches (+2.00€ each)",
+    "main_color": "Main Color"
+  }
+}

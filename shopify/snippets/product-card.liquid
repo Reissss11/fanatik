@@ -1,0 +1,78 @@
+{%- comment %}
+  Renders a product card.
+  Accepts:
+  - card_product: {Object} Product Liquid object (required)
+{% endcomment -%}
+
+{%- if card_product != blank -%}
+  <div class="jersey-card">
+    <a href="{{ card_product.url }}" class="jersey-card-link">
+      <!-- Image Container -->
+      <div class="jersey-image-container">
+        {%- if card_product.compare_at_price > card_product.price -%}
+          <!-- Promotion Tag -->
+          <span class="sale-badge">Promo</span>
+        {%- endif -%}
+
+        {%- if card_product.featured_media != blank -%}
+          <img
+            src="{{ card_product.featured_media | image_url: width: 400 }}"
+            alt="{{ card_product.featured_media.alt | escape }}"
+            loading="lazy"
+            class="jersey-img"
+            width="360"
+            height="360"
+          >
+          
+          <!-- Hover secondary image if available -->
+          {%- if card_product.media[1] != blank -%}
+            <img
+              src="{{ card_product.media[1] | image_url: width: 400 }}"
+              alt="{{ card_product.media[1].alt | escape }}"
+              loading="lazy"
+              class="jersey-img hover-img"
+              width="360"
+              height="360"
+            >
+          {%- endif -%}
+        {%- else -%}
+          <div class="placeholder-svg-wrapper">
+            {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+          </div>
+        {%- endif -%}
+      </div>
+
+      <!-- Info Details -->
+      <div class="jersey-info">
+        <!-- Season or Collection -->
+        <span class="jersey-season">
+          {%- assign season_value = card_product.metafields.custom.season -%}
+          {%- if season_value != blank -%}
+            {{ season_value }}
+          {%- else -%}
+            {%- for tag in card_product.tags -%}
+              {%- if tag contains '202' or tag contains '24/' or tag contains '25/' or tag contains '26/' -%}
+                {{ tag }}
+                {%- break -%}
+              {%- endif -%}
+            {%- endfor -%}
+          {%- endif -%}
+          {%- if season_value == blank -%}
+            {{ card_product.vendor }}
+          {%- endif -%}
+        </span>
+
+        <!-- Product Title (Team Name) -->
+        <h3 class="jersey-team">{{ card_product.title | escape }}</h3>
+
+        <!-- Price display -->
+        <div class="price-row">
+          {%- if card_product.compare_at_price > card_product.price -%}
+            <span class="price-old">{{ card_product.compare_at_price | money }}</span>
+          {%- endif -%}
+          <span class="price-val">{{ card_product.price | money }}</span>
+        </div>
+      </div>
+    </a>
+  </div>
+{%- endif -%}

@@ -1,0 +1,227 @@
+{%- liquid
+  assign default_limit = section.settings.products_per_page
+  assign limit = cart.attributes.pagination_limit | default: default_limit | plus: 0
+-%}
+
+{% paginate collection.products by limit %}
+<div class="catalog-page" id="MainCollectionContainer" data-id="{{ section.id }}">
+  <div class="catalog-container">
+    <!-- Mobile Filter Trigger -->
+    <button class="mobile-filter-btn" id="MobileFilterToggleBtn">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="4" y1="21" x2="4" y2="14"></line>
+        <line x1="4" y1="10" x2="4" y2="3"></line>
+        <line x1="12" y1="21" x2="12" y2="12"></line>
+        <line x1="12" y1="8" x2="12" y2="3"></line>
+        <line x1="20" y1="21" x2="20" y2="16"></line>
+        <line x1="20" y1="12" x2="20" y2="3"></line>
+        <line x1="1" y1="14" x2="7" y2="14"></line>
+        <line x1="9" y1="8" x2="15" y2="8"></line>
+        <line x1="17" y1="16" x2="23" y2="16"></line>
+      </svg>
+      <span>{{ 'catalog.filters' | t }}</span>
+    </button>
+
+    <!-- Sidebar Filters -->
+    <aside class="catalog-sidebar" id="CatalogSidebar">
+      <div class="sidebar-header-mobile">
+        <h2>{{ 'catalog.filters' | t }}</h2>
+        <button class="close-filters-btn" id="CloseFiltersBtn">✕</button>
+      </div>
+
+      <!-- Active Filters Summary (Chips) -->
+      {%- if collection.filters.size > 0 -%}
+        <div class="active-filters-summary">
+          {%- for filter in collection.filters -%}
+            {%- for value in filter.active_values -%}
+              <a href="{{ value.url_to_remove }}" class="active-filter-chip">
+                {{ value.label }} ✕
+              </a>
+            {%- endfor -%}
+            {%- if filter.type == "price_range" -%}
+              {%- if filter.min_value.value != blank or filter.max_value.value != blank -%}
+                <a href="{{ filter.url_to_remove }}" class="active-filter-chip">
+                  {%- if filter.min_value.value -%}{{ filter.min_value.value | money }}{%- else -%}0 €{%- endif -%} - 
+                  {%- if filter.max_value.value -%}{{ filter.max_value.value | money }}{%- else -%}Max{%- endif -%} ✕
+                </a>
+              {%- endif -%}
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+
+      <!-- Accordeon Filter Form -->
+      <form id="CollectionFiltersForm" class="filter-form">
+        <!-- Native Search inside collection -->
+        <div class="filter-dropdown" data-dropdown-name="search">
+          <button type="button" class="dropdown-trigger">
+            <span>Pesquisa</span>
+            <span class="dropdown-arrow">▼</span>
+          </button>
+          <div class="dropdown-content">
+            <div class="search-box">
+              <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+              <input
+                type="text"
+                name="q"
+                placeholder="Procurar..."
+                id="SidebarSearchInput"
+                value="{{ search.terms | escape }}"
+              >
+            </div>
+          </div>
+        </div>
+
+        {%- for filter in collection.filters -%}
+          <div class="filter-dropdown" data-dropdown-name="{{ filter.label | handleize }}">
+            <button type="button" class="dropdown-trigger">
+              <span>{{ filter.label }}</span>
+              {%- if filter.active_values.size > 0 -%}
+                <span class="active-count-badge">({{ filter.active_values.size }})</span>
+              {%- endif -%}
+              <span class="dropdown-arrow">▼</span>
+            </button>
+
+            <div class="dropdown-content">
+              {%- case filter.type -%}
+                {%- when 'boolean' or 'list' -%}
+                  <div class="filter-list">
+                    {%- for value in filter.values -%}
+                      <label class="filter-item-label {% if value.active %}active{% endif %}">
+                        <input
+                          type="checkbox"
+                          name="{{ value.param_name }}"
+                          value="{{ value.value }}"
+                          class="filter-checkbox"
+                          {% if value.active %}checked{% endif %}
+                          {% if value.count == 0 and value.active == false %}disabled{% endif %}
+                        >
+                        <span>{{ value.label }} ({{ value.count }})</span>
+                      </label>
+                    {%- endfor -%}
+                  </div>
+
+                {%- when 'price_range' -%}
+                  <div class="price-range-inputs">
+                    <div class="price-field">
+                      <span>Mínimo</span>
+                      <input
+                        name="{{ filter.min_value.param_name }}"
+                        id="Filter-{{ filter.label | escape }}-GTE"
+                        {%- if filter.min_value.value -%}
+                          value="{{ filter.min_value.value | money_without_currency | replace: ',', '' }}"
+                        {%- endif -%}
+                        type="number"
+                        placeholder="0"
+                        min="0"
+                        max="{{ filter.range_max | divided_by: 100.0 | ceil }}"
+                      >
+                    </div>
+                    <div class="price-field">
+                      <span>Máximo</span>
+                      <input
+                        name="{{ filter.max_value.param_name }}"
+                        id="Filter-{{ filter.label | escape }}-LTE"
+                        {%- if filter.max_value.value -%}
+                          value="{{ filter.max_value.value | money_without_currency | replace: ',', '' }}"
+                        {%- endif -%}
+                        type="number"
+                        placeholder="{{ filter.range_max | divided_by: 100.0 | ceil }}"
+                        min="0"
+                        max="{{ filter.range_max | divided_by: 100.0 | ceil }}"
+                      >
+                    </div>
+                  </div>
+              {%- endcase -%}
+            </div>
+          </div>
+        {%- endfor -%}
+      </form>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="catalog-content">
+      <div class="catalog-controls">
+        <h1 class="collection-title">{{ collection.title }}</h1>
+
+        <div class="pagination-limit">
+          <span>{{ 'catalog.items_per_page' | t }}</span>
+          <select class="limit-select" id="CatalogLimitSelector">
+            <option value="12" {% if limit == 12 %}selected{% endif %}>12</option>
+            <option value="24" {% if limit == 24 %}selected{% endif %}>24</option>
+            <option value="36" {% if limit == 36 %}selected{% endif %}>36</option>
+          </select>
+        </div>
+      </div>
+
+      {%- if collection.products.size == 0 -%}
+        <div class="no-results">
+          <h3>{{ 'catalog.no_results' | t }}</h3>
+          <a href="{{ collection.url }}" class="clear-filters-link-btn">
+            {{ 'catalog.clear_all' | t }}
+          </a>
+        </div>
+      {%- else -%}
+        <div class="catalog-grid">
+          {%- for product in collection.products -%}
+            {% render 'product-card', card_product: product %}
+          {%- endfor -%}
+        </div>
+
+        <!-- Pagination -->
+        {%- if paginate.pages > 1 -%}
+          <div class="pagination">
+            {%- if paginate.previous -%}
+              <a href="{{ paginate.previous.url }}" class="pagination-btn">
+                ◀ {{ 'catalog.previous' | t }}
+              </a>
+            {%- else -%}
+              <button class="pagination-btn" disabled>◀ {{ 'catalog.previous' | t }}</button>
+            {%- endif -%}
+
+            <div class="page-numbers">
+              {%- for part in paginate.parts -%}
+                {%- if part.is_link -%}
+                  <a href="{{ part.url }}" class="page-number">{{ part.title }}</a>
+                {%- else -%}
+                  <span class="page-number {% if part.title == paginate.current_page %}active{% endif %}">
+                    {{ part.title }}
+                  </span>
+                {%- endif -%}
+              {%- endfor -%}
+            </div>
+
+            {%- if paginate.next -%}
+              <a href="{{ paginate.next.url }}" class="pagination-btn">
+                {{ 'catalog.next' | t }} ▶
+              </a>
+            {%- else -%}
+              <button class="pagination-btn" disabled>{{ 'catalog.next' | t }} ▶</button>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+      {%- endif -%}
+    </main>
+  </div>
+</div>
+{% endpaginate %}
+
+{% schema %}
+{
+  "name": "Catálogo de Coleções",
+  "settings": [
+    {
+      "type": "range",
+      "id": "products_per_page",
+      "min": 8,
+      "max": 48,
+      "step": 4,
+      "label": "Produtos por Página (Padrão)",
+      "default": 12
+    }
+  ]
+}
+{% endschema %}
