@@ -7,9 +7,9 @@
         "slide_1": {
           "type": "slide",
           "settings": {
-            "subheading": "NOVIDADES DA TEMPORADA",
-            "heading": "As Nossas Camisolas Oficialmente Fanáticas",
-            "button_label": "Ver Catálogo",
+            "subheading": "",
+            "heading": "",
+            "button_label": "Comprar Agora",
             "button_link": "/collections/all"
           }
         }
