@@ -53,6 +53,7 @@
             value="{{ search.terms | escape }}"
             autocomplete="off"
           >
+          <button type="button" class="search-clear-btn" id="HeaderSearchClearBtn" style="display: none;" aria-label="Limpar pesquisa">✕</button>
           <button type="submit" class="search-submit" aria-label="{{ 'general.search.submit' | t }}">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <circle cx="11" cy="11" r="8"></circle>
@@ -104,8 +105,14 @@
           <circle cx="20" cy="21" r="1"></circle>
           <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
         </svg>
-        <span class="cart-badge {% if cart.item_count == 0 %}hidden{% endif %}" id="CartBadge">
-          {{ cart.item_count }}
+        {%- assign non_surcharge_count = 0 -%}
+        {%- for item in cart.items -%}
+          {%- if item.variant_id != 54006710763861 and item.variant_id != 54006710829397 -%}
+            {%- assign non_surcharge_count = non_surcharge_count | plus: item.quantity -%}
+          {%- endif -%}
+        {%- endfor -%}
+        <span class="cart-badge {% if non_surcharge_count == 0 %}hidden{% endif %}" id="CartBadge">
+          {{ non_surcharge_count }}
         </span>
       </button>
     </div>

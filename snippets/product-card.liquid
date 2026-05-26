@@ -68,9 +68,9 @@
         <!-- Price display -->
         <div class="price-row">
           {%- if card_product.compare_at_price > card_product.price -%}
-            <span class="price-old">{{ card_product.compare_at_price | money }}</span>
+            <span class="price-old">{{ card_product.compare_at_price | money | replace: "€", "" | strip | append: " €" }}</span>
           {%- endif -%}
-          <span class="price-val">{{ card_product.price | money }}</span>
+          <span class="price-val">{{ card_product.price | money | replace: "€", "" | strip | append: " €" }}</span>
         </div>
       </div>
     </a>

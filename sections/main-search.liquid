@@ -3,7 +3,7 @@
   assign limit = cart.attributes.pagination_limit | default: default_limit | plus: 0
 -%}
 
-{% paginate collection.products by limit %}
+{% paginate search.results by limit %}
 <div class="catalog-page" id="MainCollectionContainer" data-id="{{ section.id }}">
   <div class="catalog-container">
     <!-- Mobile Filter Trigger -->
@@ -30,9 +30,9 @@
       </div>
 
       <!-- Active Filters Summary (Chips) -->
-      {%- if collection.filters.size > 0 -%}
+      {%- if search.filters.size > 0 -%}
         <div class="active-filters-summary">
-          {%- for filter in collection.filters -%}
+          {%- for filter in search.filters -%}
             {%- for value in filter.active_values -%}
               <a href="{{ value.url_to_remove }}" class="active-filter-chip">
                 {{ value.label }} ✕
@@ -52,6 +52,7 @@
 
       <!-- Accordeon Filter Form -->
       <form id="CollectionFiltersForm" class="filter-form">
+        <input type="hidden" name="type" value="product">
         <!-- Custom Collections Filter list -->
         <div class="filter-dropdown" data-dropdown-name="collections">
           <button type="button" class="dropdown-trigger">
@@ -61,7 +62,7 @@
           <div class="dropdown-content">
             <div class="filter-list">
               {%- for col in collections -%}
-                <a href="{{ col.url }}" class="filter-item-link {% if collection.handle == col.handle %}active{% endif %}" style="display: block; padding: 0.4rem 0; color: var(--color-text); text-decoration: none; font-size: 0.95rem; font-weight: {% if collection.handle == col.handle %}800{% else %}500{% endif %};">
+                <a href="{{ col.url }}" class="filter-item-link" style="display: block; padding: 0.4rem 0; color: var(--color-text); text-decoration: none; font-size: 0.95rem; font-weight: 500;">
                   <span>{{ col.title }}</span>
                 </a>
               {%- endfor -%}
@@ -69,7 +70,7 @@
           </div>
         </div>
 
-        {%- for filter in collection.filters -%}
+        {%- for filter in search.filters -%}
           {%- assign filter_label_up = filter.label | upcase -%}
           {%- if filter_label_up == 'DISPONIBILIDADE' or filter_label_up == 'AVAILABILITY' or filter_label_up == 'PESQUISA' or filter_label_up == 'SEARCH' -%}
             {%- continue -%}
@@ -143,7 +144,13 @@
     <!-- Main Content -->
     <main class="catalog-content">
       <div class="catalog-controls">
-        <h1 class="collection-title">{{ collection.title }}</h1>
+        <h1 class="collection-title">
+          {%- if search.performed -%}
+            Resultados para "{{ search.terms | escape }}" ({{ search.results_count }})
+          {%- else -%}
+            Pesquisa
+          {%- endif -%}
+        </h1>
 
         <div class="pagination-limit">
           <span>{{ 'catalog.items_per_page' | t }}</span>
@@ -155,17 +162,21 @@
         </div>
       </div>
 
-      {%- if collection.products.size == 0 -%}
+      {%- if search.results_count == 0 or search.performed == false -%}
         <div class="no-results">
           <h3>{{ 'catalog.no_results' | t }}</h3>
-          <a href="{{ collection.url }}" class="clear-filters-link-btn">
-            {{ 'catalog.clear_all' | t }}
-          </a>
+          {%- if search.performed -%}
+            <a href="/search?q=" class="clear-filters-link-btn">
+              Limpar Pesquisa
+            </a>
+          {%- endif -%}
         </div>
       {%- else -%}
         <div class="catalog-grid">
-          {%- for product in collection.products -%}
-            {% render 'product-card', card_product: product %}
+          {%- for item in search.results -%}
+            {%- if item.object_type == 'product' -%}
+              {% render 'product-card', card_product: item %}
+            {%- endif -%}
           {%- endfor -%}
         </div>
 
@@ -209,7 +220,7 @@
 
 {% schema %}
 {
-  "name": "Catálogo de Coleções",
+  "name": "Resultados de Pesquisa",
   "settings": [
     {
       "type": "range",

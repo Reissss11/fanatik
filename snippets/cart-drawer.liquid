@@ -1,15 +1,22 @@
 <!-- Slideout Cart Drawer Container -->
+{%- assign non_surcharge_count = 0 -%}
+{%- for item in cart.items -%}
+  {%- if item.variant_id != 54006710763861 and item.variant_id != 54006710829397 -%}
+    {%- assign non_surcharge_count = non_surcharge_count | plus: item.quantity -%}
+  {%- endif -%}
+{%- endfor -%}
+
 <div class="cart-overlay" id="CartDrawerOverlay" style="display: none;">
   <div class="cart-drawer" id="CartDrawerElement">
     <!-- Header -->
     <div class="cart-header">
-      <h2>Carrinho (<span id="CartDrawerCount">{{ cart.item_count }}</span>)</h2>
+      <h2>Carrinho (<span id="CartDrawerCount">{{ non_surcharge_count }}</span>)</h2>
       <button class="close-btn" id="CartDrawerCloseBtn" aria-label="Fechar carrinho">✕</button>
     </div>
 
     <!-- Items Container -->
     <div class="cart-items" id="CartDrawerItems">
-      {%- if cart.item_count == 0 -%}
+      {%- if non_surcharge_count == 0 -%}
         <div class="empty-cart">
           <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="empty-icon">
             <circle cx="9" cy="21" r="1"></circle>
@@ -21,6 +28,9 @@
         </div>
       {%- else -%}
         {%- for item in cart.items -%}
+          {%- if item.variant_id == 54006710763861 or item.variant_id == 54006710829397 -%}
+            {%- continue -%}
+          {%- endif -%}
           <div class="cart-item" data-key="{{ item.key }}">
             <!-- Item Image -->
             <div class="cart-item-image">
@@ -49,30 +59,33 @@
               {%- assign custom_number = item.properties['Número'] -%}
               {%- if custom_name != blank or custom_number != blank -%}
                 <p class="item-customization">
-                  Personalização: {{ custom_name }} {{ custom_number }} (+3.00€)
+                  Personalização: {{ custom_name }} {{ custom_number }}
                 </p>
               {%- endif -%}
 
               <!-- Patches list -->
-              {%- assign patches_shown = false -%}
-              {%- for property in item.properties -%}
-                {%- if property.first contains 'Patch -' and property.last == 'Sim' -%}
-                  {%- if patches_shown == false -%}
-                    <div class="item-patches-list">
-                    {%- assign patches_shown = true -%}
+              {%- assign patches = item.properties['Patches'] | default: item.properties['Patch'] -%}
+              {%- if patches != blank -%}
+                {%- assign patches_array = patches | split: "," -%}
+                {%- assign patches_count = 0 -%}
+                {%- for p in patches_array -%}
+                  {%- assign clean_p = p | strip -%}
+                  {%- if clean_p != blank -%}
+                    {%- assign patches_count = patches_count | plus: 1 -%}
                   {%- endif -%}
-                  <span class="item-patch">
-                    {{ property.first | remove: 'Patch -' }} (+2.00€)
-                  </span>
+                {%- endfor -%}
+                {%- if patches_count > 0 -%}
+                  <div class="item-patches-list">
+                    <span class="item-patch">
+                      Patches: {{ patches }}
+                    </span>
+                  </div>
                 {%- endif -%}
-              {%- endfor -%}
-              {%- if patches_shown -%}
-                </div>
               {%- endif -%}
 
               <!-- Price & Quantity row -->
               <div class="item-price-row">
-                <span class="item-price">{{ item.final_line_price | money }}</span>
+                <span class="item-price">{{ item.final_line_price | money | replace: "€", "" | strip | append: " €" }}</span>
                 
                 <div class="qty-selector">
                   <button type="button" class="qty-btn minus" data-qty-change="-1">-</button>
@@ -105,8 +118,8 @@
     </div>
 
     <!-- Footer Summary (Only visible if items in cart) -->
-    <div class="cart-footer" id="CartDrawerFooter" {% if cart.item_count == 0 %}style="display: none;"{% endif %}>
-      {%- if cart.item_count >= 3 -%}
+    <div class="cart-footer" id="CartDrawerFooter" {% if non_surcharge_count == 0 %}style="display: none;"{% endif %}>
+      {%- if non_surcharge_count >= 3 -%}
         <!-- Multi-item discount notice -->
         <div class="discount-message" id="CartDrawerDiscountMessage">
           🎉 Desconto aplicado: Poupa na compra conjunta das tuas camisolas!
@@ -115,7 +128,7 @@
 
       <div class="summary-row">
         <span>Subtotal</span>
-        <span id="CartDrawerSubtotal">{{ cart.total_price | money }}</span>
+        <span id="CartDrawerSubtotal">{{ cart.total_price | money | replace: "€", "" | strip | append: " €" }}</span>
       </div>
 
       {%- if cart.cart_level_discount_applications.size > 0 -%}
@@ -123,7 +136,7 @@
           {%- for discount in cart.cart_level_discount_applications -%}
             <div class="summary-row discount">
               <span>Desconto ({{ discount.title }})</span>
-              <span>-{{ discount.total_allocated_amount | money }}</span>
+              <span>-{{ discount.total_allocated_amount | money | replace: "€", "" | strip | append: " €" }}</span>
             </div>
           {%- endfor -%}
         </div>
@@ -131,7 +144,7 @@
 
       <div class="summary-row total">
         <span>Total</span>
-        <span id="CartDrawerTotal">{{ cart.total_price | money }}</span>
+        <span id="CartDrawerTotal">{{ cart.total_price | money | replace: "€", "" | strip | append: " €" }}</span>
       </div>
 
       <a href="/checkout" class="checkout-link">

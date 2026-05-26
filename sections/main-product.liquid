@@ -57,14 +57,14 @@
       <!-- Price -->
       <div class="price-container">
         {%- if product.compare_at_price > product.price -%}
-          <span class="original-price" id="ComparePrice">{{ product.compare_at_price | money }}</span>
+          <span class="original-price" id="ComparePrice">{{ product.compare_at_price | money | replace: "€", "" | strip | append: " €" }}</span>
         {%- endif -%}
         <span class="current-price" id="ProductPrice" data-base-price="{{ product.price | divided_by: 100.0 }}">
-          {{ product.price | money }}
+          {{ product.price | money | replace: "€", "" | strip | append: " €" }}
         </span>
       </div>
 
-      <p class="description">{{ product.description }}</p>
+
 
       <!-- Cart Add Form -->
       {%- form 'product', product, id: 'ProductForm', class: 'product-form' -%}
@@ -73,63 +73,174 @@
 
         {%- if product.variants.size > 1 -%}
           <div class="size-selector">
-            <label for="SizeSelect">{{ 'product.size' | t }}:</label>
-            <select name="options[Tamanho]" id="SizeSelect" class="size-select">
+            <label>{{ 'product.size' | t }}:</label>
+            
+            {%- assign size_order = "3XS,2XS,XS,S,M,L,XL,2XL,XXL,3XL,XXXL,4XL,5XL" | split: "," -%}
+
+            <!-- Hidden native select for standard shopify integration -->
+            <select name="options[Tamanho]" id="SizeSelect" class="size-select" style="display: none;">
+              {%- for size_name in size_order -%}
+                {%- for variant in product.variants -%}
+                  {%- assign v_title = variant.title | strip | upcase -%}
+                  {%- assign s_name = size_name | strip | upcase -%}
+                  {%- if v_title == s_name -%}
+                    <option
+                      value="{{ variant.title | escape }}"
+                      data-variant-id="{{ variant.id }}"
+                      data-price="{{ variant.price | divided_by: 100.0 }}"
+                      {% if variant.compare_at_price %}data-compare-price="{{ variant.compare_at_price | divided_by: 100.0 }}"{% endif %}
+                      {% if variant == product.selected_or_first_available_variant %}selected="selected"{% endif %}
+                      {% unless variant.available %}disabled="disabled"{% endunless %}
+                    >
+                      {{ variant.title | escape }}
+                    </option>
+                  {%- endif -%}
+                {%- endfor -%}
+              {%- endfor -%}
+
               {%- for variant in product.variants -%}
-                <option
-                  value="{{ variant.title | escape }}"
-                  data-variant-id="{{ variant.id }}"
-                  data-price="{{ variant.price | divided_by: 100.0 }}"
-                  {% if variant.compare_at_price %}data-compare-price="{{ variant.compare_at_price | divided_by: 100.0 }}"{% endif %}
-                  {% if variant == product.selected_or_first_available_variant %}selected="selected"{% endif %}
-                  {% unless variant.available %}disabled="disabled"{% endunless %}
-                >
-                  {{ variant.title | escape }} {%- unless variant.available %} (Esgotado){% endunless -%}
-                </option>
+                {%- assign v_title = variant.title | strip | upcase -%}
+                {%- assign found_in_order = false -%}
+                {%- for size_name in size_order -%}
+                  {%- assign s_name = size_name | strip | upcase -%}
+                  {%- if v_title == s_name -%}
+                    {%- assign found_in_order = true -%}
+                  {%- endif -%}
+                {%- endfor -%}
+                {%- unless found_in_order -%}
+                  <option
+                    value="{{ variant.title | escape }}"
+                    data-variant-id="{{ variant.id }}"
+                    data-price="{{ variant.price | divided_by: 100.0 }}"
+                    {% if variant.compare_at_price %}data-compare-price="{{ variant.compare_at_price | divided_by: 100.0 }}"{% endif %}
+                    {% if variant == product.selected_or_first_available_variant %}selected="selected"{% endif %}
+                    {% unless variant.available %}disabled="disabled"{% endunless %}
+                  >
+                    {{ variant.title | escape }}
+                  </option>
+                {%- endunless -%}
               {%- endfor -%}
             </select>
+
+            <!-- Custom Size Button Boxes -->
+            <div class="size-boxes-container">
+              {%- assign rendered_sizes = "," -%}
+              {%- for size_name in size_order -%}
+                {%- for variant in product.variants -%}
+                  {%- assign v_size = variant.option1 | strip | upcase -%}
+                  {%- assign s_name = size_name | strip | upcase -%}
+                  {%- if v_size == s_name -%}
+                    {%- assign s_name_comma = s_name | append: "," -%}
+                    {%- unless rendered_sizes contains s_name_comma -%}
+                      <button
+                        type="button"
+                        class="size-box-btn {% if variant.option1 == product.selected_or_first_available_variant.option1 %}active{% endif %}"
+                        data-size="{{ variant.option1 | escape }}"
+                      >
+                        <span class="size-box-title">{{ variant.option1 | escape }}</span>
+                      </button>
+                      {%- assign rendered_sizes = rendered_sizes | append: s_name_comma -%}
+                    {%- endunless -%}
+                  {%- endif -%}
+                {%- endfor -%}
+              {%- endfor -%}
+
+              {%- for variant in product.variants -%}
+                {%- assign v_size = variant.option1 | strip | upcase -%}
+                {%- assign found_in_order = false -%}
+                {%- for size_name in size_order -%}
+                  {%- assign s_name = size_name | strip | upcase -%}
+                  {%- if v_size == s_name -%}
+                    {%- assign found_in_order = true -%}
+                  {%- endif -%}
+                {%- endfor -%}
+                {%- unless found_in_order -%}
+                  {%- assign s_name_comma = v_size | append: "," -%}
+                  {%- unless rendered_sizes contains s_name_comma -%}
+                    <button
+                      type="button"
+                      class="size-box-btn {% if variant.option1 == product.selected_or_first_available_variant.option1 %}active{% endif %}"
+                      data-size="{{ variant.option1 | escape }}"
+                    >
+                      <span class="size-box-title">{{ variant.option1 | escape }}</span>
+                    </button>
+                    {%- assign rendered_sizes = rendered_sizes | append: s_name_comma -%}
+                  {%- endunless -%}
+                {%- endunless -%}
+              {%- endfor -%}
+            </div>
           </div>
         {%- endif -%}
 
-        <!-- Customizations (Line Item Properties) -->
+        <!-- Customizations (Line Item Properties & Toggles) -->
         <div class="customization-section">
-          <h3>{{ 'product.personalization' | t }}</h3>
-          <div class="custom-input-group">
-            <input
-              type="text"
-              name="properties[Nome]"
-              placeholder="{{ 'product.custom_name' | t }}"
-              class="custom-input"
-              id="CustomNameInput"
-              maxlength="20"
-              autocomplete="off"
-            >
-            <input
-              type="text"
-              name="properties[Número]"
-              placeholder="{{ 'product.custom_number' | t }}"
-              class="custom-input number"
-              id="CustomNumberInput"
-              maxlength="3"
-              autocomplete="off"
-            >
-          </div>
+          <div class="customization-toggles">
+            <!-- Patches Toggle -->
+            <div class="custom-toggle-group" id="PatchesToggleGroup">
+              <span class="toggle-label">Patches:</span>
+              <div class="toggle-options">
+                <label class="toggle-option">
+                  <input type="radio" name="patches_toggle" value="Não" checked>
+                  <span class="toggle-box">Não</span>
+                </label>
+                <label class="toggle-option">
+                  <input type="radio" name="patches_toggle" value="Sim">
+                  <span class="toggle-box">Sim</span>
+                </label>
+              </div>
+            </div>
 
-          <h3>{{ 'product.patches' | t }}</h3>
-          <div class="patches-container">
-            {%- assign patch_options = "Liga, Liga Europa, Liga dos Campeões, Campeão da Liga" | split: ", " -%}
-            {%- for patch in patch_options -%}
-              <label class="patch-checkbox">
-                <input
-                  type="checkbox"
-                  name="properties[Patch - {{ patch }}]"
-                  value="Sim"
-                  class="patch-checkbox-input"
-                  data-patch-name="{{ patch }}"
-                >
-                <span>{{ patch }}</span>
-              </label>
-            {%- endfor -%}
+            <!-- Patches Inputs (hidden by default) -->
+            <div class="patches-text-container" id="PatchesInputContainer" style="display: none;">
+              <input
+                type="text"
+                name="properties[Patches]"
+                placeholder="Ex: Patch Champions, Patch Foundation"
+                class="custom-input patch-text-input"
+                id="PatchTextInput"
+                autocomplete="off"
+              >
+              <p class="customization-help" style="font-size: 0.82rem; opacity: 0.75; margin-top: 0.4rem; font-style: italic; color: var(--color-text-light);">
+                Separe múltiplos patches por vírgula
+              </p>
+            </div>
+
+            <!-- Personalização Toggle -->
+            <div class="custom-toggle-group" id="PersonalizationToggleGroup">
+              <span class="toggle-label">Personalização:</span>
+              <div class="toggle-options">
+                <label class="toggle-option">
+                  <input type="radio" name="personalization_toggle" value="Não" checked>
+                  <span class="toggle-box">Não</span>
+                </label>
+                <label class="toggle-option">
+                  <input type="radio" name="personalization_toggle" value="Sim">
+                  <span class="toggle-box">Sim</span>
+                </label>
+              </div>
+            </div>
+
+            <!-- Personalização Inputs (hidden by default) -->
+            <div class="custom-input-group" id="PersonalizationInputContainer" style="display: none; gap: 0.8rem; margin-top: 0.5rem;">
+              <input
+                type="text"
+                name="properties[Nome]"
+                placeholder="Nome"
+                class="custom-input"
+                id="CustomNameInput"
+                maxlength="20"
+                autocomplete="off"
+              >
+              <input
+                type="text"
+                name="properties[Número]"
+                placeholder="Número"
+                class="custom-input number"
+                id="CustomNumberInput"
+                maxlength="3"
+                autocomplete="off"
+              >
+            </div>
           </div>
         </div>
 
@@ -152,12 +263,28 @@
         </button>
       {%- endform -%}
 
-      <div class="details-extra">
-        <p><strong>{{ 'product.main_color' | t }}:</strong> {{ product.metafields.custom.main_color | default: 'Padrão' }}</p>
-      </div>
+
     </div>
   </div>
 </div>
+
+<script type="application/json" id="ProductVariantsJson">
+  [
+    {%- for variant in product.variants -%}
+      {
+        "id": {{ variant.id }},
+        "title": {{ variant.title | json }},
+        "price": {{ variant.price | divided_by: 100.0 }},
+        "available": {{ variant.available }},
+        "options": {{ variant.options | json }},
+        "option1": {{ variant.option1 | json }},
+        "option2": {{ variant.option2 | json }},
+        "option3": {{ variant.option3 | json }},
+        "compare_at_price": {{ variant.compare_at_price | divided_by: 100.0 | json }}
+      }{%- unless forloop.last -%},{%- endunless -%}
+    {%- endfor -%}
+  ]
+</script>
 
 {% schema %}
 {

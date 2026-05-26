@@ -36,10 +36,10 @@
     "add_to_cart": "Adicionar ao Carrinho",
     "out_of_stock": "Esgotado",
     "size": "Tamanho",
-    "personalization": "Personalização (+3.00€)",
+    "personalization": "Personalização",
     "custom_name": "Nome",
     "custom_number": "Número",
-    "patches": "Patches (+2.00€ cada)",
+    "patches": "Patches",
     "main_color": "Cor Principal"
   }
 }

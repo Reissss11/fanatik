@@ -2,6 +2,15 @@
    FANATIKJERSEY THEME JAVASCRIPT
    ========================================================================== */
 
+// ==========================================================================
+// CONFIGURAÇÃO DE TAXAS DE PERSONALIZAÇÃO E PATCHES (Opção Híbrida)
+// Crie estes dois produtos no seu Shopify Admin e insira os respetivos IDs de Variante abaixo.
+// ==========================================================================
+const CUSTOM_SURCHARGE_CONFIG = {
+  personalizationVariantId: '54006710763861', // ID Real da Variante de Personalização (3.00€)
+  patchVariantId: '54006710829397'          // ID Real da Variante de Patch (2.00€)
+};
+
 document.addEventListener('DOMContentLoaded', () => {
   initThemeToggler();
   initQuantitySelectors();
@@ -182,6 +191,33 @@ function initPredictiveSearch() {
       resultsDiv.style.display = 'none';
     }
   });
+
+  // Clear button logic
+  const clearBtn = document.getElementById('HeaderSearchClearBtn');
+  
+  function updateClearBtn() {
+    if (clearBtn) {
+      clearBtn.style.display = input.value.trim().length > 0 ? 'flex' : 'none';
+    }
+  }
+
+  updateClearBtn();
+  input.addEventListener('input', updateClearBtn);
+
+  if (clearBtn) {
+    clearBtn.addEventListener('click', () => {
+      input.value = '';
+      updateClearBtn();
+      resultsDiv.style.display = 'none';
+      resultsDiv.innerHTML = '';
+      
+      if (window.location.pathname.includes('/search')) {
+        window.location.href = '/collections/all';
+      } else {
+        input.focus();
+      }
+    });
+  }
 }
 
 /* --------------------------------------------------------------------------
@@ -232,15 +268,50 @@ function initCartDrawer() {
     productForm.addEventListener('submit', (e) => {
       e.preventDefault();
       
+      const variantId = document.getElementById('ProductVariantId').value;
+      const customName = document.getElementById('CustomNameInput') ? document.getElementById('CustomNameInput').value.trim() : '';
+      const customNumber = document.getElementById('CustomNumberInput') ? document.getElementById('CustomNumberInput').value.trim() : '';
+      const patchText = document.getElementById('PatchTextInput') ? document.getElementById('PatchTextInput').value.trim() : '';
+      
+      console.log('Form submit. Name:', customName, 'Number:', customNumber, 'Patches:', patchText);
+      
+      const properties = {};
+      if (customName) properties['Nome'] = customName;
+      if (customNumber) properties['Número'] = customNumber;
+      if (patchText) properties['Patches'] = patchText;
+      
+      const items = [];
+      
+      // 1. Add main Jersey product
+      const mainItem = {
+        id: parseInt(variantId),
+        quantity: 1
+      };
+      if (Object.keys(properties).length > 0) {
+        mainItem.properties = properties;
+      }
+      items.push(mainItem);
+      
+      console.log('Sending items payload to cart/add.js:', items);
+      
       fetch('/cart/add.js', {
         method: 'POST',
-        body: formData
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ items: items })
       })
       .then(response => response.json())
-      .then(item => {
+      .then(data => {
         // Success: reload cart stats and open drawer
         reloadCartAndRender();
         openDrawer();
+        
+        // Reset form inputs after adding
+        if (document.getElementById('CustomNameInput')) document.getElementById('CustomNameInput').value = '';
+        if (document.getElementById('CustomNumberInput')) document.getElementById('CustomNumberInput').value = '';
+        if (document.getElementById('PatchTextInput')) document.getElementById('PatchTextInput').value = '';
+        calculateProductPriceSurcharge(); // reset price displays
       })
       .catch(error => {
         console.error('AJAX add-to-cart error:', error);
@@ -249,134 +320,139 @@ function initCartDrawer() {
   }
 }
 
-// Reload Cart details and redraw HTML in drawer
+// Reload Cart details, perform auto-reconciliation, and redraw HTML in drawer
 function reloadCartAndRender() {
-  fetch('/cart.js')
+  fetch('/cart.js?v=' + Date.now())
     .then(response => response.json())
     .then(cart => {
-      // 1. Update general badges
-      const badge = document.getElementById('CartBadge');
-      const drawerCount = document.getElementById('CartDrawerCount');
-      
-      if (badge) {
-        badge.innerText = cart.item_count;
-        if (cart.item_count > 0) {
-          badge.classList.remove('hidden');
-        } else {
-          badge.classList.add('hidden');
-        }
-      }
-      
-      if (drawerCount) drawerCount.innerText = cart.item_count;
-
-      // 2. Redraw Cart Drawer Items list
-      const itemsContainer = document.getElementById('CartDrawerItems');
-      const footer = document.getElementById('CartDrawerFooter');
-      
-      if (cart.item_count === 0) {
-        itemsContainer.innerHTML = `
-          <div class="empty-cart">
-            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="empty-icon">
-              <circle cx="9" cy="21" r="1"></circle>
-              <circle cx="20" cy="21" r="1"></circle>
-              <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-            </svg>
-            <p>O seu carrinho está vazio</p>
-            <button class="start-shopping-btn" id="CartDrawerStartShoppingBtn">Começar a comprar</button>
-          </div>
-        `;
-        // Setup the close button click on the new start shopping button
-        const startShopping = document.getElementById('CartDrawerStartShoppingBtn');
-        if (startShopping) {
-          startShopping.addEventListener('click', () => {
-            const overlay = document.getElementById('CartDrawerOverlay');
-            if (overlay) overlay.style.display = 'none';
-            document.body.style.overflow = 'unset';
-          });
-        }
-        if (footer) footer.style.display = 'none';
-      } else {
-        let itemsHtml = '';
-        cart.items.forEach(item => {
-          // Format line-item properties
-          let propsHtml = '';
-          const customName = item.properties ? item.properties['Nome'] : null;
-          const customNumber = item.properties ? item.properties['Número'] : null;
-          
-          if (customName || customNumber) {
-            propsHtml += `<p class="item-customization">Personalização: ${customName || ''} ${customNumber || ''} (+3.00€)</p>`;
-          }
-
-          let patchesHtml = '';
-          if (item.properties) {
-            let patchesShown = false;
-            Object.keys(item.properties).forEach(key => {
-              if (key.includes('Patch -') && item.properties[key] === 'Sim') {
-                if (!patchesShown) {
-                  patchesHtml += '<div class="item-patches-list">';
-                  patchesShown = true;
-                }
-                patchesHtml += `<span class="item-patch">${key.replace('Patch -', '')} (+2.00€)</span>`;
-              }
-            });
-            if (patchesShown) patchesHtml += '</div>';
-          }
-
-          itemsHtml += `
-            <div class="cart-item" data-key="${item.key}">
-              <div class="cart-item-image">
-                <img src="${item.image || ''}" alt="${item.product_title}">
-              </div>
-              <div class="cart-item-info">
-                <h4>${item.product_title}</h4>
-                <p class="item-meta">Tamanho: ${item.variant_title || ''}</p>
-                ${propsHtml}
-                ${patchesHtml}
-                <div class="item-price-row">
-                  <span class="item-price">${formatShopCurrency(item.final_line_price)}</span>
-                  <div class="qty-selector">
-                    <button type="button" class="qty-btn minus" data-qty-change="-1">-</button>
-                    <input
-                      type="number"
-                      value="${item.quantity}"
-                      min="0"
-                      class="qty-input"
-                      data-key="${item.key}"
-                    >
-                    <button type="button" class="qty-btn plus" data-qty-change="1">+</button>
-                  </div>
-                </div>
-              </div>
-              <button class="remove-btn" data-key="${item.key}" aria-label="Remover artigo">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <polyline points="3 6 5 6 21 6"></polyline>
-                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                </svg>
-              </button>
-            </div>
-          `;
-        });
-        
-        itemsContainer.innerHTML = itemsHtml;
-        
-        // 3. Update Footer Subtotals & totals
-        const subtotalSpan = document.getElementById('CartDrawerSubtotal');
-        const totalSpan = document.getElementById('CartDrawerTotal');
-        const discountMsg = document.getElementById('CartDrawerDiscountMessage');
-        const discountsContainer = document.getElementById('CartDrawerDiscountsContainer');
-
-        if (subtotalSpan) subtotalSpan.innerText = formatShopCurrency(cart.total_price);
-        if (totalSpan) totalSpan.innerText = formatShopCurrency(cart.total_price);
-        
-        if (cart.item_count >= 3) {
-          if (discountMsg) discountMsg.style.display = 'block';
-        } else {
-          if (discountMsg) discountMsg.style.display = 'none';
-        }
-        
-        if (footer) footer.style.display = 'block';
-      }
+      renderCartData(cart);
     });
+}
+
+// Helper to render the cart drawer dynamically
+function renderCartData(cart) {
+  // 1. Calculate and update visible item count badges
+  let visibleItemCount = 0;
+  cart.items.forEach(item => {
+    visibleItemCount += item.quantity;
+  });
+
+  const badge = document.getElementById('CartBadge');
+  const drawerCount = document.getElementById('CartDrawerCount');
+  
+  if (badge) {
+    badge.innerText = visibleItemCount;
+    if (visibleItemCount > 0) {
+      badge.classList.remove('hidden');
+    } else {
+      badge.classList.add('hidden');
+    }
+  }
+  
+  if (drawerCount) drawerCount.innerText = visibleItemCount;
+
+  // 2. Redraw Cart Drawer Items list
+  const itemsContainer = document.getElementById('CartDrawerItems');
+  const footer = document.getElementById('CartDrawerFooter');
+  
+  if (visibleItemCount === 0) {
+    itemsContainer.innerHTML = `
+      <div class="empty-cart">
+        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="empty-icon">
+          <circle cx="9" cy="21" r="1"></circle>
+          <circle cx="20" cy="21" r="1"></circle>
+          <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+        </svg>
+        <p>O seu carrinho está vazio</p>
+        <button class="start-shopping-btn" id="CartDrawerStartShoppingBtn">Começar a comprar</button>
+      </div>
+    `;
+    // Setup the close button click on the new start shopping button
+    const startShopping = document.getElementById('CartDrawerStartShoppingBtn');
+    if (startShopping) {
+      startShopping.addEventListener('click', () => {
+        const overlay = document.getElementById('CartDrawerOverlay');
+        if (overlay) overlay.style.display = 'none';
+        document.body.style.overflow = 'unset';
+      });
+    }
+    if (footer) footer.style.display = 'none';
+  } else {
+    let itemsHtml = '';
+    
+    cart.items.forEach(item => {
+      // Format line-item properties
+      let propsHtml = '';
+      const customName = item.properties ? item.properties['Nome'] : null;
+      const customNumber = item.properties ? item.properties['Número'] : null;
+      
+      if (customName || customNumber) {
+        propsHtml += `<p class="item-customization">Personalização: ${customName || ''} ${customNumber || ''}</p>`;
+      }
+
+      let patchesHtml = '';
+      const patchesVal = item.properties ? (item.properties['Patches'] || item.properties['Patch']) : null;
+      if (patchesVal) {
+        patchesHtml = `<div class="item-patches-list"><span class="item-patch">Patches: ${patchesVal}</span></div>`;
+      }
+
+      const baseLinePrice = parseInt(item.final_line_price) || 0;
+      const customizedItemPrice = baseLinePrice;
+
+      itemsHtml += `
+        <div class="cart-item" data-key="${item.key}">
+          <div class="cart-item-image">
+            <img src="${item.image || ''}" alt="${item.product_title}">
+          </div>
+          <div class="cart-item-info">
+            <h4>${item.product_title}</h4>
+            <p class="item-meta">Tamanho: ${item.variant_title || ''}</p>
+            ${propsHtml}
+            ${patchesHtml}
+            <div class="item-price-row">
+              <span class="item-price">${formatShopCurrency(customizedItemPrice)}</span>
+              <div class="qty-selector">
+                <button type="button" class="qty-btn minus" data-qty-change="-1">-</button>
+                <input
+                  type="number"
+                  value="${item.quantity}"
+                  min="0"
+                  class="qty-input"
+                  data-key="${item.key}"
+                >
+                <button type="button" class="qty-btn plus" data-qty-change="1">+</button>
+              </div>
+            </div>
+          </div>
+          <button class="remove-btn" data-key="${item.key}" aria-label="Remover artigo">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="3 6 5 6 21 6"></polyline>
+              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+            </svg>
+          </button>
+        </div>
+      `;
+    });
+    
+    itemsContainer.innerHTML = itemsHtml;
+    
+    // 3. Update Footer Subtotals & totals
+    const subtotalSpan = document.getElementById('CartDrawerSubtotal');
+    const totalSpan = document.getElementById('CartDrawerTotal');
+    const discountMsg = document.getElementById('CartDrawerDiscountMessage');
+    const discountsContainer = document.getElementById('CartDrawerDiscountsContainer');
+
+    if (subtotalSpan) subtotalSpan.innerText = formatShopCurrency(cart.total_price);
+    if (totalSpan) totalSpan.innerText = formatShopCurrency(cart.total_price);
+    
+    if (visibleItemCount >= 3) {
+      if (discountMsg) discountMsg.style.display = 'block';
+    } else {
+      if (discountMsg) discountMsg.style.display = 'none';
+    }
+    
+    if (footer) footer.style.display = 'block';
+  }
 }
 
 function updateCartItemQuantity(key, quantity) {
@@ -508,84 +584,145 @@ function initProductPage() {
     }
   }
 
-  // Variant Size drop sync with dynamic price changing
-  const sizeSelect = document.getElementById('SizeSelect');
+  // Seletor de Tamanho, Toggles e Atualizações de Variante
+  const sizeBoxBtns = document.querySelectorAll('.size-box-btn');
   const variantInput = document.getElementById('ProductVariantId');
   const priceDisplay = document.getElementById('ProductPrice');
   const comparePriceDisplay = document.getElementById('ComparePrice');
+  const addToCartBtn = document.getElementById('AddToCartBtn');
 
-  if (sizeSelect && variantInput) {
-    sizeSelect.addEventListener('change', () => {
-      const selectedOption = sizeSelect.options[sizeSelect.selectedIndex];
-      const variantId = selectedOption.getAttribute('data-variant-id');
-      const basePrice = parseFloat(selectedOption.getAttribute('data-price'));
+  sizeBoxBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      sizeBoxBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      calculateProductPriceSurcharge();
+    });
+  });
+
+  // Toggles de Patches e Personalização
+  const patchesRadios = document.querySelectorAll('input[name="patches_toggle"]');
+  const personalizationRadios = document.querySelectorAll('input[name="personalization_toggle"]');
+  
+  const patchesContainer = document.getElementById('PatchesInputContainer');
+  const personalizationContainer = document.getElementById('PersonalizationInputContainer');
+
+  const customName = document.getElementById('CustomNameInput');
+  const customNumber = document.getElementById('CustomNumberInput');
+  const patchText = document.getElementById('PatchTextInput');
+
+  patchesRadios.forEach(radio => {
+    radio.addEventListener('change', () => {
+      if (radio.value === 'Sim') {
+        if (patchesContainer) patchesContainer.style.display = 'block';
+      } else {
+        if (patchesContainer) patchesContainer.style.display = 'none';
+        if (patchText) patchText.value = '';
+      }
+      calculateProductPriceSurcharge();
+    });
+  });
+
+  personalizationRadios.forEach(radio => {
+    radio.addEventListener('change', () => {
+      if (radio.value === 'Sim') {
+        if (personalizationContainer) personalizationContainer.style.display = 'flex';
+      } else {
+        if (personalizationContainer) personalizationContainer.style.display = 'none';
+        if (customName) customName.value = '';
+        if (customNumber) customNumber.value = '';
+      }
+      calculateProductPriceSurcharge();
+    });
+  });
+
+  if (customName) customName.addEventListener('input', calculateProductPriceSurcharge);
+  if (customNumber) customNumber.addEventListener('input', calculateProductPriceSurcharge);
+  if (patchText) patchText.addEventListener('input', calculateProductPriceSurcharge);
+
+  // Verificar se algum toggle já está pré-selecionado (ex: retroceder na navegação)
+  patchesRadios.forEach(radio => {
+    if (radio.checked && radio.value === 'Sim') {
+      if (patchesContainer) patchesContainer.style.display = 'block';
+    }
+  });
+
+  personalizationRadios.forEach(radio => {
+    if (radio.checked && radio.value === 'Sim') {
+      if (personalizationContainer) personalizationContainer.style.display = 'flex';
+    }
+  });
+
+  // Executa o cálculo inicial para sincronizar a variante correta com base no estado atual do formulário
+  calculateProductPriceSurcharge();
+
+  function calculateProductPriceSurcharge() {
+    const activeSizeBtn = document.querySelector('.size-box-btn.active');
+    if (!activeSizeBtn) return;
+    
+    const sizeVal = activeSizeBtn.getAttribute('data-size');
+    
+    // Get patches value (first Yes/No)
+    const activePatchesRadio = document.querySelector('input[name="patches_toggle"]:checked');
+    const patchesVal = activePatchesRadio ? activePatchesRadio.value : 'Não';
+
+    // Get personalization value (second Yes/No)
+    const activePersRadio = document.querySelector('input[name="personalization_toggle"]:checked');
+    const personalizationVal = activePersRadio ? activePersRadio.value : 'Não';
+
+    const matchedVariant = findMatchingVariant(sizeVal, patchesVal, personalizationVal);
+    
+    if (matchedVariant) {
+      if (variantInput) variantInput.value = matchedVariant.id;
       
-      variantInput.value = variantId;
-      
+      // Update Price display
       if (priceDisplay) {
-        priceDisplay.setAttribute('data-base-price', basePrice);
-        calculateProductPriceSurcharge(); // recalculate price label with customizations
+        priceDisplay.innerText = formatShopCurrency(matchedVariant.price * 100);
       }
       
+      // Update Compare Price
       if (comparePriceDisplay) {
-        const comparePrice = selectedOption.getAttribute('data-compare-price');
-        if (comparePrice) {
-          comparePriceDisplay.innerText = new Intl.NumberFormat('pt-PT', { style: 'currency', currency: 'EUR' }).format(parseFloat(comparePrice));
+        if (matchedVariant.compare_at_price) {
+          comparePriceDisplay.innerText = formatShopCurrency(matchedVariant.compare_at_price * 100);
           comparePriceDisplay.style.display = 'inline';
         } else {
           comparePriceDisplay.style.display = 'none';
         }
       }
-    });
+
+      // Update Add to Cart Button state
+      if (addToCartBtn) {
+        if (matchedVariant.available) {
+          addToCartBtn.disabled = false;
+          addToCartBtn.querySelector('span').innerText = 'Adicionar ao Carrinho';
+        } else {
+          addToCartBtn.disabled = true;
+          addToCartBtn.querySelector('span').innerText = 'Esgotado';
+        }
+      }
+    }
   }
 
-  // Monitor Customizations changes to dynamic calculate surcharges addition cost
-  const customName = document.getElementById('CustomNameInput');
-  const customNumber = document.getElementById('CustomNumberInput');
-  const patches = container.querySelectorAll('.patch-checkbox-input');
-
-  if (customName) customName.addEventListener('input', calculateProductPriceSurcharge);
-  if (customNumber) customNumber.addEventListener('input', calculateProductPriceSurcharge);
-  
-  patches.forEach(checkbox => {
-    checkbox.addEventListener('change', calculateProductPriceSurcharge);
-  });
-
-  // Calculate price adding customization fees
-  function calculateProductPriceSurcharge() {
-    if (!priceDisplay) return;
+  // Smart Matching algorithm to find the correct variant matching Selected Size + Customization Level
+  function findMatchingVariant(size, patches, personalization) {
+    const variantsJson = document.getElementById('ProductVariantsJson');
+    if (!variantsJson) return null;
     
-    const basePrice = parseFloat(priceDisplay.getAttribute('data-base-price')) || 0;
-    let surcharge = 0;
-    
-    // Name or Number input yields a fixed +3.00€ personalization surcharge
-    const nameVal = customName ? customName.value.trim() : '';
-    const numVal = customNumber ? customNumber.value.trim() : '';
-    if (nameVal.length > 0 || numVal.length > 0) {
-      surcharge += 3.00;
-    }
-
-    // Each active checked patch is +2.00€
-    patches.forEach(checkbox => {
-      if (checkbox.checked) {
-        surcharge += 2.00;
-      }
-    });
-
-    // Update Price Display on Page
-    const finalPrice = basePrice + surcharge;
-    priceDisplay.innerText = new Intl.NumberFormat('pt-PT', { style: 'currency', currency: 'EUR' }).format(finalPrice);
-
-    // Update Add-to-Cart Button surcharge addition text
-    const surchargeSpan = document.getElementById('SurchargeText');
-    if (surchargeSpan) {
-      if (surcharge > 0) {
-        surchargeSpan.innerText = `(+${surcharge.toFixed(2)}€)`;
-        surchargeSpan.style.display = 'inline';
-      } else {
-        surchargeSpan.innerText = '';
-        surchargeSpan.style.display = 'none';
-      }
+    try {
+      const variants = JSON.parse(variantsJson.textContent);
+      
+      // Look for a variant matching option1 (size), option2 (patches "Sim"/"Não"), option3 (personalization "Sim"/"Não")
+      return variants.find(v => {
+        const opt1 = v.option1 ? v.option1.trim().toUpperCase() : '';
+        const opt2 = v.option2 ? v.option2.trim().toUpperCase() : 'NÃO';
+        const opt3 = v.option3 ? v.option3.trim().toUpperCase() : 'NÃO';
+        
+        return opt1 === size.toUpperCase() && 
+               opt2 === patches.toUpperCase() && 
+               opt3 === personalization.toUpperCase();
+      }) || variants.find(v => v.option1.trim().toUpperCase() === size.toUpperCase()) || variants[0];
+    } catch (e) {
+      console.error('Error parsing product variants JSON:', e);
+      return null;
     }
   }
 }

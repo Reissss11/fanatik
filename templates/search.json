@@ -2,7 +2,7 @@
   "name": "Search Results",
   "sections": {
     "main": {
-      "type": "main-collection",
+      "type": "main-search",
       "settings": {
         "products_per_page": 12
       }
