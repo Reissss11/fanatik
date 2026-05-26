@@ -243,6 +243,8 @@ function initCartDrawer() {
   }
 
   if (cartBtn) cartBtn.addEventListener('click', openDrawer);
+  const mobileCartTrigger = document.getElementById('MobileCartTrigger');
+  if (mobileCartTrigger) mobileCartTrigger.addEventListener('click', openDrawer);
   if (closeBtn) closeBtn.addEventListener('click', closeDrawer);
   if (startShopping) startShopping.addEventListener('click', closeDrawer);
   
@@ -338,6 +340,7 @@ function renderCartData(cart) {
   });
 
   const badge = document.getElementById('CartBadge');
+  const mobileBadge = document.getElementById('MobileCartBadge');
   const drawerCount = document.getElementById('CartDrawerCount');
   
   if (badge) {
@@ -346,6 +349,15 @@ function renderCartData(cart) {
       badge.classList.remove('hidden');
     } else {
       badge.classList.add('hidden');
+    }
+  }
+  
+  if (mobileBadge) {
+    mobileBadge.innerText = visibleItemCount;
+    if (visibleItemCount > 0) {
+      mobileBadge.classList.remove('hidden');
+    } else {
+      mobileBadge.classList.add('hidden');
     }
   }
   

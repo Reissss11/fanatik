@@ -38,6 +38,12 @@
       })();
     </script>
 
+    <!-- PWA & Mobile App Capability Meta Tags -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Fanatik">
+    <meta name="mobile-web-app-capable" content="yes">
+
     <!-- Dynamic CSS Variables from Shopify Settings -->
     <style>
       :root {
@@ -49,6 +55,7 @@
         --color-accent: {{ settings.color_accent | default: '#E11931' }};
         --color-border: {{ settings.color_border_light | default: '#e5e5e5' }};
         --color-surface: {{ settings.color_surface_light | default: '#ffffff' }};
+        --color-surface-rgb: 255, 255, 255;
         --color-surface-hover: #f9f9f9;
         --color-primary-rgb: 0, 0, 0;
         --font-family: 'Inter', system-ui, -apple-system, sans-serif;
@@ -63,6 +70,7 @@
         --color-secondary: #1e1e1e;
         --color-border: {{ settings.color_border_dark | default: '#333333' }};
         --color-surface: {{ settings.color_surface_dark | default: '#1e1e1e' }};
+        --color-surface-rgb: 30, 30, 30;
         --color-surface-hover: #2a2a2a;
         --color-primary-rgb: 255, 255, 255;
         --card-bg: #1e1e1e;
@@ -111,5 +119,59 @@
 
     <!-- Theme JS -->
     <script src="{{ 'theme.js' | asset_url }}" defer="defer"></script>
+
+    <!-- Mobile Bottom Navigation Bar (App Experience) -->
+    <div class="mobile-bottom-nav">
+      <a href="{{ routes.root_url }}" class="mobile-bottom-nav-item {% if request.path == routes.root_url %}active{% endif %}">
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+          <polyline points="9 22 9 12 15 12 15 22"></polyline>
+        </svg>
+        <span>Início</span>
+      </a>
+
+      <a href="/collections/all" class="mobile-bottom-nav-item {% if request.path == '/collections/all' %}active{% endif %}">
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="4" y1="21" x2="4" y2="14"></line>
+          <line x1="4" y1="10" x2="4" y2="3"></line>
+          <line x1="12" y1="21" x2="12" y2="12"></line>
+          <line x1="12" y1="8" x2="12" y2="3"></line>
+          <line x1="20" y1="21" x2="20" y2="16"></line>
+          <line x1="20" y1="12" x2="20" y2="3"></line>
+          <line x1="1" y1="14" x2="7" y2="14"></line>
+          <line x1="9" y1="8" x2="15" y2="8"></line>
+          <line x1="17" y1="16" x2="23" y2="16"></line>
+        </svg>
+        <span>Ver Todas</span>
+      </a>
+
+      <button type="button" class="mobile-bottom-nav-item mobile-cart-trigger" id="MobileCartTrigger">
+        <div class="mobile-cart-icon-wrapper">
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="9" cy="21" r="1"></circle>
+            <circle cx="20" cy="21" r="1"></circle>
+            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+          </svg>
+          <span class="cart-badge {% if cart.item_count == 0 %}hidden{% endif %}" id="MobileCartBadge">
+            {{ cart.item_count }}
+          </span>
+        </div>
+        <span>Carrinho</span>
+      </button>
+
+      {%- if shop.customer_accounts_enabled -%}
+        {%- assign account_url = routes.account_url -%}
+        {%- unless customer -%}
+          {%- assign account_url = routes.account_login_url -%}
+        {%- endunless -%}
+        <a href="{{ account_url }}" class="mobile-bottom-nav-item {% if request.path == routes.account_url or request.path == routes.account_login_url %}active{% endif %}">
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+          <span>Conta</span>
+        </a>
+      {%- endif -%}
+    </div>
   </body>
 </html>
