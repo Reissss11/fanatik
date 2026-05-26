@@ -3,25 +3,20 @@
     <!-- Logo -->
     <div class="logo-container">
       <a href="{{ routes.root_url }}">
-        {%- if section.settings.logo != blank -%}
-          <img
-            src="{{ section.settings.logo | image_url: width: 180 }}"
-            alt="{{ shop.name }}"
-            class="logo"
-            width="{{ section.settings.logo.width }}"
-            height="{{ section.settings.logo.height }}"
-          >
-        {%- elsif settings.logo != blank -%}
-          <img
-            src="{{ settings.logo | image_url: width: 180 }}"
-            alt="{{ shop.name }}"
-            class="logo"
-            width="{{ settings.logo.width }}"
-            height="{{ settings.logo.height }}"
-          >
-        {%- else -%}
-          <span class="logo-text">{{ shop.name }}</span>
-        {%- endif -%}
+        <img
+          src="{{ 'logo-black.png' | asset_url }}"
+          alt="{{ shop.name }}"
+          class="logo logo-light-theme"
+          width="180"
+          height="55"
+        >
+        <img
+          src="{{ 'logo-white.png' | asset_url }}"
+          alt="{{ shop.name }}"
+          class="logo logo-dark-theme"
+          width="180"
+          height="55"
+        >
       </a>
     </div>
 
