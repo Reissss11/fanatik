@@ -471,7 +471,7 @@
 
   </div>
 </div>
-{% elsif page.handle == 'politica-de-privacidade' or page.handle == 'politica-privacidade' %}
+{% elsif page.handle == 'politica-de-privacidade' or page.handle == 'politica-privacidade' or request.path contains 'privacy-policy' %}
 <div class="privacy-container-wrapper">
   <div class="privacy-inner-container">
     
@@ -484,6 +484,20 @@
       </div>
       <h1 class="privacy-title">Política de Privacidade</h1>
       <p class="privacy-subtitle">Última atualização: Maio de 2026 · Versão 1.0</p>
+      
+      <!-- Real-time Interactive Search Bar for Privacy Terms -->
+      <div class="privacy-search-wrapper">
+        <span class="privacy-search-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+        </span>
+        <input type="text" id="PrivacySearchInput" placeholder="Procurar termos na política (ex: RGPD, cookies, dados, MB Way)..." aria-label="Procurar termos na política">
+        <button id="PrivacySearchClear" class="privacy-search-clear hidden" aria-label="Limpar pesquisa">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
     </header>
 
     <!-- Main Intro Card -->
@@ -502,247 +516,302 @@
       <!-- Left sidebar: Categories Navigation (Sticky) -->
       <aside class="privacy-sidebar">
         <nav class="privacy-categories-nav">
-          <a href="#artigo-1" class="privacy-category-nav-item active" data-target="artigo-1">
-            <span class="privacy-nav-num">1</span>
-            <span>Responsável</span>
+          <a href="#seccao-dados" class="privacy-category-nav-item active" data-target="seccao-dados">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+            <span>Sobre os Seus Dados</span>
           </a>
-          <a href="#artigo-2" class="privacy-category-nav-item" data-target="artigo-2">
-            <span class="privacy-nav-num">2</span>
-            <span>Dados Recolhidos</span>
+          <a href="#seccao-tratamento" class="privacy-category-nav-item" data-target="seccao-tratamento">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+            <span>Tratamento & Consentimento</span>
           </a>
-          <a href="#artigo-3" class="privacy-category-nav-item" data-target="artigo-3">
-            <span class="privacy-nav-num">3</span>
-            <span>Finalidades</span>
+          <a href="#seccao-seguranca" class="privacy-category-nav-item" data-target="seccao-seguranca">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+            <span>Partilha & Segurança</span>
           </a>
-          <a href="#artigo-4" class="privacy-category-nav-item" data-target="artigo-4">
-            <span class="privacy-nav-num">4</span>
-            <span>Consentimento</span>
-          </a>
-          <a href="#artigo-5" class="privacy-category-nav-item" data-target="artigo-5">
-            <span class="privacy-nav-num">5</span>
-            <span>Partilha de Dados</span>
-          </a>
-          <a href="#artigo-6" class="privacy-category-nav-item" data-target="artigo-6">
-            <span class="privacy-nav-num">6</span>
-            <span>Transf. Internacionais</span>
-          </a>
-          <a href="#artigo-7" class="privacy-category-nav-item" data-target="artigo-7">
-            <span class="privacy-nav-num">7</span>
-            <span>Segurança</span>
-          </a>
-          <a href="#artigo-8" class="privacy-category-nav-item" data-target="artigo-8">
-            <span class="privacy-nav-num">8</span>
-            <span>Cookies</span>
-          </a>
-          <a href="#artigo-9" class="privacy-category-nav-item" data-target="artigo-9">
-            <span class="privacy-nav-num">9</span>
-            <span>Conservação</span>
-          </a>
-          <a href="#artigo-10" class="privacy-category-nav-item" data-target="artigo-10">
-            <span class="privacy-nav-num">10</span>
+          <a href="#seccao-direitos" class="privacy-category-nav-item" data-target="seccao-direitos">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
             <span>Direitos do Titular</span>
           </a>
-          <a href="#artigo-11" class="privacy-category-nav-item" data-target="artigo-11">
-            <span class="privacy-nav-num">11</span>
-            <span>Limitação</span>
-          </a>
-          <a href="#artigo-12" class="privacy-category-nav-item" data-target="artigo-12">
-            <span class="privacy-nav-num">12</span>
-            <span>Alterações</span>
-          </a>
-          <a href="#artigo-13" class="privacy-category-nav-item" data-target="artigo-13">
-            <span class="privacy-nav-num">13</span>
-            <span>Lei e Foro</span>
-          </a>
-          <a href="#artigo-14" class="privacy-category-nav-item" data-target="artigo-14">
-            <span class="privacy-nav-num">14</span>
-            <span>Contacto</span>
+          <a href="#seccao-legal" class="privacy-category-nav-item" data-target="seccao-legal">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+            <span>Legal & Contacto</span>
           </a>
         </nav>
       </aside>
 
-      <!-- Right column: Privacy Content -->
+      <!-- Right column: Privacy Content Area (Interactive Accordions) -->
       <main class="privacy-content-area">
         
-        <!-- Artigo 1 -->
-        <section id="artigo-1" class="privacy-article-section">
-          <h2 class="privacy-article-title">Artigo 1 — Responsável pelo Tratamento</h2>
-          <div class="privacy-article-content">
-            <p>1.1 O responsável pelo tratamento dos dados pessoais recolhidos através do Serviço é a <strong>Fanatik Jersey</strong>.</p>
-            <p>1.2 Para qualquer questão relacionada com o tratamento dos seus dados ou privacidade, o Titular pode contactar o nosso Encarregado de Proteção de Dados (DPO) através do endereço de e-mail dedicado: <a href="mailto:fanatikjersey2@gmail.com" class="privacy-link">fanatikjersey2@gmail.com</a>.</p>
-            <p>1.3 A Fanatik Jersey reserva-se o direito de nomear um subcontratante ou transferir as suas obrigações enquanto responsável pelo tratamento, mediante notificação publicada nesta página, em estrita conformidade com os regulamentos europeus aplicáveis.</p>
+        <!-- Section 1 -->
+        <section id="seccao-dados" class="privacy-category-section">
+          <h2 class="privacy-category-title">Sobre os Seus Dados</h2>
+          
+          <div class="privacy-accordions-group">
+            <details class="privacy-accordion" name="privacy-accordion-group">
+              <summary class="privacy-summary">
+                <span class="privacy-question-text">Artigo 1 — Responsável pelo Tratamento</span>
+                <span class="privacy-icon-chevron">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </span>
+              </summary>
+              <div class="privacy-answer-content">
+                <p>1.1 O responsável pelo tratamento dos dados pessoais recolhidos através do Serviço é a marca <strong>Fanatik Jersey</strong>.</p>
+                <p>1.2 Para qualquer questão relacionada com o tratamento dos seus dados ou exercício de direitos de privacidade, o Titular pode contactar o nosso Encarregado de Proteção de Dados (DPO) através do e-mail dedicado: <a href="mailto:fanatikjersey2@gmail.com" class="privacy-link">fanatikjersey2@gmail.com</a>.</p>
+                <p>1.3 A Fanatik Jersey reserva-se o direito de nomear um subcontratante ou transferir as suas obrigações enquanto responsável pelo tratamento, mediante notificação publicada nesta página, em estrita conformidade com os regulamentos europeus aplicáveis.</p>
+              </div>
+            </details>
+
+            <details class="privacy-accordion" name="privacy-accordion-group">
+              <summary class="privacy-summary">
+                <span class="privacy-question-text">Artigo 2 — Dados Pessoais Recolhidos</span>
+                <span class="privacy-icon-chevron">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </span>
+              </summary>
+              <div class="privacy-answer-content">
+                <p>2.1 A Fanatik Jersey recolhe as seguintes categorias de dados pessoais através das interações no nosso website:</p>
+                <ul>
+                  <li><strong>Dados de identificação:</strong> nome completo, endereço de entrega, endereço de faturação, número de telefone (telemóvel) e endereço de correio eletrónico (e-mail).</li>
+                  <li><strong>Dados de pagamento:</strong> todos os dados financeiros são processados diretamente por prestadores externos de serviços de pagamento certificados (ex: Stripe, Shopify Payments, entidades bancárias de Multibanco ou MB Way). A Fanatik Jersey <strong>não armazena nem acede</strong> a dados de cartão de crédito ou chaves privadas de pagamento.</li>
+                  <li><strong>Dados de navegação:</strong> endereço IP, tipo e versão de browser, sistema operativo, páginas visitadas, duração da visita, interações com os elementos do website e dados analíticos de comportamento.</li>
+                  <li><strong>Dados de comunicação:</strong> mensagens, dúvidas ou reclamações enviadas pelos utilizadores para os nossos canais de apoio ao cliente (e-mail ou formulários de suporte).</li>
+                  <li><strong>Dados de preferências:</strong> histórico de compras, artigos guardados no carrinho de compras ou favoritos, e escolhas de comunicação de marketing.</li>
+                </ul>
+                <p>2.2 A Fanatik Jersey não recolhe intencionalmente dados de menores de 18 anos. Caso se detete a recolha involuntária de dados de menores de idade sem consentimento dos pais ou tutores, procederemos à sua eliminação imediata.</p>
+                <p>2.3 O Titular é responsável pela exatidão e atualização dos dados que fornece. A Fanatik Jersey não verifica a veracidade dos dados e declina qualquer responsabilidade por dados incorretos ou desatualizados que possam impedir a entrega de encomendas.</p>
+              </div>
+            </details>
           </div>
         </section>
 
-        <!-- Artigo 2 -->
-        <section id="artigo-2" class="privacy-article-section">
-          <h2 class="privacy-article-title">Artigo 2 — Dados Recolhidos</h2>
-          <div class="privacy-article-content">
-            <p>2.1 A Fanatik Jersey recolhe as seguintes categorias de dados pessoais através das interações no nosso website:</p>
-            <ul>
-              <li><strong>Dados de identificação:</strong> nome completo, endereço de entrega, endereço de faturação, número de telefone (telemóvel) e endereço de correio eletrónico (e-mail).</li>
-              <li><strong>Dados de pagamento:</strong> todos os dados financeiros são processados diretamente por prestadores externos de serviços de pagamento certificados (ex: Stripe, Shopify Payments, entidades bancárias de Multibanco ou MB Way). A Fanatik Jersey <strong>não armazena nem acede</strong> a dados de cartão de crédito ou chaves privadas de pagamento.</li>
-              <li><strong>Dados de navegação:</strong> endereço IP, tipo e versão de browser, sistema operativo, páginas visitadas, duração da visita, interações com os elementos do website e dados analíticos de comportamento.</li>
-              <li><strong>Dados de comunicação:</strong> mensagens, dúvidas ou reclamações enviadas pelos utilizadores para os nossos canais de apoio ao cliente (e-mail ou formulários de suporte).</li>
-              <li><strong>Dados de preferências:</strong> histórico de compras, artigos guardados no carrinho de compras ou favoritos, e escolhas de comunicação de marketing.</li>
-            </ul>
-            <p>2.2 A Fanatik Jersey não recolhe intencionalmente dados de menores de 18 anos. Caso se detete a recolha involuntária de dados de menores de idade sem consentimento dos pais ou tutores, procederemos à sua eliminação imediata.</p>
-            <p>2.3 O Titular é responsável pela exatidão e atualização dos dados que fornece. A Fanatik Jersey não verifica a veracidade dos dados e declina qualquer responsabilidade por dados incorretos ou desatualizados que possam impedir a entrega de encomendas.</p>
+        <!-- Section 2 -->
+        <section id="seccao-tratamento" class="privacy-category-section">
+          <h2 class="privacy-category-title">Tratamento & Consentimento</h2>
+          
+          <div class="privacy-accordions-group">
+            <details class="privacy-accordion" name="privacy-accordion-group">
+              <summary class="privacy-summary">
+                <span class="privacy-question-text">Artigo 3 — Finalidades e Base Legal do Tratamento</span>
+                <span class="privacy-icon-chevron">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </span>
+              </summary>
+              <div class="privacy-answer-content">
+                <p>3.1 Os dados pessoais recolhidos são tratados para as seguintes finalidades, assentes nas respetivas bases legais:</p>
+                <ul>
+                  <li><strong>Execução de Contrato:</strong> Processamento, faturação e envio de encomendas (tamanho escolhido, personalizações, patches e morada de entrega), comunicações sobre o estado da encomenda e suporte pós-venda.</li>
+                  <li><strong>Interesse Legítimo:</strong> Prevenção de fraude informática, auditoria e segurança do website, validação de transações e melhoria contínua da experiência de navegação e layout da loja.</li>
+                  <li><strong>Cumprimento de Obrigações Legais:</strong> Emissão de faturas, arquivo contabilístico e resposta a requisitos das autoridades tributárias e judiciais aplicáveis em Portugal.</li>
+                  <li><strong>Consentimento:</strong> Envio de newsletters e comunicações de marketing sobre novos lançamentos de camisolas, descontos exclusivos e promoções (apenas mediante subscrição explícita "Opt-in" pelo Titular).</li>
+                </ul>
+                <p>3.2 A Fanatik Jersey reserva-se o direito de utilizar dados agregados de forma anónima para fins estatísticos, de otimização de campanhas comerciais e análises de tendências, sem que tal identifique direta ou indiretamente os indivíduos.</p>
+              </div>
+            </details>
+
+            <details class="privacy-accordion" name="privacy-accordion-group">
+              <summary class="privacy-summary">
+                <span class="privacy-question-text">Artigo 4 — Consentimento e Retirada de Consentimento</span>
+                <span class="privacy-icon-chevron">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </span>
+              </summary>
+              <div class="privacy-answer-content">
+                <p>4.1 Ao fornecer dados pessoais no contexto de uma compra ou preenchimento de formulários, o Titular consente de forma livre, específica e informada no tratamento dos seus dados para as finalidades contratuais descritas no Artigo 3.</p>
+                <p>4.2 Para tratamentos baseados no consentimento expresso (como marketing e subscrição de ofertas), o Titular tem o direito de retirar o seu consentimento a qualquer momento, sem comprometer a licitude do tratamento efetuado até essa data.</p>
+                <p>4.3 A retirada de consentimento pode ser efetuada de forma imediata através do link de cancelamento de subscrição ("unsubscribe") presente em todos os e-mails de marketing, ou enviando um e-mail com o pedido para <a href="mailto:fanatikjersey2@gmail.com" class="privacy-link">fanatikjersey2@gmail.com</a>. O pedido será processado num prazo máximo de 10 dias úteis.</p>
+                <p>4.4 A retirada do consentimento para marketing não afeta o envio de comunicações transacionais estritamente necessárias ao processamento e entrega de encomendas em curso.</p>
+              </div>
+            </details>
+
+            <details class="privacy-accordion" name="privacy-accordion-group">
+              <summary class="privacy-summary">
+                <span class="privacy-question-text">Artigo 9 — Conservação dos Dados</span>
+                <span class="privacy-icon-chevron">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </span>
+              </summary>
+              <div class="privacy-answer-content">
+                <p>9.1 Os dados pessoais recolhidos pela Fanatik Jersey são conservados apenas durante o período estritamente necessário para cumprir as finalidades indicadas, nomeadamente:</p>
+                <ul>
+                  <li><strong>Dados de encomendas e faturação:</strong> conservados por um período legal obrigatório de <strong>7 a 10 anos</strong>, de acordo com as exigências da legislação fiscal e contabilística aplicável em Portugal.</li>
+                  <li><strong>Dados de conta de cliente:</strong> mantidos ativamente enquanto o Titular mantiver a conta ativa e não solicitar a sua respetiva eliminação.</li>
+                  <li><strong>Dados de marketing:</strong> conservados até que o Titular retire o seu consentimento ou cancele a sua subscrição de e-mails.</li>
+                  <li><strong>Dados de navegação e logs do servidor:</strong> armazenados temporariamente para fins de segurança por um período que normalmente não ultrapassa os 24 meses.</li>
+                </ul>
+                <p>9.2 A Fanatik Jersey reserva-se o direito de reter dados por períodos superiores quando estritamente necessário para defesa de direitos em eventuais litígios judiciais ou administrativos, ou por determinação judicial.</p>
+              </div>
+            </details>
           </div>
         </section>
 
-        <!-- Artigo 3 -->
-        <section id="artigo-3" class="privacy-article-section">
-          <h2 class="privacy-article-title">Artigo 3 — Finalidades e Base Legal do Tratamento</h2>
-          <div class="privacy-article-content">
-            <p>3.1 Os dados pessoais recolhidos são tratados para as seguintes finalidades, assentes nas respetivas bases legais:</p>
-            <ul>
-              <li><strong>Execução de Contrato:</strong> Processamento, faturação e envio de encomendas (tamanho escolhido, personalizações, patches e morada de entrega), comunicações sobre o estado da encomenda e suporte pós-venda.</li>
-              <li><strong>Interesse Legítimo:</strong> Prevenção de fraude informática, auditoria e segurança do website, validação de transações e melhoria contínua da experiência de navegação e layout da loja.</li>
-              <li><strong>Cumprimento de Obrigações Legais:</strong> Emissão de faturas, arquivo contabilístico e resposta a requisitos das autoridades tributárias e judiciais aplicáveis em Portugal.</li>
-              <li><strong>Consentimento:</strong> Envio de newsletters e comunicações de marketing sobre novos lançamentos de camisolas, descontos exclusivos e promoções (apenas mediante subscrição explícita "Opt-in" pelo Titular).</li>
-            </ul>
-            <p>3.2 A Fanatik Jersey reserva-se o direito de utilizar dados agregados de forma anónima para fins estatísticos, de otimização de campanhas comerciais e análises de tendências, sem que tal identifique direta ou indiretamente os indivíduos.</p>
+        <!-- Section 3 -->
+        <section id="seccao-seguranca" class="privacy-category-section">
+          <h2 class="privacy-category-title">Partilha & Segurança</h2>
+          
+          <div class="privacy-accordions-group">
+            <details class="privacy-accordion" name="privacy-accordion-group">
+              <summary class="privacy-summary">
+                <span class="privacy-question-text">Artigo 5 — Partilha e Divulgação de Dados</span>
+                <span class="privacy-icon-chevron">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </span>
+              </summary>
+              <div class="privacy-answer-content">
+                <p>5.1 A Fanatik Jersey pode partilhar dados pessoais estritamente necessários com parceiros de confiança apenas nas seguintes condições:</p>
+                <ul>
+                  <li><strong>Prestadores de serviços essenciais:</strong> gateways de pagamento (Shopify Payments, entidades bancárias autorizadas), operadores logísticos e transportadoras para processamento e entrega física de mercadorias, e fornecedores de alojamento web e ferramentas de análise (ex: Google Analytics), todos vinculados a acordos rígidos de confidencialidade de dados.</li>
+                  <li><strong>Autoridades competentes:</strong> entidades tributárias ou forças de segurança, quando legalmente exigido ou para investigação de potenciais fraudes.</li>
+                  <li><strong>Fusão ou reestruturação:</strong> em caso de reestruturação do negócio ou alteração de proprietário, garantindo que o Titular é previamente informado sobre a transição dos seus dados pessoais.</li>
+                </ul>
+                <p>5.2 A Fanatik Jersey <strong>não vende, aluga ou cede</strong> dados pessoais a terceiros sob qualquer pretexto para fins comerciais ou publicitários externos.</p>
+                <p>5.3 A nossa política de proteção estende-se apenas aos nossos services. Recomendamos que o Titular consulte as políticas de privacidade dos prestadores terceiros de transporte e pagamento ao interagir com as plataformas de terceiros.</p>
+              </div>
+            </details>
+
+            <details class="privacy-accordion" name="privacy-accordion-group">
+              <summary class="privacy-summary">
+                <span class="privacy-question-text">Artigo 6 — Transferências Internacionais de Dados</span>
+                <span class="privacy-icon-chevron">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </span>
+              </summary>
+              <div class="privacy-answer-content">
+                <p>6.1 Os dados recolhidos são maioritariamente tratados em servidores localizados na União Europeia. Contudo, em virtude da utilização da plataforma global <strong>Shopify</strong>, alguns dados podem ser transferidos e processados em países terceiros (como os EUA ou Canadá), os quais possuem decisões de adequação ou cláusulas contratuais-tipo validadas pela Comissão Europeia para garantir a máxima segurança dos seus dados.</p>
+                <p>6.2 A Fanatik Jersey assegura que todas as transferências internacionais cumprem com as exigências do RGPD e utilizam protocolos seguros de proteção.</p>
+              </div>
+            </details>
+
+            <details class="privacy-accordion" name="privacy-accordion-group">
+              <summary class="privacy-summary">
+                <span class="privacy-question-text">Artigo 7 — Segurança dos Dados</span>
+                <span class="privacy-icon-chevron">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </span>
+              </summary>
+              <div class="privacy-answer-content">
+                <p>7.1 A Fanatik Jersey implementa medidas técnicas e organizativas rigorosas para proteger os dados pessoais contra acessos não autorizados, perdas, alterações, roubo ou destruição de informação, utilizando encriptação SSL/TLS nas transmissões de dados e chaves AES-256 no armazenamento seguro da base de dados do Shopify.</p>
+                <p>7.2 Contudo, devido à natureza aberta della Internet, nenhum sistema é 100% impenetrável. Recomendamos ao utilizador utilizar passwords fortes no seu registo e proteger os seus dados de acesso.</p>
+                <p>7.3 Em caso de qualquer falha de segurança que afete ou represente risco para os direitos e liberdades do Titular, a Fanatik Jersey reportará o incidente à Comissão Nacional de Proteção de Dados (CNPD) e notificará os utilizadores afetados dentro do prazo legal de 72 horas exigido pelo RGPD.</p>
+              </div>
+            </details>
+
+            <details class="privacy-accordion" name="privacy-accordion-group">
+              <summary class="privacy-summary">
+                <span class="privacy-question-text">Artigo 8 — Cookies e Tecnologias de Rastreio</span>
+                <span class="privacy-icon-chevron">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </span>
+              </summary>
+              <div class="privacy-answer-content">
+                <p>8.1 O nosso website utiliza cookies e tecnologias de rastreio semelhantes (como pixéis de conversão) para as seguintes finalidades essenciais:</p>
+                <ul>
+                  <li><strong>Cookies estritamente necessários:</strong> para garantir o login, a manutenção de artigos no carrinho de compras e o funcionamento seguro da finalização de compra.</li>
+                  <li><strong>Cookies analíticos:</strong> para medir estatísticas de tráfego, identificar de onde provêm os visitantes e melhorar o desempenho global da loja.</li>
+                  <li><strong>Cookies de preferências:</strong> para guardar opções de idioma, temas de layout e opções de tamanho preferenciais.</li>
+                  <li><strong>Cookies de marketing e publicidade:</strong> para apresentar anúncios relevantes com base no interesse demonstrado pelas nossas camisolas de futebol ou NBA.</li>
+                </ul>
+                <p>8.2 O Titular pode facilmente gerir as suas preferências de cookies, rejeitar ou eliminar cookies através das configurações do seu navegador web. Note que a desativação de cookies essenciais pode afetar a funcionalidade total da loja.</p>
+                <p>8.3 Não nos responsabilizamos por cookies instalados por redes sociais integradas no nosso website ou outras plataformas de análise cuja gestão e políticas pertencem a terceiros.</p>
+              </div>
+            </details>
           </div>
         </section>
 
-        <!-- Artigo 4 -->
-        <section id="artigo-4" class="privacy-article-section">
-          <h2 class="privacy-article-title">Artigo 4 — Consentimento e Retirada de Consentimento</h2>
-          <div class="privacy-article-content">
-            <p>4.1 Ao fornecer dados pessoais no contexto de uma compra ou preenchimento de formulários, o Titular consente de forma livre, específica e informada no tratamento dos seus dados para as finalidades contratuais descritas no Artigo 3.</p>
-            <p>4.2 Para tratamentos baseados no consentimento expresso (como marketing e subscrição de ofertas), o Titular tem o direito de retirar o seu consentimento a qualquer momento, sem comprometer a licitude do tratamento efetuado até essa data.</p>
-            <p>4.3 A retirada de consentimento pode ser efetuada de forma imediata através do link de cancelamento de subscrição ("unsubscribe") presente em todos os e-mails de marketing, ou enviando um e-mail com o pedido para <a href="mailto:fanatikjersey2@gmail.com" class="privacy-link">fanatikjersey2@gmail.com</a>. O pedido será processado num prazo máximo de 10 dias úteis.</p>
-            <p>4.4 A retirada do consentimento para marketing não afeta o envio de comunicações transacionais estritamente necessárias ao processamento e entrega de encomendas em curso.</p>
+        <!-- Section 4 -->
+        <section id="seccao-direitos" class="privacy-category-section">
+          <h2 class="privacy-category-title">Direitos do Titular</h2>
+          
+          <div class="privacy-accordions-group">
+            <details class="privacy-accordion" name="privacy-accordion-group">
+              <summary class="privacy-summary">
+                <span class="privacy-question-text">Artigo 10 — Direitos do Titular dos Dados (RGPD)</span>
+                <span class="privacy-icon-chevron">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </span>
+              </summary>
+              <div class="privacy-answer-content">
+                <p>10.1 Em total conformidade com o RGPD e as leis de proteção europeias, o Titular pode exercer os seguintes direitos a qualquer momento sobre os seus dados pessoais:</p>
+                <ul>
+                  <li><strong>Direito de Acesso:</strong> confirmar se os seus dados estão a ser tratados e obter uma cópia dos mesmos;</li>
+                  <li><strong>Direito de Retificação:</strong> solicitar a correção imediata de dados incompletos, inexatos ou desatualizados;</li>
+                  <li><strong>Direito de Apagamento ("Esquecimento"):</strong> solicitar a eliminação dos seus dados quando estes deixarem de ser necessários para as finalidades ou quando retirar o consentimento (salvo obrigações fiscais de retenção);</li>
+                  <li><strong>Direito à Limitação do Tratamento:</strong> solicitar a suspensão temporária do tratamento dos seus dados em determinadas circunstâncias previstas na lei;</li>
+                  <li><strong>Direito de Oposição:</strong> opor-se ao tratamento dos dados, particularmente no que concerne ao marketing direto ou segmentação de anúncios;</li>
+                  <li><strong>Direito à Portabilidade:</strong> receber os seus dados pessoais num formato estruturado, legível por máquina, para transmitir a outro responsável pelo tratamento.</li>
+                </ul>
+                <p>10.2 Para exercer os seus direitos ou esclarecer qualquer dúvida de privacidade, o Titular deve submeter o pedido por escrito para o e-mail: <a href="mailto:fanatikjersey2@gmail.com" class="privacy-link">fanatikjersey2@gmail.com</a>. O pedido será processado e respondido num prazo máximo legal de 30 dias.</p>
+                <p>10.3 O Titular tem também o direito de apresentar uma reclamação formal junto da Comissão Nacional de Proteção de Dados (CNPD - cnpd.pt) caso considere que o tratamento dos seus dados pessoais viola os regulamentos aplicáveis.</p>
+              </div>
+            </details>
           </div>
         </section>
 
-        <!-- Artigo 5 -->
-        <section id="artigo-5" class="privacy-article-section">
-          <h2 class="privacy-article-title">Artigo 5 — Partilha e Divulgação de Dados</h2>
-          <div class="privacy-article-content">
-            <p>5.1 A Fanatik Jersey pode partilhar dados pessoais estritamente necessários com parceiros de confiança apenas nas seguintes condições:</p>
-            <ul>
-              <li><strong>Prestadores de serviços essenciais:</strong> gateways de pagamento (Shopify Payments, entidades bancárias autorizadas), operadores logísticos e transportadoras para processamento e entrega física de mercadorias, e fornecedores de alojamento web e ferramentas de análise (ex: Google Analytics), todos vinculados a acordos rígidos de confidencialidade de dados.</li>
-              <li><strong>Autoridades competentes:</strong> entidades tributárias ou forças de segurança, quando legalmente exigido ou para investigação de potenciais fraudes.</li>
-              <li><strong>Fusão ou reestruturação:</strong> em caso de reestruturação do negócio ou alteração de proprietário, garantindo que o Titular é previamente informado sobre a transição dos seus dados pessoais.</li>
-            </ul>
-            <p>5.2 A Fanatik Jersey <strong>não vende, aluga ou cede</strong> dados pessoais a terceiros sob qualquer pretexto para fins comerciais ou publicitários externos.</p>
-            <p>5.3 A nossa política de proteção estende-se apenas aos nossos serviços. Recomendamos que o Titular consulte as políticas de privacidade dos prestadores terceiros de transporte e pagamento ao interagir com as plataformas de terceiros.</p>
-          </div>
-        </section>
+        <!-- Section 5 -->
+        <section id="seccao-legal" class="privacy-category-section">
+          <h2 class="privacy-category-title">Legal & Contacto</h2>
+          
+          <div class="privacy-accordions-group">
+            <details class="privacy-accordion" name="privacy-accordion-group">
+              <summary class="privacy-summary">
+                <span class="privacy-question-text">Artigo 11 — Limitação de Responsabilidade</span>
+                <span class="privacy-icon-chevron">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </span>
+              </summary>
+              <div class="privacy-answer-content">
+                <p>11.1 A Fanatik Jersey não será responsável por quaisquer danos indiretos, incidentais, especiais ou consequentes resultantes de: (i) utilização incorreta ou interrupções de navegação do website por falhas de rede externa; (ii) acessos não autorizados motivados por roubo de credenciais do Titular ou ataques direcionados de força maior que ultrapassem as nossas medidas padrão de proteção; (iii) ações ou omissões de terceiros prestadores envolvidos no Serviço que detenham políticas próprias.</p>
+                <p>11.2 Nos termos permitidos por lei, em caso de eventual desconformidade ou falha técnica interna imputável à marca, a responsabilidade civil da Fanatik Jersey fica estritamente limitada ao montante total efetivamente pago pelo Titular na compra que originou o facto gerador.</p>
+              </div>
+            </details>
 
-        <!-- Artigo 6 -->
-        <section id="artigo-6" class="privacy-article-section">
-          <h2 class="privacy-article-title">Artigo 6 — Transferências Internacionais de Dados</h2>
-          <div class="privacy-article-content">
-            <p>6.1 Os dados recolhidos são maioritariamente tratados em servidores localizados na União Europeia. Contudo, em virtude da utilização da plataforma global <strong>Shopify</strong>, alguns dados podem ser transferidos e processados em países terceiros (como os EUA ou Canadá), os quais possuem decisões de adequação ou cláusulas contratuais-tipo validadas pela Comissão Europeia para garantir a máxima segurança dos seus dados.</p>
-            <p>6.2 A Fanatik Jersey assegura que todas as transferências internacionais cumprem com as exigências do RGPD e utilizam protocolos seguros de proteção.</p>
-          </div>
-        </section>
+            <details class="privacy-accordion" name="privacy-accordion-group">
+              <summary class="privacy-summary">
+                <span class="privacy-question-text">Artigo 12 — Alterações à Política de Privacidade</span>
+                <span class="privacy-icon-chevron">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </span>
+              </summary>
+              <div class="privacy-answer-content">
+                <p>12.1 A Fanatik Jersey reserva-se o direito de atualizar e modificar a presente Política de Privacidade a qualquer momento para garantir a adequação a novas legislações, alterações da plataforma Shopify ou evoluções comerciais do negócio. As alterações produzem efeitos imediatos após a sua publicação no website.</p>
+                <p>12.2 A continuação da navegação ou utilização da nossa loja online após a publicação de atualizações constitui aceitação automática e irrevogável por parte do utilizador da versão atualizada da Política.</p>
+              </div>
+            </details>
 
-        <!-- Artigo 7 -->
-        <section id="artigo-7" class="privacy-article-section">
-          <h2 class="privacy-article-title">Artigo 7 — Segurança dos Dados</h2>
-          <div class="privacy-article-content">
-            <p>7.1 A Fanatik Jersey implementa medidas técnicas e organizativas rigorosas para proteger os dados pessoais contra acessos não autorizados, perdas, alterações, roubo ou destruição de informação, utilizando encriptação SSL/TLS nas transmissões de dados e chaves AES-256 no armazenamento seguro da base de dados do Shopify.</p>
-            <p>7.2 Contudo, devido à natureza aberta da Internet, nenhum sistema é 100% impenetrável. Recomendamos ao utilizador utilizar passwords fortes no seu registo e proteger os seus dados de acesso.</p>
-            <p>7.3 Em caso de qualquer falha de segurança que afete ou represente risco para os direitos e liberdades do Titular, a Fanatik Jersey reportará o incidente à Comissão Nacional de Proteção de Dados (CNPD) e notificará os utilizadores afetados dentro do prazo legal de 72 horas exigido pelo RGPD.</p>
-          </div>
-        </section>
+            <details class="privacy-accordion" name="privacy-accordion-group">
+              <summary class="privacy-summary">
+                <span class="privacy-question-text">Artigo 13 — Lei Aplicável e Foro</span>
+                <span class="privacy-icon-chevron">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </span>
+              </summary>
+              <div class="privacy-answer-content">
+                <p>13.1 A presente Política de Privacidade é integralmente regida e interpretada em conformidade com a <strong>legislação portuguesa</strong> e os regulamentos de proteção europeus (RGPD).</p>
+                <p>13.2 Qualquer litígio, controvérsia ou reclamação decorrente da interpretação ou aplicação desta política que não possa ser resolvido de forma amigável será submetido à jurisdição exclusiva dos <strong>Tribunais da Comarca de Lisboa (Portugal)</strong>, com renúncia expressa a qualquer outro foro.</p>
+              </div>
+            </details>
 
-        <!-- Artigo 8 -->
-        <section id="artigo-8" class="privacy-article-section">
-          <h2 class="privacy-article-title">Artigo 8 — Cookies e Tecnologias de Rastreio</h2>
-          <div class="privacy-article-content">
-            <p>8.1 O nosso website utiliza cookies e tecnologias de rastreio semelhantes (como pixéis de conversão) para as seguintes finalidades essenciais:</p>
-            <ul>
-              <li><strong>Cookies estritamente necessários:</strong> para garantir o login, a manutenção de artigos no carrinho de compras e o funcionamento seguro da finalização de compra.</li>
-              <li><strong>Cookies analíticos:</strong> para medir estatísticas de tráfego, identificar de onde provêm os visitantes e melhorar o desempenho global da loja.</li>
-              <li><strong>Cookies de preferências:</strong> para guardar opções de idioma, temas de layout e opções de tamanho preferenciais.</li>
-              <li><strong>Cookies de marketing e publicidade:</strong> para apresentar anúncios relevantes com base no interesse demonstrado pelas nossas camisolas de futebol ou NBA.</li>
-            </ul>
-            <p>8.2 O Titular pode facilmente gerir as suas preferências de cookies, rejeitar ou eliminar cookies através das configurações do seu navegador web. Note que a desativação de cookies essenciais pode afetar a funcionalidade total da loja.</p>
-            <p>8.3 Não nos responsabilizamos por cookies instalados por redes sociais integradas no nosso website ou outras plataformas de análise cuja gestão e políticas pertencem a terceiros.</p>
-          </div>
-        </section>
-
-        <!-- Artigo 9 -->
-        <section id="artigo-9" class="privacy-article-section">
-          <h2 class="privacy-article-title">Artigo 9 — Conservação dos Dados</h2>
-          <div class="privacy-article-content">
-            <p>9.1 Os dados pessoais recolhidos pela Fanatik Jersey são conservados apenas durante o período estritamente necessário para cumprir as finalidades indicadas, nomeadamente:</p>
-            <ul>
-              <li><strong>Dados de encomendas e faturação:</strong> conservados por um período legal obrigatório de <strong>7 a 10 anos</strong>, de acordo com as exigências da legislação fiscal e contabilística aplicável em Portugal.</li>
-              <li><strong>Dados de conta de cliente:</strong> mantidos ativamente enquanto o Titular mantiver a conta ativa e não solicitar a sua respetiva eliminação.</li>
-              <li><strong>Dados de marketing:</strong> conservados até que o Titular retire o seu consentimento ou cancele a sua subscrição de e-mails.</li>
-              <li><strong>Dados de navegação e logs do servidor:</strong> armazenados temporariamente para fins de segurança por um período que normalmente não ultrapassa os 24 meses.</li>
-            </ul>
-            <p>9.2 A Fanatik Jersey reserva-se o direito de reter dados por períodos superiores quando estritamente necessário para defesa de direitos em eventuais litígios judiciais ou administrativos, ou por determinação judicial.</p>
-          </div>
-        </section>
-
-        <!-- Artigo 10 -->
-        <section id="artigo-10" class="privacy-article-section">
-          <h2 class="privacy-article-title">Artigo 10 — Direitos do Titular dos Dados</h2>
-          <div class="privacy-article-content">
-            <p>10.1 Em total conformidade com o RGPD e as leis de proteção europeias, o Titular pode exercer os seguintes direitos a qualquer momento sobre os seus dados pessoais:</p>
-            <ul>
-              <li><strong>Direito de Acesso:</strong> confirmar se os seus dados estão a ser tratados e obter uma cópia dos mesmos;</li>
-              <li><strong>Direito de Retificação:</strong> solicitar a correção imediata de dados incompletos, inexatos ou desatualizados;</li>
-              <li><strong>Direito de Apagamento ("Esquecimento"):</strong> solicitar a eliminação dos seus dados quando estes deixarem de ser necessários para as finalidades ou quando retirar o consentimento (salvo obrigações fiscais de retenção);</li>
-              <li><strong>Direito à Limitação do Tratamento:</strong> solicitar a suspensão temporária do tratamento dos seus dados em determinadas circunstâncias previstas na lei;</li>
-              <li><strong>Direito de Oposição:</strong> opor-se ao tratamento dos dados, particularmente no que concerne ao marketing direto ou segmentação de anúncios;</li>
-              <li><strong>Direito à Portabilidade:</strong> receber os seus dados pessoais num formato estruturado, legível por máquina, para transmitir a outro responsável pelo tratamento.</li>
-            </ul>
-            <p>10.2 Para exercer os seus direitos ou esclarecer qualquer dúvida de privacidade, o Titular deve submeter o pedido por escrito para o e-mail: <a href="mailto:fanatikjersey2@gmail.com" class="privacy-link">fanatikjersey2@gmail.com</a>. O pedido será processado e respondido num prazo máximo legal de 30 dias.</p>
-            <p>10.3 O Titular tem também o direito de apresentar uma reclamação formal junto da Comissão Nacional de Proteção de Dados (CNPD - cnpd.pt) caso considere que o tratamento dos seus dados pessoais viola os regulamentos aplicáveis.</p>
-          </div>
-        </section>
-
-        <!-- Artigo 11 -->
-        <section id="artigo-11" class="privacy-article-section">
-          <h2 class="privacy-article-title">Artigo 11 — Limitação de Responsabilidade</h2>
-          <div class="privacy-article-content">
-            <p>11.1 A Fanatik Jersey não será responsável por quaisquer danos indiretos, incidentais, especiais ou consequentes resultantes de: (i) utilização incorreta ou interrupções de navegação do website por falhas de rede externa; (ii) acessos não autorizados motivados por roubo de credenciais do Titular ou ataques direcionados de força maior que ultrapassem as nossas medidas padrão de proteção; (iii) ações ou omissões de terceiros prestadores envolvidos no Serviço que detenham políticas próprias.</p>
-            <p>11.2 Nos termos permitidos por lei, em caso de eventual desconformidade ou falha técnica interna imputável à marca, a responsabilidade civil da Fanatik Jersey fica estritamente limitada ao montante total efetivamente pago pelo Titular na compra que originou o facto gerador.</p>
-          </div>
-        </section>
-
-        <!-- Artigo 12 -->
-        <section id="artigo-12" class="privacy-article-section">
-          <h2 class="privacy-article-title">Artigo 12 — Alterações à Política de Privacidade</h2>
-          <div class="privacy-article-content">
-            <p>12.1 A Fanatik Jersey reserva-se o direito de atualizar e modificar a presente Política de Privacidade a qualquer momento para garantir a adequação a novas legislações, alterações da plataforma Shopify ou evoluções comerciais do negócio. As alterações produzem efeitos imediatos após a sua publicação no website.</p>
-            <p>12.2 A continuação da navegação ou utilização da nossa loja online após a publicação de atualizações constitui aceitação automática e irrevogável por parte do utilizador da versão atualizada da Política.</p>
-          </div>
-        </section>
-
-        <!-- Artigo 13 -->
-        <section id="artigo-13" class="privacy-article-section">
-          <h2 class="privacy-article-title">Artigo 13 — Lei Aplicável e Foro</h2>
-          <div class="privacy-article-content">
-            <p>13.1 A presente Política de Privacidade é integralmente regida e interpretada em conformidade com a <strong>legislação portuguesa</strong> e os regulamentos de proteção europeus (RGPD).</p>
-            <p>13.2 Qualquer litígio, controvérsia ou reclamação decorrente da interpretação ou aplicação desta política que não possa ser resolvido de forma amigável será submetido à jurisdição exclusiva dos <strong>Tribunais da Comarca de Lisboa (Portugal)</strong>, com renúncia expressa a qualquer outro foro.</p>
-          </div>
-        </section>
-
-        <!-- Artigo 14 -->
-        <section id="artigo-14" class="privacy-article-section">
-          <h2 class="privacy-article-title">Artigo 14 — Contacto</h2>
-          <div class="privacy-article-content">
-            <p>Para o esclarecimento de qualquer dúvida de privacidade, envio de reclamações ou para o exercício dos seus direitos de titular dos dados pessoais descritos nesta página, a equipa da Fanatik está ao seu inteiro dispor através de:</p>
-            <div class="privacy-contact-box">
-              <a href="mailto:fanatikjersey2@gmail.com" class="privacy-cta-btn">
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
-                  <polyline points="22,6 12,13 2,6"></polyline>
-                </svg>
-                <span>Enviar E-mail de Contacto</span>
-              </a>
-              <span class="privacy-contact-email">fanatikjersey2@gmail.com</span>
-            </div>
-            <p class="privacy-conclusion-note">Ao continuar a navegar ou a efetuar compras no nosso Serviço, o Titular declara que tomou integral conhecimento, compreendeu e aceita incondicionalmente a presente Política de Privacidade e Tratamento de Dados.</p>
+            <details class="privacy-accordion" name="privacy-accordion-group">
+              <summary class="privacy-summary">
+                <span class="privacy-question-text">Artigo 14 — Contacto e Apoio</span>
+                <span class="privacy-icon-chevron">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </span>
+              </summary>
+              <div class="privacy-answer-content">
+                <p>Para o esclarecimento de qualquer dúvida de privacidade, envio de reclamações ou para o exercício dos seus direitos de titular dos dados pessoais descritos nesta página, a equipa da Fanatik está ao seu inteiro dispor através de:</p>
+                <div class="privacy-contact-box">
+                  <a href="mailto:fanatikjersey2@gmail.com" class="privacy-cta-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                      <polyline points="22,6 12,13 2,6"></polyline>
+                    </svg>
+                    <span>Enviar E-mail de Contacto</span>
+                  </a>
+                  <span class="privacy-contact-email">fanatikjersey2@gmail.com</span>
+                </div>
+                <p class="privacy-conclusion-note">Ao continuar a navegar ou a efetuar compras no nosso Serviço, o Titular declara que tomou integral conhecimento, compreendeu e aceita incondicionalmente a presente Política de Privacidade e Tratamento de Dados.</p>
+              </div>
+            </details>
           </div>
         </section>
 
@@ -751,7 +820,212 @@
     </div>
   </div>
 </div>
-{% else %}
+
+{% elsif page.handle == 'trocas-e-devolucoes' or page.handle == 'trocas-devolucoes' or page.handle == 'politica-de-reembolso' or page.handle == 'politica-reembolso' or page.handle == 'devolucoes' or request.path contains 'refund-policy' %}
+<div class="refund-container-wrapper">
+  <div class="refund-inner-container">
+    
+    <!-- Header -->
+    <header class="refund-header">
+      <div class="refund-header-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path>
+        </svg>
+      </div>
+      <h1 class="refund-title">Trocas & Devoluções</h1>
+      <p class="refund-subtitle">Última atualização: Maio de 2026 · Versão 1.0</p>
+      
+      <!-- Real-time Interactive Search Bar for Refund Terms -->
+      <div class="refund-search-wrapper">
+        <span class="refund-search-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+        </span>
+        <input type="text" id="RefundSearchInput" placeholder="Procurar termos na política de reembolso..." aria-label="Procurar termos na política de trocas">
+        <button id="RefundSearchClear" class="refund-search-clear hidden" aria-label="Limpar pesquisa">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Intro Card -->
+    <div class="refund-intro-card">
+      <p>
+        Na <strong>Fanatik Jersey</strong>, operamos com total transparência e seriedade em todas as etapas da nossa atividade comercial. A presente Política de Trocas e Devoluções rege as condições de compra e estabelece os termos claros de isenção de responsabilidade.
+      </p>
+      <p>
+        Visto que a Fanatik Jersey atua no mercado exclusivamente como um <strong>ponto de revenda de camisolas</strong> (intermediação comercial direta com fornecedores topo de gama internacionais), <strong>não aceitamos trocas ou devoluções</strong>, e qualquer tipo de danos nas peças são-nos <strong>totalmente alheios</strong>. Ao efetuar uma compra no nosso website, o cliente reconhece e aceita integralmente estas condições.
+      </p>
+    </div>
+
+    <!-- Main Layout Grid -->
+    <div class="refund-main-layout">
+      
+      <!-- Left sidebar: Categories Navigation (Sticky) -->
+      <aside class="refund-sidebar">
+        <nav class="refund-categories-nav">
+          <a href="#troca-revenda" class="refund-category-nav-item active" data-target="troca-revenda">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="2" ry="2"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
+            <span>Revenda & Isenção</span>
+          </a>
+          <a href="#troca-nao-devolucao" class="refund-category-nav-item" data-target="troca-nao-devolucao">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            <span>Não Devolução</span>
+          </a>
+          <a href="#troca-tamanhos" class="refund-category-nav-item" data-target="troca-tamanhos">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.38 3.46L16 7.83l-3.83-3.83a2 2 0 0 0-2.83 0L3.46 9.88a2 2 0 0 0 0 2.83L7.83 17l-4.37 4.38a1 1 0 0 0 1.42 1.42L9.25 18.4l3.83 3.83a2 2 0 0 0 2.83 0l5.88-5.88a2 2 0 0 0 0-2.83L18.4 9.68l4.37-4.38a1 1 0 0 0-1.42-1.42l-4.37 4.37-2.6-2.6a1 1 0 0 0-1.4 0z"></path></svg>
+            <span>Tamanhos & Extravios</span>
+          </a>
+          <a href="#troca-acordo" class="refund-category-nav-item" data-target="troca-acordo">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+            <span>Sustentabilidade & Acordo</span>
+          </a>
+        </nav>
+      </aside>
+
+      <!-- Right column: Refund Content Area (Interactive Accordions) -->
+      <main class="refund-content-area">
+        
+        <!-- Category 1 -->
+        <section id="troca-revenda" class="refund-category-section">
+          <h2 class="refund-category-title">1. Revenda & Isenção de Responsabilidade</h2>
+          
+          <div class="refund-accordions-group">
+            <details class="refund-accordion" name="refund-accordion-group">
+              <summary class="refund-summary">
+                <span class="refund-question-text">Artigo 1 — Ponto de Revenda & Intermediação Comercial</span>
+                <span class="refund-icon-chevron">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </span>
+              </summary>
+              <div class="refund-answer-content">
+                <p>1.1 A <strong>Fanatik Jersey</strong> atua exclusivamente no mercado como um <strong>ponto de revenda de camisolas</strong> desportivas premium (Futebol e NBA). Nós <strong>não fabricamos</strong> as camisolas apresentadas no Serviço.</p>
+                <p>1.2 A nossa atividade principal consiste em efetuar uma pesquisa exaustiva, validação rigorosa e intermediação comercial de importação direta com os <strong>melhores fornecedores mundiais</strong> especializados em réplicas de alta fidelidade desportiva. É este modelo que nos permite oferecer uma fantástica relação preço/qualidade no mercado nacional.</p>
+              </div>
+            </details>
+
+            <details class="refund-accordion" name="refund-accordion-group">
+              <summary class="refund-summary">
+                <span class="refund-question-text">Artigo 2 — Danos e Defeitos Totalmente Alheios</span>
+                <span class="refund-icon-chevron">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </span>
+              </summary>
+              <div class="refund-answer-content">
+                <p>2.1 Por sermos unicamente intermediários e revendedores de fornecedores terceiros, <strong>toda e qualquer anomalia física, defeito de fabrico real ou danos de qualquer natureza nas camisolas são-nos totalmente alheios</strong>.</p>
+                <p>2.2 A Fanatik Jersey fica totalmente desprovida de responsabilidade ou obrigação sobre: costuras imperfeitas, pequenas falhas ou fios puxados nos tecidos, defeitos estéticos na colagem ou bordado de emblemas e patches oficiais, manchas fabris ou qualquer outro tipo de dano físico ou desgaste provocado.</p>
+                <p>2.3 Ao efetuar a compra, o cliente isenta de forma irrevogável a Fanatik Jersey de qualquer responsabilidade civil ou financeira sobre a qualidade microscópica da produção efetuada pelos fabricantes.</p>
+              </div>
+            </details>
+          </div>
+        </section>
+
+        <!-- Category 2 -->
+        <section id="troca-nao-devolucao" class="refund-category-section">
+          <h2 class="refund-category-title">2. Política de Não Devolução e Não Reembolso</h2>
+          
+          <div class="refund-accordions-group">
+            <details class="refund-accordion" name="refund-accordion-group">
+              <summary class="refund-summary">
+                <span class="refund-question-text">Artigo 3 — Política de Não Devolução Absoluta</span>
+                <span class="refund-icon-chevron">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </span>
+              </summary>
+              <div class="refund-answer-content">
+                <p>3.1 Tendo em conta o nosso modelo operativo de importação direta por revenda e processamento sob encomenda exclusiva do cliente, <strong>não aceitamos trocas ou devoluções de qualquer espécie</strong>.</p>
+                <p>3.2 <strong>Todas as vendas são estritas, finais e irrevogáveis</strong> a partir do momento em que a encomenda é confirmada e enviada para processamento junto dos nossos fornecedores internacionais. Não há lugar a qualquer direito de arrependimento de compra ou cancelamento posterior.</p>
+              </div>
+            </details>
+
+            <details class="refund-accordion" name="refund-accordion-group">
+              <summary class="refund-summary">
+                <span class="refund-question-text">Artigo 4 — Ausência de Reembolsos Financeiros</span>
+                <span class="refund-icon-chevron">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </span>
+              </summary>
+              <div class="refund-answer-content">
+                <p>4.1 Sob nenhuma circunstância a Fanatik Jersey procederá a reembolsos monetários parciais ou totais nas compras efetuadas, nem será concedido crédito em loja por motivos de insatisfação estética, tamanho inadequado ou desistência pessoal.</p>
+                <p>4.2 O comprador assume a responsabilidade financeira integral da transação no ato de finalização da compra no nosso checkout.</p>
+              </div>
+            </details>
+          </div>
+        </section>
+
+        <!-- Category 3 -->
+        <section id="troca-tamanhos" class="refund-category-section">
+          <h2 class="refund-category-title">3. Tamanhos, Personalizações & Rastreio</h2>
+          
+          <div class="refund-accordions-group">
+            <details class="refund-accordion" name="refund-accordion-group">
+              <summary class="refund-summary">
+                <span class="refund-question-text">Artigo 5 — Responsabilidade sobre Tamanhos e Modelos</span>
+                <span class="refund-icon-chevron">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </span>
+              </summary>
+              <div class="refund-answer-content">
+                <p>5.1 A escolha correta do tamanho (do S ao XXL), da época desportiva, da versão da camisola (Adepto, Jogador ou Retro) bem como de todos os dados de personalização (nome do jogador desportivo, número e patches de ligas oficiais) é da **inteira e exclusiva responsabilidade do cliente**.</p>
+                <p>5.2 Visto que operamos com uma política de **devolução zero**, é obrigação do cliente verificar minuciosamente as medidas no nosso guia de tamanhos detalhado e rever todos os textos de personalização e dados de envio no carrinho de compras antes de pagar.</p>
+              </div>
+            </details>
+
+            <details class="refund-accordion" name="refund-accordion-group">
+              <summary class="refund-summary">
+                <span class="refund-question-text">Artigo 6 — Encomendas Não Entregues ou Extraviadas</span>
+                <span class="refund-icon-chevron">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </span>
+              </summary>
+              <div class="refund-answer-content">
+                <p>6.1 O transporte, desalfandegamento e entrega física das camisolas são geridos por empresas de logística parceiras independentes da nossa marca. Caso o código de rastreamento oficial indique que a encomenda foi <strong>"Entregue"</strong> na morada fornecida pelo cliente, qualquer responsabilidade sobre o não recebimento recai inteiramente sobre o cliente, não sendo concedido qualquer envio alternativo ou compensação.</p>
+                <p>6.2 Apenas em situações raras onde ocorra a confirmação oficial de **extravio físico no trânsito** por parte da empresa transportadora parceira antes da tentativa de entrega, a Fanatik Jersey tentará ativamente intermediar o incidente junto do fornecedor na origem para viabilizar um envio de substituição para o cliente.</p>
+              </div>
+            </details>
+          </div>
+        </section>
+
+        <!-- Category 4 -->
+        <section id="troca-acordo" class="refund-category-section">
+          <h2 class="refund-category-title">4. Sustentabilidade & Acordo de Venda</h2>
+          
+          <div class="refund-accordions-group">
+            <details class="refund-accordion" name="refund-accordion-group">
+              <summary class="refund-summary">
+                <span class="refund-question-text">Artigo 7 — Sustentabilidade & Preços Baixos</span>
+                <span class="refund-icon-chevron">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </span>
+              </summary>
+              <div class="refund-answer-content">
+                <p>7.1 Ao eliminar por completo o circuito logístico de devoluções e envios reversos (que geram custos operacionais massivos e emissões desnecessárias de gases poluentes no transporte internacional de mercadorias), a Fanatik Jersey consegue manter os preços de revenda das camisolas premium extremamente baixos e acessíveis.</p>
+                <p>7.2 Esta política firme de não devolução garante um negócio sustentável a nível ambiental e financeiro, beneficiando toda a nossa comunidade com a melhor relação preço/qualidade de Portugal.</p>
+              </div>
+            </details>
+
+            <details class="refund-accordion" name="refund-accordion-group">
+              <summary class="refund-summary">
+                <span class="refund-question-text">Artigo 8 — Aceitação da Política pelo Comprador</span>
+                <span class="refund-icon-chevron">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </span>
+              </summary>
+              <div class="refund-answer-content">
+                <p>8.1 Ao finalizar, submeter e pagar qualquer encomenda no nosso website, o cliente declara de livre e espontânea vontade que **leu, compreendeu perfeitamente e aceita sem reservas todos os termos e condições** previstos na presente Política de Trocas e Devoluções.</p>
+                <p>8.2 Se não concorda com a nossa política rígida de não devolução e de isenção de responsabilidade sobre danos, solicitamos que não realize compras no nosso website.</p>
+              </div>
+            </details>
+          </div>
+        </section>
+
+      </main>
+
+    </div>
+  </div>
+</div>{% else %}
 <div class="page-container-wrapper">
   <div class="page-inner-container">
     <h1 class="page-title">{{ page.title }}</h1>
@@ -763,8 +1037,8 @@
 {% endif %}
 
 <style>
-/* Privacy Policy Styling - Premium Layout & Sidebar Navigation */
-.privacy-container-wrapper {
+/* Privacy & Refund Policy Scoped Styling - Glassmorphism, Accordion, Grid Layouts */
+.privacy-container-wrapper, .refund-container-wrapper {
   max-width: 100%;
   margin: 0 auto;
   padding: 5rem 1.5rem;
@@ -772,12 +1046,12 @@
   min-height: 80vh;
 }
 
-.privacy-inner-container {
+.privacy-inner-container, .refund-inner-container {
   max-width: 1200px;
   margin: 0 auto;
 }
 
-.privacy-header {
+.privacy-header, .refund-header {
   text-align: center;
   margin-bottom: 3.5rem;
   display: flex;
@@ -785,7 +1059,7 @@
   align-items: center;
 }
 
-.privacy-header-icon {
+.privacy-header-icon, .refund-header-icon {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -800,12 +1074,12 @@
   transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.privacy-header:hover .privacy-header-icon {
+.privacy-header:hover .privacy-header-icon, .refund-header:hover .refund-header-icon {
   transform: translateY(-4px) scale(1.02);
   color: var(--color-accent);
 }
 
-.privacy-title {
+.privacy-title, .refund-title {
   font-size: clamp(2.2rem, 5vw, 3.2rem);
   font-weight: 900;
   color: var(--color-text);
@@ -814,16 +1088,83 @@
   text-transform: uppercase;
 }
 
-.privacy-subtitle {
+.privacy-subtitle, .refund-subtitle {
   font-size: clamp(0.95rem, 2vw, 1.15rem);
   color: var(--color-text-light);
   max-width: 600px;
   line-height: 1.6;
-  margin: 0;
+  margin: 0 0 2.5rem 0;
   opacity: 0.85;
 }
 
-.privacy-intro-card {
+.privacy-search-wrapper, .refund-search-wrapper {
+  width: 100%;
+  max-width: 540px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 50px;
+  padding: 0.2rem 0.5rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+  transition: all 0.3s ease;
+}
+
+.privacy-search-wrapper:focus-within, .refund-search-wrapper:focus-within {
+  border-color: var(--color-accent);
+  box-shadow: 0 6px 24px rgba(var(--color-primary-rgb), 0.08);
+  transform: translateY(-1px);
+}
+
+.privacy-search-icon, .refund-search-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.8rem;
+  color: var(--color-text-light);
+  pointer-events: none;
+}
+
+.privacy-search-wrapper input, .refund-search-wrapper input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  padding: 0.8rem 0.2rem;
+  font-size: 1rem;
+  color: var(--color-text);
+  outline: none;
+  font-family: inherit;
+}
+
+.privacy-search-wrapper input::placeholder, .refund-search-wrapper input::placeholder {
+  color: var(--color-text-light);
+  opacity: 0.8;
+}
+
+.privacy-search-clear, .refund-search-clear {
+  background: transparent;
+  border: none;
+  color: var(--color-text-light);
+  cursor: pointer;
+  padding: 0.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+
+.privacy-search-clear:hover, .refund-search-clear:hover {
+  color: var(--color-text);
+  background: rgba(var(--color-primary-rgb), 0.05);
+}
+
+.privacy-search-clear.hidden, .refund-search-clear.hidden {
+  display: none;
+}
+
+.privacy-intro-card, .refund-intro-card {
   background: var(--color-surface);
   border: 1px solid var(--color-border);
   border-radius: 24px;
@@ -835,189 +1176,218 @@
   font-size: 1.05rem;
 }
 
-.privacy-intro-card p:first-child {
+.privacy-intro-card p:first-child, .refund-intro-card p:first-child {
   margin-top: 0;
 }
 
-.privacy-intro-card p:last-child {
+.privacy-intro-card p:last-child, .refund-intro-card p:last-child {
   margin-bottom: 0;
 }
 
-.privacy-intro-card strong {
+.privacy-intro-card strong, .refund-intro-card strong {
   color: var(--color-text);
 }
 
-.privacy-main-layout {
+.privacy-main-layout, .refund-main-layout {
   display: grid;
   grid-template-columns: 280px 1fr;
   gap: 4rem;
   align-items: start;
 }
 
-.privacy-sidebar {
+.privacy-sidebar, .refund-sidebar {
   position: sticky;
   top: 100px;
   z-index: 10;
 }
 
-.privacy-categories-nav {
+.privacy-categories-nav, .refund-categories-nav {
   display: flex;
   flex-direction: column;
-  gap: 0.4rem;
+  gap: 0.5rem;
   background: rgba(var(--color-surface-rgb), 0.5);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   border: 1px solid var(--color-border);
-  padding: 0.8rem;
-  border-radius: 24px;
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.02);
-  max-height: calc(100vh - 160px);
-  overflow-y: auto;
-  scrollbar-width: thin;
+  padding: 1rem;
+  border-radius: 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
 }
 
-.privacy-categories-nav::-webkit-scrollbar {
-  width: 4px;
-}
-
-.privacy-categories-nav::-webkit-scrollbar-thumb {
-  background: var(--color-border);
-  border-radius: 4px;
-}
-
-.privacy-category-nav-item {
+.privacy-category-nav-item, .refund-category-nav-item {
   display: flex;
   align-items: center;
-  gap: 0.8rem;
-  padding: 0.75rem 1rem;
+  gap: 0.9rem;
+  padding: 0.9rem 1.2rem;
   border-radius: 12px;
   color: var(--color-text-light);
   text-decoration: none;
   font-weight: 600;
-  font-size: 0.88rem;
+  font-size: 0.95rem;
   transition: all 0.25s ease;
   border: 1px solid transparent;
 }
 
-.privacy-nav-num {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
-  background: var(--color-border);
-  color: var(--color-text-light);
-  font-size: 0.78rem;
-  font-weight: 700;
-  transition: all 0.25s ease;
+.privacy-category-nav-item svg, .refund-category-nav-item svg {
+  stroke-width: 2.2px;
+  transition: transform 0.2s ease;
   flex-shrink: 0;
 }
 
-.privacy-category-nav-item:hover {
+.privacy-category-nav-item:hover, .refund-category-nav-item:hover {
   color: var(--color-text);
   background: rgba(var(--color-primary-rgb), 0.03);
 }
 
-.privacy-category-nav-item:hover .privacy-nav-num {
-  background: var(--color-text);
-  color: var(--color-bg);
+.privacy-category-nav-item:hover svg, .refund-category-nav-item:hover svg {
+  transform: scale(1.05);
 }
 
-.privacy-category-nav-item.active {
+.privacy-category-nav-item.active, .refund-category-nav-item.active {
   color: #ffffff;
   background: var(--color-text);
   border-color: var(--color-text);
   box-shadow: 0 4px 12px rgba(var(--color-primary-rgb), 0.15);
 }
 
-html[data-theme="dark"] .privacy-category-nav-item.active {
+html[data-theme="dark"] .privacy-category-nav-item.active,
+html[data-theme="dark"] .refund-category-nav-item.active {
   color: #0b0b0b;
   background: #ffffff;
   border-color: #ffffff;
 }
 
-.privacy-category-nav-item.active .privacy-nav-num {
-  background: #ffffff;
-  color: #0b0b0b;
+.privacy-category-nav-item.active svg, .refund-category-nav-item.active svg {
+  color: inherit;
 }
 
-html[data-theme="dark"] .privacy-category-nav-item.active .privacy-nav-num {
-  background: #0b0b0b;
-  color: #ffffff;
-}
-
-.privacy-content-area {
+.privacy-content-area, .refund-content-area {
   display: flex;
   flex-direction: column;
   gap: 4.5rem;
 }
 
-.privacy-article-section {
-  scroll-margin-top: 110px;
+.privacy-category-section, .refund-category-section {
+  scroll-margin-top: 100px;
 }
 
-.privacy-article-title {
-  font-size: 1.5rem;
+.privacy-category-title, .refund-category-title {
+  font-size: 1.6rem;
   font-weight: 800;
   color: var(--color-text);
-  margin: 0 0 1.5rem 0;
+  margin: 0 0 1.8rem 0;
   padding-bottom: 0.8rem;
   border-bottom: 2px solid var(--color-border);
-  letter-spacing: -0.3px;
 }
 
-.privacy-article-content {
-  color: var(--color-text-light);
-  line-height: 1.7;
-  font-size: 1rem;
+.privacy-accordions-group, .refund-accordions-group {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 
-.privacy-article-content p {
-  margin: 0 0 1.2rem 0;
+.privacy-accordion, .refund-accordion {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  overflow: hidden;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.01);
 }
 
-.privacy-article-content p:last-child {
-  margin-bottom: 0;
+.privacy-accordion:hover, .refund-accordion:hover {
+  border-color: rgba(var(--color-primary-rgb), 0.3);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.03);
 }
 
-.privacy-article-content strong {
+.privacy-accordion[open], .refund-accordion[open] {
+  border-color: var(--color-text);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.04);
+}
+
+.privacy-summary, .refund-summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.4rem 1.8rem;
+  font-weight: 700;
+  font-size: 1.05rem;
+  cursor: pointer;
   color: var(--color-text);
-}
-
-.privacy-article-content ul {
-  margin: 0 0 1.5rem 0;
-  padding-left: 1.5rem;
+  user-select: none;
   list-style: none;
 }
 
-.privacy-article-content ul li {
-  position: relative;
-  margin-bottom: 0.8rem;
+.privacy-summary::-webkit-details-marker, .refund-summary::-webkit-details-marker {
+  display: none;
+}
+
+.privacy-question-text, .refund-question-text {
+  line-height: 1.4;
+  padding-right: 1.5rem;
+}
+
+.privacy-icon-chevron, .refund-icon-chevron {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-light);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), color 0.3s ease;
+  flex-shrink: 0;
+}
+
+.privacy-icon-chevron svg, .refund-icon-chevron svg {
+  stroke-width: 2.5px;
+}
+
+.privacy-accordion[open] .privacy-icon-chevron, .refund-accordion[open] .refund-icon-chevron {
+  transform: rotate(180deg);
+  color: var(--color-text);
+}
+
+.privacy-answer-content, .refund-answer-content {
+  padding: 0 1.8rem 1.6rem 1.8rem;
+  border-top: 1px solid transparent;
+  color: var(--color-text-light);
+  line-height: 1.65;
+  font-size: 0.98rem;
+  animation: policySlideDown 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.privacy-accordion[open] .privacy-answer-content, .refund-accordion[open] .refund-answer-content {
+  border-top-color: var(--color-border);
+}
+
+.privacy-answer-content p, .refund-answer-content p {
+  margin: 0 0 1rem 0;
+}
+
+.privacy-answer-content p:last-child, .refund-answer-content p:last-child {
+  margin-bottom: 0;
+}
+
+.privacy-answer-content ul, .refund-answer-content ul {
+  margin: 0 0 1rem 0;
   padding-left: 1.2rem;
+  list-style: disc;
 }
 
-.privacy-article-content ul li::before {
-  content: "•";
-  color: var(--color-accent);
-  font-size: 1.2rem;
-  position: absolute;
-  left: 0;
-  top: -2px;
+.privacy-answer-content ul li, .refund-answer-content ul li {
+  margin-bottom: 0.5rem;
 }
 
-.privacy-link {
+.privacy-link, .refund-link {
   color: var(--color-text);
   text-decoration: underline;
   font-weight: 600;
   transition: color 0.2s ease;
 }
 
-.privacy-link:hover {
+.privacy-link:hover, .refund-link:hover {
   color: var(--color-accent);
 }
 
-.privacy-contact-box {
+.privacy-contact-box, .refund-contact-box {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -1029,7 +1399,7 @@ html[data-theme="dark"] .privacy-category-nav-item.active .privacy-nav-num {
   border-radius: 16px;
 }
 
-.privacy-cta-btn {
+.privacy-cta-btn, .refund-cta-btn {
   display: inline-flex;
   align-items: center;
   gap: 0.8rem;
@@ -1040,65 +1410,105 @@ html[data-theme="dark"] .privacy-category-nav-item.active .privacy-nav-num {
   font-size: 0.95rem;
   padding: 0.9rem 1.6rem;
   border-radius: 50px;
-  box-shadow: 0 4px 15px rgba(var(--color-primary-rgb), 0.1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   border: 1px solid var(--color-text);
 }
 
-html[data-theme="dark"] .privacy-cta-btn {
+html[data-theme="dark"] .privacy-cta-btn,
+html[data-theme="dark"] .refund-cta-btn {
   background-color: #ffffff;
   color: #0b0b0b !important;
   border-color: #ffffff;
 }
 
-.privacy-cta-btn:hover {
+.privacy-cta-btn:hover, .refund-cta-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(var(--color-primary-rgb), 0.18);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.18);
 }
 
-.privacy-cta-btn svg {
+.privacy-cta-btn svg, .refund-cta-btn svg {
   transition: transform 0.25s ease;
 }
 
-.privacy-cta-btn:hover svg {
+.privacy-cta-btn:hover svg, .refund-cta-btn:hover svg {
   transform: scale(1.1);
 }
 
-.privacy-contact-email {
+.privacy-contact-email, .refund-contact-email {
   font-size: 1.05rem;
   font-weight: 700;
   color: var(--color-text);
 }
 
-.privacy-conclusion-note {
+.privacy-conclusion-note, .refund-conclusion-note {
   font-size: 0.9rem;
   opacity: 0.75;
   font-style: italic;
   margin-top: 1.8rem;
 }
 
-/* Responsive Grid styling */
+@keyframes policySlideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.privacy-accordion.filtered-out, .refund-accordion.filtered-out {
+  display: none !important;
+}
+
+.privacy-category-section.filtered-out, .refund-category-section.filtered-out {
+  display: none !important;
+}
+
+.privacy-no-results, .refund-no-results {
+  text-align: center;
+  padding: 4rem 1rem;
+  color: var(--color-text-light);
+  font-size: 1.1rem;
+}
+
+.privacy-no-results svg, .refund-no-results svg {
+  margin-bottom: 1rem;
+  opacity: 0.5;
+  color: var(--color-text-light);
+}
+
+.privacy-highlight, .refund-highlight {
+  background-color: rgba(255, 235, 59, 0.3);
+  color: inherit;
+  padding: 0 2px;
+  border-radius: 2px;
+  font-weight: inherit;
+}
+
 @media (max-width: 992px) {
-  .privacy-container-wrapper {
+  .privacy-container-wrapper, .refund-container-wrapper {
     padding: 3rem 1rem;
   }
 
-  .privacy-header {
+  .privacy-header, .refund-header {
     margin-bottom: 2.5rem;
   }
 
-  .privacy-intro-card {
+  .privacy-intro-card, .refund-intro-card {
     padding: 1.6rem 1.8rem;
     margin-bottom: 2.5rem;
     font-size: 0.98rem;
   }
 
-  .privacy-main-layout {
+  .privacy-main-layout, .refund-main-layout {
     grid-template-columns: 1fr;
     gap: 2.5rem;
   }
 
-  .privacy-sidebar {
+  .privacy-sidebar, .refund-sidebar {
     position: sticky;
     top: 60px;
     margin: 0 -1rem;
@@ -1107,7 +1517,7 @@ html[data-theme="dark"] .privacy-cta-btn {
     box-shadow: 0 4px 10px rgba(0,0,0,0.02);
   }
 
-  .privacy-categories-nav {
+  .privacy-categories-nav, .refund-categories-nav {
     flex-direction: row;
     overflow-x: auto;
     white-space: nowrap;
@@ -1118,36 +1528,30 @@ html[data-theme="dark"] .privacy-cta-btn {
     max-height: none;
   }
 
-  .privacy-categories-nav::-webkit-scrollbar {
+  .privacy-categories-nav::-webkit-scrollbar, .refund-categories-nav::-webkit-scrollbar {
     display: none;
   }
 
-  .privacy-category-nav-item {
+  .privacy-category-nav-item, .refund-category-nav-item {
     padding: 0.6rem 0.9rem;
     font-size: 0.82rem;
     gap: 0.5rem;
   }
 
-  .privacy-nav-num {
-    width: 18px;
-    height: 18px;
-    font-size: 0.7rem;
-  }
-
-  .privacy-content-area {
+  .privacy-content-area, .refund-content-area {
     gap: 3rem;
   }
 
-  .privacy-article-section {
+  .privacy-category-section, .refund-category-section {
     scroll-margin-top: 140px;
   }
 
-  .privacy-article-title {
+  .privacy-category-title, .refund-category-title {
     font-size: 1.3rem;
     margin-bottom: 1rem;
   }
 
-  .privacy-contact-box {
+  .privacy-contact-box, .refund-contact-box {
     padding: 1.2rem;
     flex-direction: column;
     align-items: stretch;
@@ -1155,11 +1559,11 @@ html[data-theme="dark"] .privacy-cta-btn {
     gap: 1rem;
   }
 
-  .privacy-cta-btn {
+  .privacy-cta-btn, .refund-cta-btn {
+    width: 100%;
     justify-content: center;
   }
 }
-
 /* FAQ Styling - Modern Glassmorphism & Accordion Design System */
 .faq-container-wrapper {
   max-width: 100%;
@@ -2333,13 +2737,12 @@ html[data-theme="dark"] .guarantee-cta-btn {
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-  // --- PRIVACY POLICY CODE ---
+    // --- PRIVACY POLICY CODE ---
   const privacyNavItems = document.querySelectorAll('.privacy-category-nav-item');
-  const privacyArticles = document.querySelectorAll('.privacy-article-section');
+  const privacyArticles = document.querySelectorAll('.privacy-category-section');
   const privacyNavContainer = document.querySelector('.privacy-categories-nav');
 
   if (privacyNavItems.length > 0 && privacyArticles.length > 0) {
-    // Scroll Spy for Privacy Policy
     const privacyObserverOptions = {
       root: null,
       rootMargin: '-20% 0px -60% 0px',
@@ -2354,7 +2757,6 @@ document.addEventListener('DOMContentLoaded', function() {
             if (item.getAttribute('data-target') === id) {
               item.classList.add('active');
               
-              // Horizontal scrolling auto-centering on mobile
               if (window.innerWidth <= 992 && privacyNavContainer) {
                 const offsetLeft = item.offsetLeft - (privacyNavContainer.offsetWidth / 2) + (item.offsetWidth / 2);
                 privacyNavContainer.scrollTo({
@@ -2374,7 +2776,6 @@ document.addEventListener('DOMContentLoaded', function() {
       privacyObserver.observe(article);
     });
 
-    // Smooth Scroll Click Handler
     privacyNavItems.forEach(item => {
       item.addEventListener('click', function(e) {
         e.preventDefault();
@@ -2395,7 +2796,354 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 
-  const searchInput = document.getElementById('FaqSearchInput');
+  // Real-time keyword search filter for Privacy Policy
+  const privacySearchInput = document.getElementById('PrivacySearchInput');
+  const privacySearchClear = document.getElementById('PrivacySearchClear');
+  const privacyAccordions = document.querySelectorAll('.privacy-accordion');
+  const privacyCategories = document.querySelectorAll('.privacy-category-section');
+  const privacyContentArea = document.querySelector('.privacy-content-area');
+  let privacyNoResultsEl = null;
+
+  if (privacySearchInput) {
+    privacySearchInput.addEventListener('input', function(e) {
+      const query = e.target.value.trim().toLowerCase();
+      
+      if (query.length > 0) {
+        privacySearchClear.classList.remove('hidden');
+      } else {
+        privacySearchClear.classList.add('hidden');
+      }
+      
+      let totalMatches = 0;
+      if (privacyNoResultsEl) {
+        privacyNoResultsEl.remove();
+        privacyNoResultsEl = null;
+      }
+
+      privacyCategories.forEach(category => {
+        let categoryMatches = 0;
+        const accordionsInCat = category.querySelectorAll('.privacy-accordion');
+        
+        accordionsInCat.forEach(accordion => {
+          const qEl = accordion.querySelector('.privacy-question-text');
+          const aEl = accordion.querySelector('.privacy-answer-content');
+          
+          // Original text backup if not already present
+          if (!accordion.dataset.originalQ) {
+            accordion.dataset.originalQ = qEl.innerHTML;
+          }
+          if (!accordion.dataset.originalA) {
+            accordion.dataset.originalA = aEl.innerHTML;
+          }
+
+          const qText = qEl.textContent.toLowerCase();
+          const aText = aEl.textContent.toLowerCase();
+          
+          if (qText.includes(query) || aText.includes(query)) {
+            accordion.classList.remove('filtered-out');
+            categoryMatches++;
+            totalMatches++;
+            
+            if (query.length >= 2) {
+              accordion.setAttribute('open', '');
+              
+              // Highlight matched text
+              highlightText(qEl, accordion.dataset.originalQ, query, 'privacy-highlight');
+              highlightText(aEl, accordion.dataset.originalA, query, 'privacy-highlight');
+            } else {
+              accordion.removeAttribute('open');
+              qEl.innerHTML = accordion.dataset.originalQ;
+              aEl.innerHTML = accordion.dataset.originalA;
+            }
+          } else {
+            accordion.classList.add('filtered-out');
+            accordion.removeAttribute('open');
+            qEl.innerHTML = accordion.dataset.originalQ;
+            aEl.innerHTML = accordion.dataset.originalA;
+          }
+        });
+        
+        if (categoryMatches > 0) {
+          category.classList.remove('filtered-out');
+        } else {
+          category.classList.add('filtered-out');
+        }
+      });
+      
+      if (totalMatches === 0 && query.length > 0) {
+        privacyNoResultsEl = document.createElement('div');
+        privacyNoResultsEl.className = 'privacy-no-results';
+        privacyNoResultsEl.innerHTML = `
+          <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            <line x1="8" y1="11" x2="14" y2="11"></line>
+          </svg>
+          <p>Não foram encontrados artigos para "<strong>${escapeHtml(query)}</strong>"</p>
+          <p style="font-size: 0.9rem; margin-top: 0.5rem; opacity: 0.7;">Tente pesquisar por outros termos, como "dados", "cookies", "responsável" ou "retirar".</p>
+        `;
+        privacyContentArea.appendChild(privacyNoResultsEl);
+      }
+    });
+
+    privacySearchClear.addEventListener('click', function() {
+      privacySearchInput.value = '';
+      privacySearchClear.classList.add('hidden');
+      if (privacyNoResultsEl) {
+        privacyNoResultsEl.remove();
+        privacyNoResultsEl = null;
+      }
+      privacyCategories.forEach(category => {
+        category.classList.remove('filtered-out');
+        category.querySelectorAll('.privacy-accordion').forEach(accordion => {
+          accordion.classList.remove('filtered-out');
+          accordion.removeAttribute('open');
+          const qEl = accordion.querySelector('.privacy-question-text');
+          const aEl = accordion.querySelector('.privacy-answer-content');
+          if (accordion.dataset.originalQ) qEl.innerHTML = accordion.dataset.originalQ;
+          if (accordion.dataset.originalA) aEl.innerHTML = accordion.dataset.originalA;
+        });
+      });
+      privacySearchInput.focus();
+    });
+  }
+
+
+  // --- REFUND POLICY CODE (TROCAS & DEVOLUÇÕES) ---
+  const refundNavItems = document.querySelectorAll('.refund-category-nav-item');
+  const refundArticles = document.querySelectorAll('.refund-category-section');
+  const refundNavContainer = document.querySelector('.refund-categories-nav');
+
+  if (refundNavItems.length > 0 && refundArticles.length > 0) {
+    const refundObserverOptions = {
+      root: null,
+      rootMargin: '-20% 0px -60% 0px',
+      threshold: 0
+    };
+
+    const refundObserver = new IntersectionObserver(function(entries) {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const id = entry.target.getAttribute('id');
+          refundNavItems.forEach(item => {
+            if (item.getAttribute('data-target') === id) {
+              item.classList.add('active');
+              
+              if (window.innerWidth <= 992 && refundNavContainer) {
+                const offsetLeft = item.offsetLeft - (refundNavContainer.offsetWidth / 2) + (item.offsetWidth / 2);
+                refundNavContainer.scrollTo({
+                  left: offsetLeft,
+                  behavior: 'smooth'
+                });
+              }
+            } else {
+              item.classList.remove('active');
+            }
+          });
+        }
+      });
+    }, refundObserverOptions);
+
+    refundArticles.forEach(article => {
+      refundObserver.observe(article);
+    });
+
+    refundNavItems.forEach(item => {
+      item.addEventListener('click', function(e) {
+        e.preventDefault();
+        const targetId = this.getAttribute('data-target');
+        const targetSection = document.getElementById(targetId);
+        
+        if (targetSection) {
+          const headerOffset = window.innerWidth <= 992 ? 150 : 110;
+          const elementPosition = targetSection.getBoundingClientRect().top;
+          const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+          
+          window.scrollTo({
+            top: offsetPosition,
+            behavior: 'smooth'
+          });
+        }
+      });
+    });
+  }
+
+  // Real-time keyword search filter for Refund Policy
+  const refundSearchInput = document.getElementById('RefundSearchInput');
+  const refundSearchClear = document.getElementById('RefundSearchClear');
+  const refundAccordions = document.querySelectorAll('.refund-accordion');
+  const refundCategories = document.querySelectorAll('.refund-category-section');
+  const refundContentArea = document.querySelector('.refund-content-area');
+  let refundNoResultsEl = null;
+
+  if (refundSearchInput) {
+    refundSearchInput.addEventListener('input', function(e) {
+      const query = e.target.value.trim().toLowerCase();
+      
+      if (query.length > 0) {
+        refundSearchClear.classList.remove('hidden');
+      } else {
+        refundSearchClear.classList.add('hidden');
+      }
+      
+      let totalMatches = 0;
+      if (refundNoResultsEl) {
+        refundNoResultsEl.remove();
+        refundNoResultsEl = null;
+      }
+
+      refundCategories.forEach(category => {
+        let categoryMatches = 0;
+        const accordionsInCat = category.querySelectorAll('.refund-accordion');
+        
+        accordionsInCat.forEach(accordion => {
+          const qEl = accordion.querySelector('.refund-question-text');
+          const aEl = accordion.querySelector('.refund-answer-content');
+          
+          // Original text backup if not already present
+          if (!accordion.dataset.originalQ) {
+            accordion.dataset.originalQ = qEl.innerHTML;
+          }
+          if (!accordion.dataset.originalA) {
+            accordion.dataset.originalA = aEl.innerHTML;
+          }
+
+          const qText = qEl.textContent.toLowerCase();
+          const aText = aEl.textContent.toLowerCase();
+          
+          if (qText.includes(query) || aText.includes(query)) {
+            accordion.classList.remove('filtered-out');
+            categoryMatches++;
+            totalMatches++;
+            
+            if (query.length >= 2) {
+              accordion.setAttribute('open', '');
+              
+              // Highlight matched text
+              highlightText(qEl, accordion.dataset.originalQ, query, 'refund-highlight');
+              highlightText(aEl, accordion.dataset.originalA, query, 'refund-highlight');
+            } else {
+              accordion.removeAttribute('open');
+              qEl.innerHTML = accordion.dataset.originalQ;
+              aEl.innerHTML = accordion.dataset.originalA;
+            }
+          } else {
+            accordion.classList.add('filtered-out');
+            accordion.removeAttribute('open');
+            qEl.innerHTML = accordion.dataset.originalQ;
+            aEl.innerHTML = accordion.dataset.originalA;
+          }
+        });
+        
+        if (categoryMatches > 0) {
+          category.classList.remove('filtered-out');
+        } else {
+          category.classList.add('filtered-out');
+        }
+      });
+      
+      if (totalMatches === 0 && query.length > 0) {
+        refundNoResultsEl = document.createElement('div');
+        refundNoResultsEl.className = 'refund-no-results';
+        refundNoResultsEl.innerHTML = `
+          <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            <line x1="8" y1="11" x2="14" y2="11"></line>
+          </svg>
+          <p>Não foram encontrados artigos para "<strong>${escapeHtml(query)}</strong>"</p>
+          <p style="font-size: 0.9rem; margin-top: 0.5rem; opacity: 0.7;">Tente pesquisar por outros termos, como "revenda", "danos", "devolução", "tamanho" ou "sustentabilidade".</p>
+        `;
+        refundContentArea.appendChild(refundNoResultsEl);
+      }
+    });
+
+    refundSearchClear.addEventListener('click', function() {
+      refundSearchInput.value = '';
+      refundSearchClear.classList.add('hidden');
+      if (refundNoResultsEl) {
+        refundNoResultsEl.remove();
+        refundNoResultsEl = null;
+      }
+      refundCategories.forEach(category => {
+        category.classList.remove('filtered-out');
+        category.querySelectorAll('.refund-accordion').forEach(accordion => {
+          accordion.classList.remove('filtered-out');
+          accordion.removeAttribute('open');
+          const qEl = accordion.querySelector('.refund-question-text');
+          const aEl = accordion.querySelector('.refund-answer-content');
+          if (accordion.dataset.originalQ) qEl.innerHTML = accordion.dataset.originalQ;
+          if (accordion.dataset.originalA) aEl.innerHTML = accordion.dataset.originalA;
+        });
+      });
+      refundSearchInput.focus();
+    });
+  }
+
+  // --- TEXT HIGHLIGHT HELPER FUNCTION ---
+  function highlightText(element, originalHTML, query, highlightClass) {
+    if (!query) {
+      element.innerHTML = originalHTML;
+      return;
+    }
+    
+    // We want to highlight matches in text content without breaking existing HTML tags.
+    // A robust simple way: parse the HTML text nodes and wrap query occurrences.
+    const temp = document.createElement('div');
+    temp.innerHTML = originalHTML;
+    
+    function recursiveHighlight(node) {
+      if (node.nodeType === 3) { // Text node
+        const text = node.nodeValue;
+        const lowerText = text.toLowerCase();
+        const index = lowerText.indexOf(query);
+        
+        if (index >= 0) {
+          const parent = node.parentNode;
+          const fragments = [];
+          let currentText = text;
+          let currentLower = lowerText;
+          
+          while (true) {
+            const idx = currentLower.indexOf(query);
+            if (idx < 0) {
+              fragments.push(document.createTextNode(currentText));
+              break;
+            }
+            
+            // Text before match
+            if (idx > 0) {
+              fragments.push(document.createTextNode(currentText.substring(0, idx)));
+            }
+            
+            // Match tag
+            const mark = document.createElement('mark');
+            mark.className = highlightClass;
+            mark.textContent = currentText.substring(idx, idx + query.length);
+            fragments.push(mark);
+            
+            currentText = currentText.substring(idx + query.length);
+            currentLower = currentLower.substring(idx + query.length);
+          }
+          
+          // Replace node with fragments
+          const next = node.nextSibling;
+          fragments.forEach(frag => {
+            parent.insertBefore(frag, next);
+          });
+          parent.removeChild(node);
+        }
+      } else if (node.nodeType === 1 && node.childNodes && !['MARK', 'SCRIPT', 'STYLE'].includes(node.tagName)) {
+        // Child elements (excluding mark itself or script/style)
+        const children = Array.from(node.childNodes);
+        children.forEach(recursiveHighlight);
+      }
+    }
+    
+    recursiveHighlight(temp);
+    element.innerHTML = temp.innerHTML;
+  }
+const searchInput = document.getElementById('FaqSearchInput');
   const clearBtn = document.getElementById('FaqSearchClear');
   const accordions = document.querySelectorAll('.faq-accordion');
   const categories = document.querySelectorAll('.faq-category-section');

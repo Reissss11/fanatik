@@ -1,0 +1,12 @@
+{% if request.path contains 'privacy-policy' or request.path contains 'refund-policy' %}
+  {% section 'main-page' %}
+{% else %}
+  <div class="page-container-wrapper">
+    <div class="page-inner-container">
+      <h1 class="page-title" style="text-align: center; margin-bottom: 3rem;">{{ policy.title }}</h1>
+      <div class="page-content-rich" style="line-height: 1.8; color: var(--color-text-light);">
+        {{ policy.body }}
+      </div>
+    </div>
+  </div>
+{% endif %}
