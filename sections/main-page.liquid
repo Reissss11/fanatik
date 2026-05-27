@@ -306,86 +306,288 @@
 
   </div>
 </div>
-{% elsif page.handle == 'envio-e-entrega' %}
+{% elsif page.handle == 'envio-e-entrega' or page.handle == 'politica-de-envio' or page.handle == 'politica-envio' or request.path contains 'shipping-policy' %}
 <div class="shipping-container-wrapper">
   <div class="shipping-inner-container">
     
     <!-- Header -->
     <header class="shipping-header">
-      <h1 class="shipping-title">Envio e Entrega</h1>
-      <p class="shipping-subtitle">Tudo o que precisas de saber sobre a expedição e o acompanhamento da tua camisola Fanatik.</p>
-    </header>
-
-    <!-- Main Highlight Box -->
-    <div class="shipping-highlight-card">
-      <div class="shipping-card-icon">
-        <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <div class="shipping-header-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
           <rect x="1" y="3" width="15" height="13" rx="2" ry="2"></rect>
           <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
           <circle cx="5.5" cy="18.5" r="2.5"></circle>
           <circle cx="18.5" cy="18.5" r="2.5"></circle>
         </svg>
       </div>
-      <p class="shipping-highlight-text">
-        Na <strong>Fanatik</strong>, cada encomenda é cuidadosamente processada junto dos nossos fornecedores premium, rigorosamente inspecionada e embalada com proteção total — o processo completo (preparação na origem + envio expresso) demora em média <strong>7 a 15 dias úteis</strong>.
+      <h1 class="shipping-title">Política de Envio</h1>
+      <p class="shipping-subtitle">Última atualização: Maio de 2026 · Versão 1.0</p>
+      
+      <!-- Real-time Interactive Search Bar for Shipping Terms -->
+      <div class="shipping-search-wrapper">
+        <span class="shipping-search-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+        </span>
+        <input type="text" id="ShippingSearchInput" placeholder="Procurar termos na política de envio (ex: prazos, alfândega, extravio, Brasil)..." aria-label="Procurar termos na política de envio">
+        <button id="ShippingSearchClear" class="shipping-search-clear hidden" aria-label="Limpar pesquisa">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Intro Card -->
+    <div class="shipping-intro-card">
+      <p>
+        Na <strong>Fanatik Jersey</strong>, dedicamo-nos a assegurar um serviço de entrega transparente, rigoroso e eficiente. A presente Política de Envio define os prazos, condições e responsabilidades aplicáveis ao trânsito e entrega de todas as camisolas encomendadas na nossa loja online.
+      </p>
+      <p>
+        💡 <strong>Nota Importante:</strong> Realizamos envios **exclusivamente para a Europa e o Brasil**. Não efetuamos entregas em nenhuma outra região geográfica do globo. Ao efetuar uma compra, o cliente declara que tomou integral conhecimento e concorda sem reservas com as presentes condições.
       </p>
     </div>
 
-    <!-- Details Grid -->
-    <div class="shipping-grid">
+    <!-- Main Layout Grid -->
+    <div class="shipping-main-layout">
       
-      <!-- Card 1: Portes Grátis -->
-      <div class="shipping-benefit-card">
-        <div class="benefit-icon">
-          <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <line x1="12" y1="1" x2="12" y2="23"></line>
-            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
-          </svg>
-        </div>
-        <h3>Portes Grátis > 50€</h3>
-        <p>O envio é totalmente gratuito em todas as encomendas acima de 50€. Garantimos o melhor preço de envio nas encomendas de valor inferior.</p>
-      </div>
+      <!-- Left sidebar: Categories Navigation (Sticky) -->
+      <aside class="shipping-sidebar">
+        <nav class="shipping-categories-nav">
+          <a href="#envio-processamento" class="shipping-category-nav-item active" data-target="envio-processamento">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+            <span>Processamento & Prazos</span>
+          </a>
+          <a href="#envio-regras" class="shipping-category-nav-item" data-target="envio-regras">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+            <span>Regras & Atrasos</span>
+          </a>
+          <a href="#envio-entregas" class="shipping-category-nav-item" data-target="envio-entregas">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+            <span>Responsabilidade & Custos</span>
+          </a>
+          <a href="#envio-aceitacao" class="shipping-category-nav-item" data-target="envio-aceitacao">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+            <span>Aceitação & Trânsito</span>
+          </a>
+        </nav>
+      </aside>
 
-      <!-- Card 2: Envio Registado -->
-      <div class="shipping-benefit-card">
-        <div class="benefit-icon">
-          <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-            <circle cx="12" cy="10" r="3"></circle>
-          </svg>
-        </div>
-        <h3>Rastreamento Expresso</h3>
-        <p>Todas as nossas camisolas são enviadas com correio registado e rastreamento ativo. Receberás o código de tracking por e-mail para acompanhar tudo em tempo real.</p>
-      </div>
+      <!-- Right column: Shipping Content Area (Interactive Accordions) -->
+      <main class="shipping-content-area">
+        
+        <!-- Category 1 -->
+        <section id="envio-processamento" class="shipping-category-section">
+          <h2 class="shipping-category-title">1. Processamento & Prazos de Entrega</h2>
+          
+          <div class="shipping-accordions-group">
+            <details class="shipping-accordion" name="shipping-accordion-group">
+              <summary class="shipping-summary">
+                <span class="shipping-question-text">Artigo 1 — Processamento de Encomendas</span>
+                <span class="shipping-icon-chevron">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </span>
+              </summary>
+              <div class="shipping-answer-content">
+                <p>1.1 Todas as nossas encomendas são processadas no nosso centro logístico internacional parceiro no país de origem das peças.</p>
+                <p>1.2 O prazo padrão de processamento, inspeção de qualidade de costuras e logótipos e embalamento protetor é de **1 a 3 dias úteis**. Durante períodos de elevada procura comercial, épocas festivas (como Natal e Páscoa) ou campanhas promocionais ativas (ex: Black Friday), este prazo poderá estender-se até um período máximo de **6 dias úteis**.</p>
+              </div>
+            </details>
 
-      <!-- Card 3: Planeamento Prevenido -->
-      <div class="shipping-benefit-card">
-        <div class="benefit-icon">
-          <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-            <line x1="16" y1="2" x2="16" y2="6"></line>
-            <line x1="8" y1="2" x2="8" y2="6"></line>
-            <line x1="3" y1="10" x2="21" y2="10"></line>
-          </svg>
-        </div>
-        <h3>Prepara-te com Antecedência</h3>
-        <p>Se planeias oferecer a camisola num aniversário, data comemorativa ou jogo importante, recomendamos fazer a encomenda com antecedência para evitar atrasos imprevistos.</p>
-      </div>
+            <details class="shipping-accordion" name="shipping-accordion-group">
+              <summary class="shipping-summary">
+                <span class="shipping-question-text">Artigo 2 — Prazos Estimados de Entrega & Zonas Geográficas</span>
+                <span class="shipping-icon-chevron">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </span>
+              </summary>
+              <div class="shipping-answer-content">
+                <p>2.1 A Fanatik Jersey realiza envios **exclusivamente** para as seguintes zonas geográficas, com as respetivas estimativas médias de trânsito logístico:</p>
+                <ul>
+                  <li><strong>Europa (especialmente Portugal):</strong> 7 a 15 dias úteis após expedição (podendo em casos muito excecionais estender-se até 25 dias úteis por atrasos alfandegários ou de transporte).</li>
+                  <li><strong>Brasil:</strong> 20 a 30 dias úteis após expedição (devido a trâmites e fiscalizações de desalfandegamento da Receita Federal local).</li>
+                </ul>
+                <p>2.2 A Fanatik Jersey **não efetua envios para nenhuma outra região geográfica ou país** fora do espaço europeu e do Brasil.</p>
+                <p>2.3 As estimativas de entrega referem-se a dias úteis e não incluem fins de semana nem feriados nacionais do país de origem ou do país de destino.</p>
+              </div>
+            </details>
+          </div>
+        </section>
+
+        <!-- Category 2 -->
+        <section id="envio-regras" class="shipping-category-section">
+          <h2 class="shipping-category-title">2. Confirmação, Código de Rastreio & Atrasos</h2>
+          
+          <div class="shipping-accordions-group">
+            <details class="shipping-accordion" name="shipping-accordion-group">
+              <summary class="shipping-summary">
+                <span class="shipping-question-text">Artigo 3 — Confirmação e Código de Rastreamento (Tracking)</span>
+                <span class="shipping-icon-chevron">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </span>
+              </summary>
+              <div class="shipping-answer-content">
+                <p>3.1 Assim que a sua encomenda for expedida do armazém internacional de origem, o cliente receberá um e-mail automático de confirmação de envio contendo o respetivo **código de rastreamento** (tracking link).</p>
+                <p>3.2 Recomendamos vivamente que o cliente consulte regularmente o link de tracking fornecido para acompanhar a evolução e o estado da entrega em tempo real.</p>
+              </div>
+            </details>
+
+            <details class="shipping-accordion" name="shipping-accordion-group">
+              <summary class="shipping-summary">
+                <span class="shipping-question-text">Artigo 4 — Isenção por Atrasos Logísticos Externos</span>
+                <span class="shipping-icon-chevron">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </span>
+              </summary>
+              <div class="shipping-answer-content">
+                <p>4.1 Por atuarmos unicamente como um ponto de revenda com intermediação logística, a **Fanatik Jersey não se responsabiliza por atrasos no trânsito** causados por:</p>
+                <ul>
+                  <li>Retenções e trâmites de desembaraço alfandegário nos países de destino (Europa e Brasil);</li>
+                  <li>Greves civis, paralisações setoriais ou interrupções nos serviços de transporte locais ou internacionais;</li>
+                  <li>Condições meteorológicas adversas, desastres naturais, pandemias ou outras situações de força maior fora do nosso controlo direto.</li>
+                </ul>
+              </div>
+            </details>
+          </div>
+        </section>
+
+        <!-- Category 3 -->
+        <section id="envio-entregas" class="shipping-category-section">
+          <h2 class="shipping-category-title">3. Responsabilidades de Entrega & Custos de Envio</h2>
+          
+          <div class="shipping-accordions-group">
+            <details class="shipping-accordion" name="shipping-accordion-group">
+              <summary class="shipping-summary">
+                <span class="shipping-question-text">Artigo 5 — Encomendas Perdidas ou Extraviadas após Entrega</span>
+                <span class="shipping-icon-chevron">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </span>
+              </summary>
+              <div class="shipping-answer-content">
+                <p>5.1 Se o código de rastreamento oficial da transportadora indicar que o pacote foi **"Entregue"** na morada de destino fornecida, a Fanatik Jersey declina qualquer responsabilidade sobre o eventual desaparecimento ou roubo do pacote após esse facto.</p>
+                <p>5.2 Em caso de discrepância de entrega ou não recebimento físico estando o status como entregue, o cliente deve entrar em contacto direto com os vizinhos ou investigar localmente junto do operador postal local (como os CTT em Portugal ou os Correios no Brasil).</p>
+              </div>
+            </details>
+
+            <details class="shipping-accordion" name="shipping-accordion-group">
+              <summary class="shipping-summary">
+                <span class="shipping-question-text">Artigo 6 — Moradas Incorretas ou Incompletas</span>
+                <span class="shipping-icon-chevron">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </span>
+              </summary>
+              <div class="shipping-answer-content">
+                <p>6.1 É da inteira e **exclusiva responsabilidade do cliente fornecer uma morada completa, correta e válida** no ato da finalização de compra.</p>
+                <p>6.2 A Fanatik Jersey não é responsável por encomendas que não possam ser entregues devido a moradas incorretas, incompletas ou inexistentes.</p>
+                <p>6.3 Por se tratar de um circuito de envio internacional, caso a transportadora não consiga efetuar a entrega por erro de morada, o pacote **não será devolvido à origem** e poderá ser **destruído** pelas autoridades alfandegárias ou operadoras locais, sem direito a qualquer tipo de reembolso financeiro ou reenvio sem custos.</p>
+              </div>
+            </details>
+
+            <details class="shipping-accordion" name="shipping-accordion-group">
+              <summary class="shipping-summary">
+                <span class="shipping-question-text">Artigo 7 — Levantamento em Pontos de Recolha (Pickup Points)</span>
+                <span class="shipping-icon-chevron">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </span>
+              </summary>
+              <div class="shipping-answer-content">
+                <p>7.1 Caso a tentativa de entrega ao domicílio falhe por ausência do destinatário ou dificuldades de acesso, a transportadora postal poderá encaminhar a encomenda para um **Ponto de Recolha local** (Posto dos CTT, cacifo inteligente, agência parceira ou posto postal no Brasil).</p>
+                <p>7.2 É dever **exclusivo do cliente acompanhar o rastreio e efetuar o levantamento físico** do pacote dentro do prazo limite estipulado pela transportadora (normalmente de 5 a 10 dias de calendário).</p>
+                <p>7.3 Se o cliente não levantar a encomenda atempadamente, esta poderá ser devolvida para destruição do operador logístico internacional, não sendo a Fanatik Jersey responsabilizada e não havendo lugar a compensações.</p>
+              </div>
+            </details>
+
+            <details class="shipping-accordion" name="shipping-accordion-group">
+              <summary class="shipping-summary">
+                <span class="shipping-question-text">Artigo 8 — Retenção Alfandegária e Taxas de Desalfandegamento</span>
+                <span class="shipping-icon-chevron">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </span>
+              </summary>
+              <div class="shipping-answer-content">
+                <p>8.1 Em caso de retenção física da encomenda nas alfândegas de destino devido a processos de amostragem padrão ou requisitos de verificação documental, o **cliente compromete-se a cooperar ativamente com as autoridades alfandegárias** para a regularização e libertação do pacote.</p>
+                <p>8.2 Quaisquer taxas alfandegárias de desalfandegamento administrativo, impostos de importação locais (como o ICMS ou taxas postais no Brasil) são da responsabilidade financeira exclusiva do cliente.</p>
+                <p>8.3 Caso o pacote seja destruído pelas autoridades aduaneiras devido à recusa de cooperação ou falta de pagamento das taxas alfandegárias por parte do cliente, a Fanatik Jersey fica totalmente isenta de obrigações de reembolso.</p>
+              </div>
+            </details>
+
+            <details class="shipping-accordion" name="shipping-accordion-group">
+              <summary class="shipping-summary">
+                <span class="shipping-question-text">Artigo 9 — Impossibilidade de Alteração de Morada</span>
+                <span class="shipping-icon-chevron">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </span>
+              </summary>
+              <div class="shipping-answer-content">
+                <p>9.1 **Não é possível efetuar qualquer alteração nos dados da morada de entrega após a encomenda ser expedida** do centro logístico de origem.</p>
+                <p>9.2 Pedimos ao cliente que reveja minuciosamente todos os campos da morada, código postal, e contacto telefónico no carrinho antes de pagar.</p>
+              </div>
+            </details>
+          </div>
+        </section>
+
+        <!-- Section 4 -->
+        <section id="envio-aceitacao" class="shipping-category-section">
+          <h2 class="shipping-category-title">4. Prazos de Investigação, Trânsito & Aceitação</h2>
+          
+          <div class="shipping-accordions-group">
+            <details class="shipping-accordion" name="shipping-accordion-group">
+              <summary class="shipping-summary">
+                <span class="shipping-question-text">Artigo 10 — Encomendas Não Entregues (Prazo de Investigação)</span>
+                <span class="shipping-icon-chevron">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </span>
+              </summary>
+              <div class="shipping-answer-content">
+                <p>10.1 Caso a sua encomenda não seja entregue no prazo máximo de **40 dias úteis** após a expedição oficial, o cliente deverá contactar o nosso suporte através de <a href="mailto:fanatikjersey2@gmail.com" class="shipping-link">fanatikjersey2@gmail.com</a> para abrirmos um processo de investigação formal junto da transportadora parceira.</p>
+                <p>10.2 Em casos estritos onde a empresa transportadora confirme formalmente o **extravio físico ou perda em trânsito** do pacote, a Fanatik Jersey procederá ao **reenvio sem custos adicionais** de uma nova camisola de substituição idêntica para o cliente.</p>
+              </div>
+            </details>
+
+            <details class="shipping-accordion" name="shipping-accordion-group">
+              <summary class="shipping-summary">
+                <span class="shipping-question-text">Artigo 11 — Custos de Devolução por Culpa do Cliente</span>
+                <span class="shipping-icon-chevron">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </span>
+              </summary>
+              <div class="shipping-answer-content">
+                <p>11.1 Caso um pacote seja devolvido por erro de morada fornecido pelo cliente, recusa infundada de receção ou falha de levantamento no Ponto de Recolha no prazo estipulado, o cliente assumirá todos os **custos adicionais de reenvio de mercadoria** aplicáveis para viabilizar um novo trânsito postal.</p>
+                <p>11.2 Se a transportadora ou alfândega decidir destruir o pacote devido ao incumprimento ou desinteresse do destinatário por estas razões, não haverá lugar a qualquer devolução monetária.</p>
+              </div>
+            </details>
+
+            <details class="shipping-accordion" name="shipping-accordion-group">
+              <summary class="shipping-summary">
+                <span class="shipping-question-text">Artigo 12 — Cancelamento de Encomendas em Trânsito</span>
+                <span class="shipping-icon-chevron">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </span>
+              </summary>
+              <div class="shipping-answer-content">
+                <p>12.1 **Nenhuma encomenda que já se encontre fisicamente em trânsito postal internacional poderá ser cancelada ou reembolsada**.</p>
+                <p>12.2 Uma vez despachada a encomenda para expedição postal aduaneira, o processo logístico é completamente irreversível por motivos técnicos.</p>
+              </div>
+            </details>
+
+            <details class="shipping-accordion" name="shipping-accordion-group">
+              <summary class="shipping-summary">
+                <span class="shipping-question-text">Artigo 13 — Declaração de Aceitação dos Termos de Envio</span>
+                <span class="shipping-icon-chevron">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </span>
+              </summary>
+              <div class="shipping-answer-content">
+                <p>13.1 Ao efetuar e finalizar uma compra na Fanatik Jersey, o comprador declara inequivocamente que **leu, compreendeu integralmente e aceita de livre e espontânea vontade todas as regras, prazos e isenções de responsabilidade** dispostos na presente Política de Envio.</p>
+                <p>13.2 Em conjugação com a nossa Política de Devolução Zero, todos os acordos comerciais entre a loja e o cliente são considerados finais e legalmente válidos nos termos aduaneiros e contratuais aplicáveis.</p>
+              </div>
+            </details>
+          </div>
+        </section>
+
+      </main>
 
     </div>
-
-    <!-- Contact Callout -->
-    <div class="shipping-contact-callout">
-      <p>Tens alguma dúvida sobre o tempo de trânsito ou sobre a entrega do teu pacote?</p>
-      <a href="mailto:fanatikjersey2@gmail.com" class="shipping-cta-btn">
-        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
-          <polyline points="22,6 12,13 2,6"></polyline>
-        </svg>
-        <span>Contacta o Suporte</span>
-      </a>
-    </div>
-
   </div>
 </div>
 {% elsif page.handle == 'satisfacao-garantida' %}
@@ -2265,7 +2467,7 @@ html[data-theme="dark"] .faq-category-nav-item.active {
   }
 }
 
-/* Shipping and Delivery Styling */
+/* Shipping Scoped Styling - Glassmorphism, Accordion, Grid Layouts */
 .shipping-container-wrapper {
   max-width: 100%;
   margin: 0 auto;
@@ -2275,16 +2477,36 @@ html[data-theme="dark"] .faq-category-nav-item.active {
 }
 
 .shipping-inner-container {
-  max-width: 900px;
+  max-width: 1200px;
   margin: 0 auto;
 }
 
 .shipping-header {
   text-align: center;
-  margin-bottom: 4rem;
+  margin-bottom: 3.5rem;
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+.shipping-header-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.04);
+  color: var(--color-text);
+  margin-bottom: 1.5rem;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.shipping-header:hover .shipping-header-icon {
+  transform: translateY(-4px) scale(1.02);
+  color: var(--color-accent);
 }
 
 .shipping-title {
@@ -2297,155 +2519,344 @@ html[data-theme="dark"] .faq-category-nav-item.active {
 }
 
 .shipping-subtitle {
-  font-size: clamp(1rem, 2vw, 1.2rem);
+  font-size: clamp(0.95rem, 2vw, 1.15rem);
   color: var(--color-text-light);
-  max-width: 650px;
+  max-width: 600px;
   line-height: 1.6;
-  margin: 0 auto;
+  margin: 0 0 2.5rem 0;
+  opacity: 0.85;
 }
 
-/* Highlight card styles */
-.shipping-highlight-card {
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  padding: 2.5rem;
-  border-radius: 24px;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.02);
+.shipping-search-wrapper {
+  width: 100%;
+  max-width: 540px;
+  position: relative;
   display: flex;
   align-items: center;
-  gap: 2rem;
-  margin-bottom: 4rem;
-  transition: transform 0.3s ease, border-color 0.3s ease;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 50px;
+  padding: 0.2rem 0.5rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+  transition: all 0.3s ease;
 }
 
-.shipping-highlight-card:hover {
-  transform: translateY(-2px);
-  border-color: rgba(var(--color-primary-rgb), 0.25);
+.shipping-search-wrapper:focus-within {
+  border-color: var(--color-accent);
+  box-shadow: 0 6px 24px rgba(var(--color-primary-rgb), 0.08);
+  transform: translateY(-1px);
 }
 
-.shipping-card-icon {
-  background: rgba(var(--color-primary-rgb), 0.04);
-  color: var(--color-accent);
-  padding: 1.2rem;
-  border-radius: 20px;
+.shipping-search-icon {
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 0.8rem;
+  color: var(--color-text-light);
+  pointer-events: none;
+}
+
+.shipping-search-wrapper input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  padding: 0.8rem 0.2rem;
+  font-size: 1rem;
+  color: var(--color-text);
+  outline: none;
+  font-family: inherit;
+}
+
+.shipping-search-wrapper input::placeholder {
+  color: var(--color-text-light);
+  opacity: 0.8;
+}
+
+.shipping-search-clear {
+  background: transparent;
+  border: none;
+  color: var(--color-text-light);
+  cursor: pointer;
+  padding: 0.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+
+.shipping-search-clear:hover {
+  color: var(--color-text);
+  background: rgba(var(--color-primary-rgb), 0.05);
+}
+
+.shipping-search-clear.hidden {
+  display: none;
+}
+
+.shipping-intro-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 24px;
+  padding: 2.2rem 2.8rem;
+  margin-bottom: 4rem;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.02);
+  line-height: 1.7;
+  color: var(--color-text-light);
+  font-size: 1.05rem;
+}
+
+.shipping-intro-card p:first-child {
+  margin-top: 0;
+}
+
+.shipping-intro-card p:last-child {
+  margin-bottom: 0;
+}
+
+.shipping-intro-card strong {
+  color: var(--color-text);
+}
+
+.shipping-main-layout {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 4rem;
+  align-items: start;
+}
+
+.shipping-sidebar {
+  position: sticky;
+  top: 100px;
+  z-index: 10;
+}
+
+.shipping-categories-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  background: rgba(var(--color-surface-rgb), 0.5);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--color-border);
+  padding: 1rem;
+  border-radius: 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+}
+
+.shipping-category-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  padding: 0.9rem 1.2rem;
+  border-radius: 12px;
+  color: var(--color-text-light);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: all 0.25s ease;
+  border: 1px solid transparent;
+}
+
+.shipping-category-nav-item svg {
+  stroke-width: 2.2px;
+  transition: transform 0.2s ease;
   flex-shrink: 0;
 }
 
-.shipping-highlight-text {
-  line-height: 1.75;
-  color: var(--color-text-light);
-  font-size: 1.1rem;
-  margin: 0;
-}
-
-.shipping-highlight-text strong {
+.shipping-category-nav-item:hover {
   color: var(--color-text);
+  background: rgba(var(--color-primary-rgb), 0.03);
 }
 
-/* Benefit Grid */
-.shipping-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 2rem;
-  margin-bottom: 5rem;
+.shipping-category-nav-item:hover svg {
+  transform: scale(1.05);
 }
 
-.shipping-benefit-card {
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  padding: 2rem 1.8rem;
-  border-radius: 20px;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.01);
+.shipping-category-nav-item.active {
+  color: #ffffff;
+  background: var(--color-text);
+  border-color: var(--color-text);
+  box-shadow: 0 4px 12px rgba(var(--color-primary-rgb), 0.15);
+}
+
+html[data-theme="dark"] .shipping-category-nav-item.active {
+  color: #0b0b0b;
+  background: #ffffff;
+  border-color: #ffffff;
+}
+
+.shipping-category-nav-item.active svg {
+  color: inherit;
+}
+
+.shipping-content-area {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  gap: 4.5rem;
 }
 
-.shipping-benefit-card:hover {
-  transform: translateY(-4px);
-  border-color: rgba(var(--color-primary-rgb), 0.25);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.03);
+.shipping-category-section {
+  scroll-margin-top: 100px;
 }
 
-.benefit-icon {
-  color: var(--color-accent);
-  margin-bottom: 1.2rem;
-  display: inline-flex;
-}
-
-.shipping-benefit-card h3 {
-  font-size: 1.15rem;
+.shipping-category-title {
+  font-size: 1.6rem;
   font-weight: 800;
   color: var(--color-text);
-  margin: 0 0 0.8rem 0;
+  margin: 0 0 1.8rem 0;
+  padding-bottom: 0.8rem;
+  border-bottom: 2px solid var(--color-border);
 }
 
-.shipping-benefit-card p {
-  line-height: 1.6;
-  color: var(--color-text-light);
-  font-size: 0.94rem;
-  margin: 0;
-}
-
-/* Contact Callout */
-.shipping-contact-callout {
-  text-align: center;
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  padding: 3rem 2rem;
-  border-radius: 24px;
+.shipping-accordions-group {
   display: flex;
   flex-direction: column;
+  gap: 1rem;
+}
+
+.shipping-accordion {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  overflow: hidden;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.01);
+}
+
+.shipping-accordion:hover {
+  border-color: rgba(var(--color-primary-rgb), 0.3);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.03);
+}
+
+.shipping-accordion[open] {
+  border-color: var(--color-text);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.04);
+}
+
+.shipping-summary {
+  display: flex;
+  justify-content: space-between;
   align-items: center;
-}
-
-.shipping-contact-callout p {
-  font-size: 1.1rem;
-  color: var(--color-text);
+  padding: 1.4rem 1.8rem;
   font-weight: 700;
-  margin: 0 0 1.5rem 0;
-}
-
-.shipping-cta-btn {
-  background: var(--color-text) !important;
-  color: var(--color-bg) !important;
-  font-weight: 800 !important;
-  font-size: 0.95rem !important;
-  padding: 0.9rem 2.2rem !important;
-  border-radius: 50px !important;
-  border: 1px solid var(--color-text) !important;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15) !important;
-  transition: all 0.3s ease !important;
-  display: inline-flex !important;
-  align-items: center !important;
-  gap: 0.6rem !important;
-  text-transform: uppercase !important;
-  letter-spacing: 0.5px !important;
-  text-decoration: none !important;
+  font-size: 1.05rem;
   cursor: pointer;
+  color: var(--color-text);
+  user-select: none;
+  list-style: none;
 }
 
-html[data-theme="dark"] .shipping-cta-btn {
-  background: #ffffff !important;
-  color: #0b0b0b !important;
-  border-color: #ffffff !important;
+.shipping-summary::-webkit-details-marker {
+  display: none;
 }
 
-.shipping-cta-btn:hover {
-  transform: translateY(-2px) !important;
-  opacity: 0.9;
+.shipping-question-text {
+  line-height: 1.4;
+  padding-right: 1.5rem;
 }
 
-.shipping-cta-btn svg {
-  stroke-width: 2.2px;
+.shipping-icon-chevron {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-light);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), color 0.3s ease;
+  flex-shrink: 0;
 }
 
-/* Responsive styles */
-@media (max-width: 768px) {
+.shipping-icon-chevron svg {
+  stroke-width: 2.5px;
+}
+
+.shipping-accordion[open] .shipping-icon-chevron {
+  transform: rotate(180deg);
+  color: var(--color-text);
+}
+
+.shipping-answer-content {
+  padding: 0 1.8rem 1.6rem 1.8rem;
+  border-top: 1px solid transparent;
+  color: var(--color-text-light);
+  line-height: 1.65;
+  font-size: 0.98rem;
+  animation: shippingSlideDown 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.shipping-accordion[open] .shipping-answer-content {
+  border-top-color: var(--color-border);
+}
+
+.shipping-answer-content p {
+  margin: 0 0 1rem 0;
+}
+
+.shipping-answer-content p:last-child {
+  margin-bottom: 0;
+}
+
+.shipping-answer-content ul {
+  margin: 0 0 1rem 0;
+  padding-left: 1.2rem;
+  list-style: disc;
+}
+
+.shipping-answer-content ul li {
+  margin-bottom: 0.5rem;
+}
+
+.shipping-link {
+  color: var(--color-text);
+  text-decoration: underline;
+  font-weight: 600;
+  transition: color 0.2s ease;
+}
+
+.shipping-link:hover {
+  color: var(--color-accent);
+}
+
+@keyframes shippingSlideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.shipping-accordion.filtered-out {
+  display: none !important;
+}
+
+.shipping-category-section.filtered-out {
+  display: none !important;
+}
+
+.shipping-no-results {
+  text-align: center;
+  padding: 4rem 1rem;
+  color: var(--color-text-light);
+  font-size: 1.1rem;
+}
+
+.shipping-no-results svg {
+  margin-bottom: 1rem;
+  opacity: 0.5;
+  color: var(--color-text-light);
+}
+
+.shipping-highlight {
+  background-color: rgba(255, 235, 59, 0.3);
+  color: inherit;
+  padding: 0 2px;
+  border-radius: 2px;
+  font-weight: inherit;
+}
+
+@media (max-width: 992px) {
   .shipping-container-wrapper {
     padding: 3rem 1rem;
   }
@@ -2454,28 +2865,60 @@ html[data-theme="dark"] .shipping-cta-btn {
     margin-bottom: 2.5rem;
   }
 
-  .shipping-highlight-card {
-    flex-direction: column;
-    padding: 2rem;
-    text-align: center;
-    gap: 1.2rem;
+  .shipping-intro-card {
+    padding: 1.6rem 1.8rem;
+    margin-bottom: 2.5rem;
+    font-size: 0.98rem;
   }
 
-  .shipping-grid {
+  .shipping-main-layout {
     grid-template-columns: 1fr;
-    gap: 1.5rem;
+    gap: 2.5rem;
   }
 
-  .shipping-contact-callout {
-    padding: 2.2rem 1.2rem;
+  .shipping-sidebar {
+    position: sticky;
+    top: 60px;
+    margin: 0 -1rem;
+    padding: 0 1rem;
+    background: var(--color-bg);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.02);
   }
 
-  .shipping-cta-btn {
-    width: 100%;
-    justify-content: center;
+  .shipping-categories-nav {
+    flex-direction: row;
+    overflow-x: auto;
+    white-space: nowrap;
+    padding: 0.6rem;
+    border-radius: 12px;
+    gap: 0.4rem;
+    scrollbar-width: none;
+    max-height: none;
+  }
+
+  .shipping-categories-nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  .shipping-category-nav-item {
+    padding: 0.6rem 0.9rem;
+    font-size: 0.82rem;
+    gap: 0.5rem;
+  }
+
+  .shipping-content-area {
+    gap: 3rem;
+  }
+
+  .shipping-category-section {
+    scroll-margin-top: 140px;
+  }
+
+  .shipping-category-title {
+    font-size: 1.3rem;
+    margin-bottom: 1rem;
   }
 }
-
 /* Guarantee of Satisfaction Styling */
 .guarantee-container-wrapper {
   max-width: 100%;
@@ -3143,7 +3586,176 @@ document.addEventListener('DOMContentLoaded', function() {
     recursiveHighlight(temp);
     element.innerHTML = temp.innerHTML;
   }
-const searchInput = document.getElementById('FaqSearchInput');
+  // --- SHIPPING POLICY CODE ---
+  const shippingNavItems = document.querySelectorAll('.shipping-category-nav-item');
+  const shippingArticles = document.querySelectorAll('.shipping-category-section');
+  const shippingNavContainer = document.querySelector('.shipping-categories-nav');
+
+  if (shippingNavItems.length > 0 && shippingArticles.length > 0) {
+    const shippingObserverOptions = {
+      root: null,
+      rootMargin: '-20% 0px -60% 0px',
+      threshold: 0
+    };
+
+    const shippingObserver = new IntersectionObserver(function(entries) {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const id = entry.target.getAttribute('id');
+          shippingNavItems.forEach(item => {
+            if (item.getAttribute('data-target') === id) {
+              item.classList.add('active');
+              
+              if (window.innerWidth <= 992 && shippingNavContainer) {
+                const offsetLeft = item.offsetLeft - (shippingNavContainer.offsetWidth / 2) + (item.offsetWidth / 2);
+                shippingNavContainer.scrollTo({
+                  left: offsetLeft,
+                  behavior: 'smooth'
+                });
+              }
+            } else {
+              item.classList.remove('active');
+            }
+          });
+        }
+      });
+    }, shippingObserverOptions);
+
+    shippingArticles.forEach(article => {
+      shippingObserver.observe(article);
+    });
+
+    shippingNavItems.forEach(item => {
+      item.addEventListener('click', function(e) {
+        e.preventDefault();
+        const targetId = this.getAttribute('data-target');
+        const targetSection = document.getElementById(targetId);
+        
+        if (targetSection) {
+          const headerOffset = window.innerWidth <= 992 ? 150 : 110;
+          const elementPosition = targetSection.getBoundingClientRect().top;
+          const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+          
+          window.scrollTo({
+            top: offsetPosition,
+            behavior: 'smooth'
+          });
+        }
+      });
+    });
+  }
+
+  // Real-time keyword search filter for Shipping Policy
+  const shippingSearchInput = document.getElementById('ShippingSearchInput');
+  const shippingSearchClear = document.getElementById('ShippingSearchClear');
+  const shippingAccordions = document.querySelectorAll('.shipping-accordion');
+  const shippingCategories = document.querySelectorAll('.shipping-category-section');
+  const shippingContentArea = document.querySelector('.shipping-content-area');
+  let shippingNoResultsEl = null;
+
+  if (shippingSearchInput) {
+    shippingSearchInput.addEventListener('input', function(e) {
+      const query = e.target.value.trim().toLowerCase();
+      
+      if (query.length > 0) {
+        shippingSearchClear.classList.remove('hidden');
+      } else {
+        shippingSearchClear.classList.add('hidden');
+      }
+      
+      let totalMatches = 0;
+      if (shippingNoResultsEl) {
+        shippingNoResultsEl.remove();
+        shippingNoResultsEl = null;
+      }
+
+      shippingCategories.forEach(category => {
+        let categoryMatches = 0;
+        const accordionsInCat = category.querySelectorAll('.shipping-accordion');
+        
+        accordionsInCat.forEach(accordion => {
+          const qEl = accordion.querySelector('.shipping-question-text');
+          const aEl = accordion.querySelector('.shipping-answer-content');
+          
+          if (!accordion.dataset.originalQ) {
+            accordion.dataset.originalQ = qEl.innerHTML;
+          }
+          if (!accordion.dataset.originalA) {
+            accordion.dataset.originalA = aEl.innerHTML;
+          }
+
+          const qText = qEl.textContent.toLowerCase();
+          const aText = aEl.textContent.toLowerCase();
+          
+          if (qText.includes(query) || aText.includes(query)) {
+            accordion.classList.remove('filtered-out');
+            categoryMatches++;
+            totalMatches++;
+            
+            if (query.length >= 2) {
+              accordion.setAttribute('open', '');
+              highlightText(qEl, accordion.dataset.originalQ, query, 'shipping-highlight');
+              highlightText(aEl, accordion.dataset.originalA, query, 'shipping-highlight');
+            } else {
+              accordion.removeAttribute('open');
+              qEl.innerHTML = accordion.dataset.originalQ;
+              aEl.innerHTML = accordion.dataset.originalA;
+            }
+          } else {
+            accordion.classList.add('filtered-out');
+            accordion.removeAttribute('open');
+            qEl.innerHTML = accordion.dataset.originalQ;
+            aEl.innerHTML = accordion.dataset.originalA;
+          }
+        });
+        
+        if (categoryMatches > 0) {
+          category.classList.remove('filtered-out');
+        } else {
+          category.classList.add('filtered-out');
+        }
+      });
+      
+      if (totalMatches === 0 && query.length > 0) {
+        shippingNoResultsEl = document.createElement('div');
+        shippingNoResultsEl.className = 'shipping-no-results';
+        shippingNoResultsEl.innerHTML = `
+          <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            <line x1="8" y1="11" x2="14" y2="11"></line>
+          </svg>
+          <p>Não foram encontrados artigos para "<strong>${escapeHtml(query)}</strong>"</p>
+          <p style="font-size: 0.9rem; margin-top: 0.5rem; opacity: 0.7;">Tente pesquisar por outros termos, como "prazos", "alfândega", "Brasil" ou "extravio".</p>
+        `;
+        shippingContentArea.appendChild(shippingNoResultsEl);
+      }
+    });
+
+    shippingSearchClear.addEventListener('click', function() {
+      shippingSearchInput.value = '';
+      shippingSearchClear.classList.add('hidden');
+      if (shippingNoResultsEl) {
+        shippingNoResultsEl.remove();
+        shippingNoResultsEl = null;
+      }
+      shippingCategories.forEach(category => {
+        category.classList.remove('filtered-out');
+        category.querySelectorAll('.shipping-accordion').forEach(accordion => {
+          accordion.classList.remove('filtered-out');
+          accordion.removeAttribute('open');
+          const qEl = accordion.querySelector('.shipping-question-text');
+          const aEl = accordion.querySelector('.shipping-answer-content');
+          if (accordion.dataset.originalQ) qEl.innerHTML = accordion.dataset.originalQ;
+          if (accordion.dataset.originalA) aEl.innerHTML = accordion.dataset.originalA;
+        });
+      });
+      shippingSearchInput.focus();
+    });
+  }
+
+
+  const searchInput = document.getElementById('FaqSearchInput');
   const clearBtn = document.getElementById('FaqSearchClear');
   const accordions = document.querySelectorAll('.faq-accordion');
   const categories = document.querySelectorAll('.faq-category-section');

@@ -1,4 +1,4 @@
-{% if request.path contains 'privacy-policy' or request.path contains 'refund-policy' %}
+{% if request.path contains 'privacy-policy' or request.path contains 'refund-policy' or request.path contains 'shipping-policy' %}
   {% section 'main-page' %}
 {% else %}
   <div class="page-container-wrapper">
