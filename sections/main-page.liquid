@@ -1227,7 +1227,390 @@
 
     </div>
   </div>
-</div>{% else %}
+</div>{% elsif page.handle == 'termos-de-servico' or page.handle == 'termos-e-condicoes' or page.handle == 'termos-condicoes' or request.path contains 'terms-of-service' %}
+<div class="tos-container-wrapper">
+  <div class="tos-inner-container">
+    
+    <!-- Header -->
+    <header class="tos-header">
+      <div class="tos-header-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+          <polyline points="14 2 14 8 20 8"></polyline>
+          <line x1="16" y1="13" x2="8" y2="13"></line>
+          <line x1="16" y1="17" x2="8" y2="17"></line>
+          <polyline points="10 9 9 9 8 9"></polyline>
+        </svg>
+      </div>
+      <h1 class="tos-title">Termos & Condições</h1>
+      <p class="tos-subtitle">Última atualização: Maio de 2026 · Versão 1.0</p>
+      
+      <!-- Real-time Interactive Search Bar for TOS Terms -->
+      <div class="tos-search-wrapper">
+        <span class="tos-search-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+        </span>
+        <input type="text" id="TosSearchInput" placeholder="Procurar termos nos termos de serviço (ex: preços, devolução, lei, Lisboa)..." aria-label="Procurar termos nos termos de serviço">
+        <button id="TosSearchClear" class="tos-search-clear hidden" aria-label="Limpar pesquisa">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Intro Card -->
+    <div class="tos-intro-card">
+      <p>
+        Bem-vindo à <strong>Fanatik Jersey</strong>. Ao aceder ou navegar em qualquer parte deste website ou ao efetuar uma compra na nossa loja online, o utilizador reconhece que leu, compreendeu e aceitou integralmente os presentes Termos e Condições ("T&C"), bem como todos os documentos complementares aqui referenciados, incluindo a nossa Política de Privacidade e Política de Trocas e Devoluções. Caso discorde de qualquer disposição aqui contida, deverá abster-se de utilizar o nosso Serviço.
+      </p>
+      <p>
+        A Fanatik Jersey reserva-se o direito de alterar, suspender ou descontinuar qualquer aspeto do Serviço — incluindo produtos, preços, funcionalidades e condições de acesso — em qualquer momento e sem aviso prévio. A continuação da utilização do Serviço após qualquer alteração constitui aceitação automática e irrevogável das novas condições.
+      </p>
+    </div>
+
+    <!-- Main Layout Grid -->
+    <div class="tos-main-layout">
+      
+      <!-- Left sidebar: Categories Navigation (Sticky) -->
+      <aside class="tos-sidebar">
+        <nav class="tos-categories-nav">
+          <a href="#tos-servico" class="tos-category-nav-item active" data-target="tos-servico">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+            <span>Introdução & Serviço</span>
+          </a>
+          <a href="#tos-precos" class="tos-category-nav-item" data-target="tos-precos">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+            <span>Preços & Encomendas</span>
+          </a>
+          <a href="#tos-devolucoes" class="tos-category-nav-item" data-target="tos-devolucoes">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path></svg>
+            <span>Trocas & Propriedade</span>
+          </a>
+          <a href="#tos-responsabilidade" class="tos-category-nav-item" data-target="tos-responsabilidade">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2" ry="2"></rect><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+            <span>Contas & Proteção</span>
+          </a>
+          <a href="#tos-legal" class="tos-category-nav-item" data-target="tos-legal">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+            <span>Regras & Foro Legal</span>
+          </a>
+        </nav>
+      </aside>
+
+      <!-- Right column: TOS Content Area (Interactive Accordions) -->
+      <main class="tos-content-area">
+        
+        <!-- Category 1 -->
+        <section id="tos-servico" class="tos-category-section">
+          <h2 class="tos-category-title">1. Introdução, Âmbito & Serviço</h2>
+          
+          <div class="tos-accordions-group">
+            <details class="tos-accordion" name="tos-accordion-group">
+              <summary class="tos-summary">
+                <span class="tos-question-text">Artigo 1 — Identidade e Âmbito de Aplicação</span>
+                <span class="tos-icon-chevron">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </span>
+              </summary>
+              <div class="tos-answer-content">
+                <p>1.1 A loja online **fanatikjersey.com** (e os seus domínios associados) é operada pela marca **Fanatik Jersey** ("nós", "nos", "nosso").</p>
+                <p>1.2 Os presentes Termos e Condições de Utilização e Venda aplicam-se na sua totalidade a todos os utilizadores do website, sem qualquer exceção: meros visitantes, compradores registados, criadores de conteúdo ou qualquer pessoa que interaja com o nosso Serviço, seja a que título for.</p>
+                <p>1.3 Qualquer nova funcionalidade, ferramenta, promoção ou produto adicionado à nossa loja online ficará automaticamente sujeito aos presentes T&C, sem necessidade de qualquer notificação individual prévia.</p>
+                <p>1.4 Ao registar uma conta ou ao finalizar uma compra no nosso website, o Cliente declara possuir idade igual ou superior a 18 anos, ou dispor de autorização expressa do seu representante legal para o efeito.</p>
+              </div>
+            </details>
+
+            <details class="tos-accordion" name="tos-accordion-group">
+              <summary class="tos-summary">
+                <span class="tos-question-text">Artigo 2 — Disponibilidade do Serviço e Força Maior</span>
+                <span class="tos-icon-chevron">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </span>
+              </summary>
+              <div class="tos-answer-content">
+                <p>2.1 A Fanatik Jersey não garante que o website estará disponível de forma ininterrupta, livre de erros temporários, vírus informáticos ou outros elementos prejudiciais. O nosso Serviço é disponibilizado "tal como está" (*as is*) e "conforme disponível" (*as available*), sem qualquer tipo de garantia expressa ou implícita de qualquer natureza.</p>
+                <p>2.2 A Fanatik Jersey não será responsável por qualquer interrupção, atraso, falha de acesso, perda de dados ou dano resultante de: (i) falhas na infraestrutura de servidores de terceiros ou rede de internet global; (ii) ataques cibernéticos, intrusões não autorizadas de hackers ou vírus informáticos; (iii) casos fortuitos ou de força maior (greves, catástrofes naturais, restrições governamentais aduaneiras).</p>
+                <p>2.3 Reservamo-nos o direito de suspender, atualizar ou encerrar definitivamente o website ou qualquer parte dele, a qualquer momento e sem aviso prévio por motivos de manutenção técnica.</p>
+              </div>
+            </details>
+
+            <details class="tos-accordion" name="tos-accordion-group">
+              <summary class="tos-summary">
+                <span class="tos-question-text">Artigo 3 — Produtos, Descrições & Intermediação de Revenda</span>
+                <span class="tos-icon-chevron">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </span>
+              </summary>
+              <div class="tos-answer-content">
+                <p>3.1 Todos os produtos apresentados no website estão estritamente sujeitos à disponibilidade de stock dos nossos fornecedores internacionais parceiros. A apresentação de um produto na nossa loja não constitui uma oferta de venda vinculativa, mas sim um convite ao cliente para efetuar um pedido de compra (*invitatio ad offerendum*).</p>
+                <p>3.2 Como atuamos estritamente como um **ponto de revenda de camisolas** (intermediação comercial com fornecedores premium estrangeiros), envidamos todos os esforços comerciais razoáveis para assegurar a exatidão das descrições, tabelas de medidas e fotografias dos produtos. Contudo, as imagens apresentadas no Serviço são de caráter ilustrativo.</p>
+                <p>3.3 Reservamo-nos o direito de alterar, descontinuar ou substituir qualquer modelo de camisola do catálogo a qualquer momento, sem aviso prévio, e sem que tal gere qualquer obrigação de compensação.</p>
+                <p>3.4 A venda de produtos pode ser limitada por nós a nível de quantidade por pessoa, agregado familiar, morada de entrega, região geográfica de destino ou método de pagamento.</p>
+              </div>
+            </details>
+          </div>
+        </section>
+
+        <!-- Category 2 -->
+        <section id="tos-precos" class="tos-category-section">
+          <h2 class="tos-category-title">2. Preços, Encomendas & Prazos de Envio</h2>
+          
+          <div class="tos-accordions-group">
+            <details class="tos-accordion" name="tos-accordion-group">
+              <summary class="tos-summary">
+                <span class="tos-question-text">Artigo 4 — Preços, Moeda & Custos Alfandegários</span>
+                <span class="shipping-icon-chevron">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </span>
+              </summary>
+              <div class="tos-answer-content">
+                <p>4.1 Todos os preços dos nossos produtos são apresentados na moeda oficial **Euro (€)**.</p>
+                <p>4.2 Os preços indicados **não incluem taxas alfandegárias de importação, direitos aduaneiros ou taxas postais administrativas do país de destino** (como as taxas postais e impostos da Receita Federal no Brasil). Todos estes custos adicionais, quando aplicáveis, são da responsabilidade financeira exclusiva do Cliente.</p>
+                <p>4.3 A Fanatik Jersey reserva-se o direito de alterar os preços de venda de qualquer produto a qualquer momento e sem aviso prévio.</p>
+                <p>4.4 Em caso de erro informático evidente na fixação do preço de um produto (ex: preço a zero ou manifestamente irrisório), a Fanatik Jersey não fica obrigada a honrar a venda e cancelará a encomenda, notificando o Cliente e devolvendo a totalidade do montante pago.</p>
+              </div>
+            </details>
+
+            <details class="tos-accordion" name="tos-accordion-group">
+              <summary class="tos-summary">
+                <span class="tos-question-text">Artigo 5 — Processamento de Encomendas & Meios de Pagamento</span>
+                <span class="shipping-icon-chevron">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </span>
+              </summary>
+              <div class="tos-answer-content">
+                <p>5.1 A receção de uma encomenda por nós não constitui aceitação automática da mesma. O contrato de compra e venda considera-se celebrado no momento em que a Fanatik Jersey processa o envio e emite o e-mail de confirmação com o respetivo código de rastreamento.</p>
+                <p>5.2 Todo o processamento de pagamentos é efetuado por gateways independentes certificados e totalmente seguros, nomeadamente: **Shopify Payments, Stripe, MB Way, Multibanco, Apple Pay e Google Pay**. A Fanatik Jersey não recolhe nem armazena dados de cartões ou chaves privadas.</p>
+                <p>5.3 Em caso de recusa de pagamento, suspeita de fraude ou reversão de pagamento (*chargeback*), a Fanatik Jersey reserva-se o direito de anular a encomenda e suspender a conta de utilizador associada.</p>
+              </div>
+            </details>
+
+            <details class="tos-accordion" name="tos-accordion-group">
+              <summary class="tos-summary">
+                <span class="tos-question-text">Artigo 6 — Envio, Entrega & Prazos Logísticos</span>
+                <span class="shipping-icon-chevron">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </span>
+              </summary>
+              <div class="tos-answer-content">
+                <p>6.1 Todos os prazos de entrega apresentados no website são estimativas médias logísticas indicativas e não constituem de forma alguma uma garantia contratual de cumprimento temporal estrito.</p>
+                <p>6.2 O risco de perda ou dano físico dos produtos transfere-se para o Cliente a partir do momento em que a encomenda é entregue pela transportadora postal na morada de destino.</p>
+                <p>6.3 Realizamos entregas **exclusivamente na Europa e no Brasil**. A Fanatik Jersey não efetua envios para quaisquer outras regiões geográficas mundiais.</p>
+                <p>6.4 O fornecimento de moradas incorretas, incompletas ou inválidas no checkout é da exclusiva responsabilidade do Cliente. Se a encomenda for destruída pela transportadora internacional ou alfândega por impossibilidade de entrega derivada de dados errados, não haverá lugar a reembolso.</p>
+              </div>
+            </details>
+          </div>
+        </section>
+
+        <!-- Category 3 -->
+        <section id="tos-devolucoes" class="tos-category-section">
+          <h2 class="tos-category-title">3. Trocas, Devoluções & Propriedade Intelectual</h2>
+          
+          <div class="tos-accordions-group">
+            <details class="tos-accordion" name="tos-accordion-group">
+              <summary class="tos-summary">
+                <span class="tos-question-text">Artigo 7 — Política Estrita de Não Devolução e Isenção de Danos</span>
+                <span class="shipping-icon-chevron">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </span>
+              </summary>
+              <div class="tos-answer-content">
+                <p>7.1 Em total conformidade com o nosso modelo de negócio de intermediação comercial e revenda direta sob encomenda, **a Fanatik Jersey não aceita devoluções nem trocas de qualquer espécie**.</p>
+                <p>7.2 Por atuarmos unicamente como revendedores de fornecedores terceiros internacionais, **toda e qualquer anomalia física, defeito microscópico de fabrico ou danos na camisola são-nos totalmente alheios**, ficando a nossa marca isenta de responsabilidades pós-venda.</p>
+                <p>7.3 Artigos personalizados (ex: camisolas com nome, número e patches à escolha do cliente), edições especiais retro ou camisolas adquiridas em saldos/promoções estão terminantemente excluídos de qualquer política de reembolso ou troca.</p>
+                <p>7.4 Em caso de confirmed loss (extravio de pacote oficialmente declarado pela transportadora), a Fanatik Jersey suportará o reenvio de uma nova camisola ao cliente a custo zero.</p>
+              </div>
+            </details>
+
+            <details class="tos-accordion" name="tos-accordion-group">
+              <summary class="tos-summary">
+                <span class="tos-question-text">Artigo 8 — Direitos de Propriedade Intelectual</span>
+                <span class="shipping-icon-chevron">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </span>
+              </summary>
+              <div class="tos-answer-content">
+                <p>8.1 Todo o conteúdo visual e intelectual contido no website (textos, logótipos de marca, designs, layouts, códigos, gráficos, imagens de camisolas e slogans) é propriedade exclusiva da **Fanatik Jersey** ou é utilizado sob licença autorizada de terceiros parceiros. Todos os direitos reservados.</p>
+                <p>8.2 É terminantemente proibida a reprodução, cópia, distribuição, publicação comercial ou modificação de qualquer conteúdo do nosso website sem o nosso consentimento prévio por escrito.</p>
+                <p>8.3 A Fanatik Jersey respeita rigorosamente os direitos de propriedade intelectual de marcas, ligas oficiais e clubes desportivos de terceiros.</p>
+              </div>
+            </details>
+          </div>
+        </section>
+
+        <!-- Category 4 -->
+        <section id="tos-responsabilidade" class="tos-category-section">
+          <h2 class="tos-category-title">4. Contas de Utilizador & Limitação de Responsabilidade</h2>
+          
+          <div class="tos-accordions-group">
+            <details class="tos-accordion" name="tos-accordion-group">
+              <summary class="tos-summary">
+                <span class="tos-question-text">Artigo 9 — Conta de Utilizador, Segurança & Suspensão</span>
+                <span class="shipping-icon-chevron">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </span>
+              </summary>
+              <div class="tos-answer-content">
+                <p>9.1 O Cliente é o único e exclusivo responsável por manter a total confidencialidade das suas credenciais de acesso ao website (login e password) e por todas as atividades comerciais realizadas na sua conta.</p>
+                <p>9.2 A Fanatik Jersey reserva-se o direito unilateral de suspender, banir ou encerrar definitivamente qualquer conta de utilizador, sem qualquer aviso prévio ou direito a compensação, em caso de suspeita fundamentada de fraude, utilização de meios de pagamento ilegítimos ou violação de qualquer disposição dos presentes T&C.</p>
+              </div>
+            </details>
+
+            <details class="tos-accordion" name="tos-accordion-group">
+              <summary class="tos-summary">
+                <span class="tos-question-text">Artigo 10 — Limitação Geral de Responsabilidade Civil</span>
+                <span class="shipping-icon-chevron">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </span>
+              </summary>
+              <div class="tos-answer-content">
+                <p>10.1 Na máxima extensão permitida pela legislação portuguesa aplicável, a Fanatik Jersey exclui expressamente toda e qualquer responsabilidade civil por:</p>
+                <ul>
+                  <li>Lucros cessantes, perdas financeiras indiretas ou danos consequentes de qualquer natureza;</li>
+                  <li>Danos ou quebras decorrentes do uso inadequado das camisolas (ex: lavagem inadequada na máquina);</li>
+                  <li>Erros, omissões ou ligeiras imprecisões nas descrições de modelos de camisolas desportivas;</li>
+                  <li>Ações, omissões ou falhas operacionais de parceiros terceiros (operadores de transporte aduaneiro ou intermediários de faturação eletrónica).</li>
+                </ul>
+                <p>10.2 A responsabilidade civil total acumulada da Fanatik Jersey perante o cliente por qualquer litígio comercial fica estritamente limitada ao montante total efetivamente pago pelo Cliente na compra que originou o facto gerador de litígio.</p>
+              </div>
+            </details>
+
+            <details class="tos-accordion" name="tos-accordion-group">
+              <summary class="tos-summary">
+                <span class="tos-question-text">Artigo 11 — Indemnização por Violação de Termos</span>
+                <span class="shipping-icon-chevron">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </span>
+              </summary>
+              <div class="tos-answer-content">
+                <p>11.1 O Cliente compromete-se a indemnizar, defender e isentar de qualquer responsabilidade a Fanatik Jersey, os seus fundadores, funcionários e parceiros logísticos, contra quaisquer reclamações, perdas, despesas judiciais e custos conexos resultantes da violação direta destes Termos pelo Cliente ou da violação de qualquer lei ou direito de terceiros.</p>
+              </div>
+            </details>
+          </div>
+        </section>
+
+        <!-- Section 5 -->
+        <section id="tos-legal" class="tos-category-section">
+          <h2 class="tos-category-title">5. Regras, Usos Proibidos, Foro & Lei Aplicável</h2>
+          
+          <div class="tos-accordions-group">
+            <details class="tos-accordion" name="tos-accordion-group">
+              <summary class="tos-summary">
+                <span class="tos-question-text">Artigo 12 — Usos Proibidos do Serviço</span>
+                <span class="shipping-icon-chevron">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </span>
+              </summary>
+              <div class="tos-answer-content">
+                <p>12.1 É estritamente proibido utilizar o nosso Serviço, website ou conteúdos para as seguintes finalidades:</p>
+                <ul>
+                  <li>Qualquer atividade ilegal, fraudulenta ou contrária à ordem pública e bons costumes;</li>
+                  <li>Violação de direitos de propriedade intelectual ou de privacidade de terceiros;</li>
+                  <li>Transmissão de vírus informáticos, malware ou qualquer código malicioso nocivo;</li>
+                  <li>Tentativas de acesso não autorizado a servidores, sistemas ou redes da Fanatik Jersey;</li>
+                  <li>Revenda ou exploração comercial do nosso Serviço de revenda de camisolas sem a nossa autorização expressa;</li>
+                  <li>Qualquer ação de difamação pública ou que possa prejudicar a reputação comercial da marca.</li>
+                </ul>
+              </div>
+            </details>
+
+            <details class="tos-accordion" name="tos-accordion-group">
+              <summary class="tos-summary">
+                <span class="tos-question-text">Artigo 13 — Ferramentas e Ligações de Terceiros</span>
+                <span class="shipping-icon-chevron">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </span>
+              </summary>
+              <div class="tos-answer-content">
+                <p>13.1 O website pode conter hiperligações para sites de terceiros ou integrar ferramentas externas independentes da nossa marca. A Fanatik Jersey não controla, não apoia e não se responsabiliza pelo conteúdo, funcionamento ou eventuais práticas de privacidade dessas plataformas externas.</p>
+              </div>
+            </details>
+
+            <details class="tos-accordion" name="tos-accordion-group">
+              <summary class="tos-summary">
+                <span class="tos-question-text">Artigo 14 — Proteção de Dados e Privacidade</span>
+                <span class="shipping-icon-chevron">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </span>
+              </summary>
+              <div class="tos-answer-content">
+                <p>14.1 O tratamento dos seus dados pessoais no âmbito da navegação e finalização de compras é integralmente regulado pela nossa Política de Privacidade, a qual é parte integrante destes T&C.</p>
+              </div>
+            </details>
+
+            <details class="tos-accordion" name="tos-accordion-group">
+              <summary class="tos-summary">
+                <span class="tos-question-text">Artigo 15 — Alterações aos Termos e Condições</span>
+                <span class="shipping-icon-chevron">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </span>
+              </summary>
+              <div class="tos-answer-content">
+                <p>15.1 A Fanatik Jersey reserva-se o direito de atualizar e alterar qualquer secção dos presentes Termos e Condições a qualquer momento. Quaisquer alterações entram em vigor imediatamente após a sua publicação no website.</p>
+              </div>
+            </details>
+
+            <details class="tos-accordion" name="tos-accordion-group">
+              <summary class="tos-summary">
+                <span class="tos-question-text">Artigo 16 — Lei Aplicável e Resolução de Litígios (Foro)</span>
+                <span class="shipping-icon-chevron">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </span>
+              </summary>
+              <div class="tos-answer-content">
+                <p>16.1 Os presentes Termos e Condições são integralmente regidos, interpretados e executados em conformidade com a **legislação da República Portuguesa**.</p>
+                <p>16.2 Qualquer litígio, controvérsia ou reclamação decorrente da interpretação, aplicação ou incumprimento destes Termos que não possa ser resolvido por mútuo acordo amigável será submetido à jurisdição exclusiva dos **Tribunais da Comarca de Lisboa (Portugal)**, com renúncia expressa a qualquer outro foro.</p>
+              </div>
+            </details>
+
+            <details class="tos-accordion" name="tos-accordion-group">
+              <summary class="tos-summary">
+                <span class="tos-question-text">Artigo 17 — Disposições Finais & Acordo Integral</span>
+                <span class="shipping-icon-chevron">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </span>
+              </summary>
+              <div class="tos-answer-content">
+                <p>17.1 Se qualquer cláusula ou disposição destes T&C for considerada ilegal, nula ou por qualquer razão inexequível por um tribunal competente, essa cláusula será considerada separável e não afetará a validade e exequibilidade das restantes disposições aduaneiras e comerciais, que se manterão em pleno vigor.</p>
+                <p>17.2 A ausência de exercício ou aplicação imediata de qualquer direito ou disposição destes Termos por nossa parte não constituirá uma renúncia a esse direito ou disposição futuramente.</p>
+                <p>17.3 Estes T&C constituem o acordo e entendimento integral entre o Cliente e a Fanatik Jersey.</p>
+              </div>
+            </details>
+
+            <details class="tos-accordion" name="tos-accordion-group">
+              <summary class="tos-summary">
+                <span class="tos-question-text">Artigo 18 — Contacto & Esclarecimento de Dúvidas</span>
+                <span class="shipping-icon-chevron">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </span>
+              </summary>
+              <div class="tos-answer-content">
+                <p>Para qualquer esclarecimento comercial de dúvidas relativas aos presentes Termos e Condições, o Cliente poderá entrar em contacto direto com o nosso apoio a qualquer momento através de:</p>
+                <div class="tos-contact-box">
+                  <a href="mailto:fanatikjersey2@gmail.com" class="tos-cta-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                      <polyline points="22,6 12,13 2,6"></polyline>
+                    </svg>
+                    <span>Enviar E-mail à Fanatik</span>
+                  </a>
+                  <span class="tos-contact-email">fanatikjersey2@gmail.com</span>
+                </div>
+                <p class="tos-conclusion-note">Ao concluir qualquer transação no nosso website, o Cliente declara que leu, compreendeu e aceita incondicionalmente todos os presentes Termos e Condições.</p>
+              </div>
+            </details>
+          </div>
+        </section>
+
+      </main>
+
+    </div>
+  </div>
+</div>
+
+{% else %}
 <div class="page-container-wrapper">
   <div class="page-inner-container">
     <h1 class="page-title">{{ page.title }}</h1>
@@ -3176,6 +3559,532 @@ html[data-theme="dark"] .guarantee-cta-btn {
     justify-content: center;
   }
 }
+/* Terms of Service Scoped Styling - Glassmorphism, Accordion, Grid Layouts */
+.tos-container-wrapper {
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 5rem 1.5rem;
+  background-color: var(--color-bg);
+  min-height: 80vh;
+}
+
+.tos-inner-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.tos-header {
+  text-align: center;
+  margin-bottom: 3.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.tos-header-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.04);
+  color: var(--color-text);
+  margin-bottom: 1.5rem;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.tos-header:hover .tos-header-icon {
+  transform: translateY(-4px) scale(1.02);
+  color: var(--color-accent);
+}
+
+.tos-title {
+  font-size: clamp(2.2rem, 5vw, 3.2rem);
+  font-weight: 900;
+  color: var(--color-text);
+  margin: 0 0 1rem 0;
+  letter-spacing: -0.5px;
+  text-transform: uppercase;
+}
+
+.tos-subtitle {
+  font-size: clamp(0.95rem, 2vw, 1.15rem);
+  color: var(--color-text-light);
+  max-width: 600px;
+  line-height: 1.6;
+  margin: 0 0 2.5rem 0;
+  opacity: 0.85;
+}
+
+.tos-search-wrapper {
+  width: 100%;
+  max-width: 540px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 50px;
+  padding: 0.2rem 0.5rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+  transition: all 0.3s ease;
+}
+
+.tos-search-wrapper:focus-within {
+  border-color: var(--color-accent);
+  box-shadow: 0 6px 24px rgba(var(--color-primary-rgb), 0.08);
+  transform: translateY(-1px);
+}
+
+.tos-search-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.8rem;
+  color: var(--color-text-light);
+  pointer-events: none;
+}
+
+.tos-search-wrapper input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  padding: 0.8rem 0.2rem;
+  font-size: 1rem;
+  color: var(--color-text);
+  outline: none;
+  font-family: inherit;
+}
+
+.tos-search-wrapper input::placeholder {
+  color: var(--color-text-light);
+  opacity: 0.8;
+}
+
+.tos-search-clear {
+  background: transparent;
+  border: none;
+  color: var(--color-text-light);
+  cursor: pointer;
+  padding: 0.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+
+.tos-search-clear:hover {
+  color: var(--color-text);
+  background: rgba(var(--color-primary-rgb), 0.05);
+}
+
+.tos-search-clear.hidden {
+  display: none;
+}
+
+.tos-intro-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 24px;
+  padding: 2.2rem 2.8rem;
+  margin-bottom: 4rem;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.02);
+  line-height: 1.7;
+  color: var(--color-text-light);
+  font-size: 1.05rem;
+}
+
+.tos-intro-card p:first-child {
+  margin-top: 0;
+}
+
+.tos-intro-card p:last-child {
+  margin-bottom: 0;
+}
+
+.tos-intro-card strong {
+  color: var(--color-text);
+}
+
+.tos-main-layout {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 4rem;
+  align-items: start;
+}
+
+.tos-sidebar {
+  position: sticky;
+  top: 100px;
+  z-index: 10;
+}
+
+.tos-categories-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  background: rgba(var(--color-surface-rgb), 0.5);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--color-border);
+  padding: 1rem;
+  border-radius: 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+}
+
+.tos-category-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  padding: 0.9rem 1.2rem;
+  border-radius: 12px;
+  color: var(--color-text-light);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: all 0.25s ease;
+  border: 1px solid transparent;
+}
+
+.tos-category-nav-item svg {
+  stroke-width: 2.2px;
+  transition: transform 0.2s ease;
+  flex-shrink: 0;
+}
+
+.tos-category-nav-item:hover {
+  color: var(--color-text);
+  background: rgba(var(--color-primary-rgb), 0.03);
+}
+
+.tos-category-nav-item:hover svg {
+  transform: scale(1.05);
+}
+
+.tos-category-nav-item.active {
+  color: #ffffff;
+  background: var(--color-text);
+  border-color: var(--color-text);
+  box-shadow: 0 4px 12px rgba(var(--color-primary-rgb), 0.15);
+}
+
+html[data-theme="dark"] .tos-category-nav-item.active {
+  color: #0b0b0b;
+  background: #ffffff;
+  border-color: #ffffff;
+}
+
+.tos-category-nav-item.active svg {
+  color: inherit;
+}
+
+.tos-content-area {
+  display: flex;
+  flex-direction: column;
+  gap: 4.5rem;
+}
+
+.tos-category-section {
+  scroll-margin-top: 100px;
+}
+
+.tos-category-title {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--color-text);
+  margin: 0 0 1.8rem 0;
+  padding-bottom: 0.8rem;
+  border-bottom: 2px solid var(--color-border);
+}
+
+.tos-accordions-group {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.tos-accordion {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  overflow: hidden;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.01);
+}
+
+.tos-accordion:hover {
+  border-color: rgba(var(--color-primary-rgb), 0.3);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.03);
+}
+
+.tos-accordion[open] {
+  border-color: var(--color-text);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.04);
+}
+
+.tos-summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.4rem 1.8rem;
+  font-weight: 700;
+  font-size: 1.05rem;
+  cursor: pointer;
+  color: var(--color-text);
+  user-select: none;
+  list-style: none;
+}
+
+.tos-summary::-webkit-details-marker {
+  display: none;
+}
+
+.tos-question-text {
+  line-height: 1.4;
+  padding-right: 1.5rem;
+}
+
+.tos-icon-chevron {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-light);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), color 0.3s ease;
+  flex-shrink: 0;
+}
+
+.tos-icon-chevron svg {
+  stroke-width: 2.5px;
+}
+
+.tos-accordion[open] .tos-icon-chevron {
+  transform: rotate(180deg);
+  color: var(--color-text);
+}
+
+.tos-answer-content {
+  padding: 0 1.8rem 1.6rem 1.8rem;
+  border-top: 1px solid transparent;
+  color: var(--color-text-light);
+  line-height: 1.65;
+  font-size: 0.98rem;
+  animation: tosSlideDown 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.tos-accordion[open] .tos-answer-content {
+  border-top-color: var(--color-border);
+}
+
+.tos-answer-content p {
+  margin: 0 0 1rem 0;
+}
+
+.tos-answer-content p:last-child {
+  margin-bottom: 0;
+}
+
+.tos-answer-content ul {
+  margin: 0 0 1rem 0;
+  padding-left: 1.2rem;
+  list-style: disc;
+}
+
+.tos-answer-content ul li {
+  margin-bottom: 0.5rem;
+}
+
+.tos-link {
+  color: var(--color-text);
+  text-decoration: underline;
+  font-weight: 600;
+  transition: color 0.2s ease;
+}
+
+.tos-link:hover {
+  color: var(--color-accent);
+}
+
+.tos-contact-box {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1.5rem;
+  margin: 1.8rem 0;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  padding: 1.5rem 2rem;
+  border-radius: 16px;
+}
+
+.tos-cta-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.8rem;
+  background-color: var(--color-text);
+  color: var(--color-bg) !important;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 0.95rem;
+  padding: 0.9rem 1.6rem;
+  border-radius: 50px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid var(--color-text);
+}
+
+html[data-theme="dark"] .tos-cta-btn {
+  background-color: #ffffff;
+  color: #0b0b0b !important;
+  border-color: #ffffff;
+}
+
+.tos-cta-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.18);
+}
+
+.tos-cta-btn svg {
+  transition: transform 0.25s ease;
+}
+
+.tos-cta-btn:hover svg {
+  transform: scale(1.1);
+}
+
+.tos-contact-email {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.tos-conclusion-note {
+  font-size: 0.9rem;
+  opacity: 0.75;
+  font-style: italic;
+  margin-top: 1.8rem;
+}
+
+@keyframes tosSlideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.tos-accordion.filtered-out {
+  display: none !important;
+}
+
+.tos-category-section.filtered-out {
+  display: none !important;
+}
+
+.tos-no-results {
+  text-align: center;
+  padding: 4rem 1rem;
+  color: var(--color-text-light);
+  font-size: 1.1rem;
+}
+
+.tos-no-results svg {
+  margin-bottom: 1rem;
+  opacity: 0.5;
+  color: var(--color-text-light);
+}
+
+.tos-highlight {
+  background-color: rgba(255, 235, 59, 0.3);
+  color: inherit;
+  padding: 0 2px;
+  border-radius: 2px;
+  font-weight: inherit;
+}
+
+@media (max-width: 992px) {
+  .tos-container-wrapper {
+    padding: 3rem 1rem;
+  }
+
+  .tos-header {
+    margin-bottom: 2.5rem;
+  }
+
+  .tos-intro-card {
+    padding: 1.6rem 1.8rem;
+    margin-bottom: 2.5rem;
+    font-size: 0.98rem;
+  }
+
+  .tos-main-layout {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+
+  .tos-sidebar {
+    position: sticky;
+    top: 60px;
+    margin: 0 -1rem;
+    padding: 0 1rem;
+    background: var(--color-bg);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+  }
+
+  .tos-categories-nav {
+    flex-direction: row;
+    overflow-x: auto;
+    white-space: nowrap;
+    padding: 0.6rem;
+    border-radius: 12px;
+    gap: 0.4rem;
+    scrollbar-width: none;
+    max-height: none;
+  }
+
+  .tos-categories-nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  .tos-category-nav-item {
+    padding: 0.6rem 0.9rem;
+    font-size: 0.82rem;
+    gap: 0.5rem;
+  }
+
+  .tos-content-area {
+    gap: 3rem;
+  }
+
+  .tos-category-section {
+    scroll-margin-top: 140px;
+  }
+
+  .tos-category-title {
+    font-size: 1.3rem;
+    margin-bottom: 1rem;
+  }
+
+  .tos-contact-box {
+    padding: 1.2rem;
+    flex-direction: column;
+    align-items: stretch;
+    text-align: center;
+    gap: 1rem;
+  }
+
+  .tos-cta-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
 </style>
 
 <script>
@@ -3751,6 +4660,176 @@ document.addEventListener('DOMContentLoaded', function() {
         });
       });
       shippingSearchInput.focus();
+    });
+  }
+
+
+    // --- TERMS OF SERVICE CODE ---
+  const tosNavItems = document.querySelectorAll('.tos-category-nav-item');
+  const tosArticles = document.querySelectorAll('.tos-category-section');
+  const tosNavContainer = document.querySelector('.tos-categories-nav');
+
+  if (tosNavItems.length > 0 && tosArticles.length > 0) {
+    const tosObserverOptions = {
+      root: null,
+      rootMargin: '-20% 0px -60% 0px',
+      threshold: 0
+    };
+
+    const tosObserver = new IntersectionObserver(function(entries) {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const id = entry.target.getAttribute('id');
+          tosNavItems.forEach(item => {
+            if (item.getAttribute('data-target') === id) {
+              item.classList.add('active');
+              
+              if (window.innerWidth <= 992 && tosNavContainer) {
+                const offsetLeft = item.offsetLeft - (tosNavContainer.offsetWidth / 2) + (item.offsetWidth / 2);
+                tosNavContainer.scrollTo({
+                  left: offsetLeft,
+                  behavior: 'smooth'
+                });
+              }
+            } else {
+              item.classList.remove('active');
+            }
+          });
+        }
+      });
+    }, tosObserverOptions);
+
+    tosArticles.forEach(article => {
+      tosObserver.observe(article);
+    });
+
+    tosNavItems.forEach(item => {
+      item.addEventListener('click', function(e) {
+        e.preventDefault();
+        const targetId = this.getAttribute('data-target');
+        const targetSection = document.getElementById(targetId);
+        
+        if (targetSection) {
+          const headerOffset = window.innerWidth <= 992 ? 150 : 110;
+          const elementPosition = targetSection.getBoundingClientRect().top;
+          const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+          
+          window.scrollTo({
+            top: offsetPosition,
+            behavior: 'smooth'
+          });
+        }
+      });
+    });
+  }
+
+  // Real-time keyword search filter for Terms of Service
+  const tosSearchInput = document.getElementById('TosSearchInput');
+  const tosSearchClear = document.getElementById('TosSearchClear');
+  const tosAccordions = document.querySelectorAll('.tos-accordion');
+  const tosCategories = document.querySelectorAll('.tos-category-section');
+  const tosContentArea = document.querySelector('.tos-content-area');
+  let tosNoResultsEl = null;
+
+  if (tosSearchInput) {
+    tosSearchInput.addEventListener('input', function(e) {
+      const query = e.target.value.trim().toLowerCase();
+      
+      if (query.length > 0) {
+        tosSearchClear.classList.remove('hidden');
+      } else {
+        tosSearchClear.classList.add('hidden');
+      }
+      
+      let totalMatches = 0;
+      if (tosNoResultsEl) {
+        tosNoResultsEl.remove();
+        tosNoResultsEl = null;
+      }
+
+      tosCategories.forEach(category => {
+        let categoryMatches = 0;
+        const accordionsInCat = category.querySelectorAll('.tos-accordion');
+        
+        accordionsInCat.forEach(accordion => {
+          const qEl = accordion.querySelector('.tos-question-text');
+          const aEl = accordion.querySelector('.tos-answer-content');
+          
+          if (!accordion.dataset.originalQ) {
+            accordion.dataset.originalQ = qEl.innerHTML;
+          }
+          if (!accordion.dataset.originalA) {
+            accordion.dataset.originalA = aEl.innerHTML;
+          }
+
+          const qText = qEl.textContent.toLowerCase();
+          const aText = aEl.textContent.toLowerCase();
+          
+          if (qText.includes(query) || aText.includes(query)) {
+            accordion.classList.remove('filtered-out');
+            categoryMatches++;
+            totalMatches++;
+            
+            if (query.length >= 2) {
+              accordion.setAttribute('open', '');
+              highlightText(qEl, accordion.dataset.originalQ, query, 'tos-highlight');
+              highlightText(aEl, accordion.dataset.originalA, query, 'tos-highlight');
+            } else {
+              accordion.removeAttribute('open');
+              qEl.innerHTML = accordion.dataset.originalQ;
+              aEl.innerHTML = accordion.dataset.originalA;
+            }
+          } else {
+            accordion.classList.add('filtered-out');
+            accordion.removeAttribute('open');
+            qEl.innerHTML = accordion.dataset.originalQ;
+            aEl.innerHTML = accordion.dataset.originalA;
+          }
+        });
+        
+        if (categoryMatches > 0) {
+          category.classList.remove('filtered-out');
+        } else {
+          category.classList.add('filtered-out');
+        }
+      });
+      
+      if (totalMatches === 0 && query.length > 0) {
+        tosSearchClear.classList.remove('hidden');
+        tosNoResultsEl = document.createElement('div');
+        tosNoResultsEl.className = 'tos-no-results';
+        tosNoResultsEl.innerHTML = `
+          <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            <line x1="8" y1="11" x2="14" y2="11"></line>
+          </svg>
+          <p>Não foram encontrados artigos para "<strong>${escapeHtml(query)}</strong>"</p>
+          <p style="font-size: 0.9rem; margin-top: 0.5rem; opacity: 0.7;">Tente pesquisar por outros termos, como "preços", "devolução", "lei" ou "Lisboa".</p>
+        `;
+        tosContentArea.appendChild(tosNoResultsEl);
+      }
+    });
+
+    tosSearchClear.addEventListener('click', function() {
+      tosSearchInput.value = '';
+      tosSearchClear.classList.add('hidden');
+      if (tosNoResultsEl) {
+        tosNoResultsEl.remove();
+        tosNoResultsEl = null;
+      }
+      tosCategories.forEach(category => {
+        category.classList.remove('filtered-out');
+        category.querySelectorAll('.tos-accordion').forEach(accordion => {
+          accordion.classList.remove('filtered-out');
+          accordion.removeAttribute('open');
+          const qEl = accordion.querySelector('.tos-question-text');
+          const aEl = accordion.querySelector('.tos-answer-content');
+          if (accordion.dataset.originalQ) qEl.innerHTML = accordion.dataset.originalQ;
+          if (accordion.dataset.originalA) aEl.innerHTML = accordion.dataset.originalA;
+        });
+      });
+      tosSearchInput.focus();
     });
   }
 
