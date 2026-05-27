@@ -1,9 +1,34 @@
 {%- liquid
   assign default_limit = section.settings.products_per_page
   assign limit = cart.attributes.pagination_limit | default: default_limit | plus: 0
+
+  # Extract query parameters from canonical_url to parse clubes and opcoes
+  assign url_parts = canonical_url | split: '?'
+  assign active_clubes_string = ""
+  assign active_opcoes_string = ""
+  assign active_epocas_string = ""
+  assign query_parts = ""
+  if url_parts.size > 1
+    assign query_string = url_parts[1]
+    assign query_parts = query_string | split: '&'
+    for part in query_parts
+      assign param_key_val = part | split: '='
+      assign param_key = param_key_val[0] | urldecode
+      if param_key == 'clubes'
+        assign active_clubes_string = param_key_val[1] | urldecode
+      elsif param_key == 'opcoes'
+        assign active_opcoes_string = param_key_val[1] | urldecode
+      elsif param_key == 'epocas'
+        assign active_epocas_string = param_key_val[1] | urldecode
+      endif
+    endfor
+  endif
+  assign active_clubes = active_clubes_string | split: ','
+  assign active_opcoes = active_opcoes_string | split: ','
+  assign active_epocas = active_epocas_string | split: ','
 -%}
 
-{% paginate collection.products by limit %}
+{% paginate collection.products by 250 %}
 <div class="catalog-page" id="MainCollectionContainer" data-id="{{ section.id }}">
   <div class="catalog-container">
     <!-- Mobile Filter Trigger -->
@@ -29,18 +54,216 @@
         <button class="close-filters-btn" id="CloseFiltersBtn">✕</button>
       </div>
 
+      {%- liquid
+        assign has_active_filters = false
+        for filter in collection.filters
+          if filter.active_values.size > 0
+            assign has_active_filters = true
+          endif
+          if filter.type == "price_range"
+            if filter.min_value.value != blank or filter.max_value.value != blank
+              assign has_active_filters = true
+            endif
+          endif
+        endfor
+
+        if active_clubes.size > 0 and active_clubes[0] != blank
+          assign has_active_filters = true
+        endif
+
+        if active_opcoes.size > 0 and active_opcoes[0] != blank
+          assign has_active_filters = true
+        endif
+
+        if active_epocas.size > 0 and active_epocas[0] != blank
+          assign has_active_filters = true
+        endif
+
+        # Unfiltered tags list to prevent disappearance during tag-based filtering
+        assign collection_all_tags = collections[collection.handle].all_tags | default: collection.all_tags
+
+        # Configuration for dynamic tag grouping
+        assign leagues_string = "liga portugal,premier league,la liga,serie a,bundesliga,ligue 1,brasileirão,liga dos campeões"
+        assign leagues_array = leagues_string | split: ","
+
+        assign sizes_string = "s,m,l,xl,xxl,xxxl,xs,s-m,l-xl"
+        assign sizes_array = sizes_string | split: ","
+
+        assign generic_string = "retro,nova,camisola,jersey,homem,mulher,criança,personalizado,camisolas,jerseys"
+        assign generic_array = generic_string | split: ","
+      -%}
+
       <!-- Active Filters Summary (Chips) -->
-      {%- if collection.filters.size > 0 -%}
+      {%- if has_active_filters -%}
         <div class="active-filters-summary">
+          {%- if active_clubes.size > 0 and active_clubes[0] != blank -%}
+            {%- for club_handle in active_clubes -%}
+              {%- for tag in collection_all_tags -%}
+                {%- assign tag_handle = tag | handle -%}
+                {%- if tag_handle == club_handle -%}
+                  {%- liquid
+                    assign new_clubes = ""
+                    for other_club in active_clubes
+                      if other_club != tag_handle
+                        if new_clubes != ""
+                          assign new_clubes = new_clubes | append: ","
+                        endif
+                        assign new_clubes = new_clubes | append: other_club
+                      endif
+                    endfor
+
+                    assign query_parts_to_keep = ""
+                    for part in query_parts
+                      assign param_key_val = part | split: '='
+                      assign param_key = param_key_val[0] | urldecode
+                      if param_key != 'clubes'
+                        if query_parts_to_keep != ""
+                          assign query_parts_to_keep = query_parts_to_keep | append: "&"
+                        endif
+                        assign query_parts_to_keep = query_parts_to_keep | append: part
+                      endif
+                    endfor
+
+                    assign final_query = ""
+                    if new_clubes != ""
+                      assign final_query = "clubes=" | append: new_clubes
+                    endif
+                    if query_parts_to_keep != ""
+                      if final_query != ""
+                        assign final_query = final_query | append: "&"
+                      endif
+                      assign final_query = final_query | append: query_parts_to_keep
+                    endif
+
+                    if final_query != ""
+                      assign remove_tag_url = "/collections/" | append: collection.handle | append: "?" | append: final_query
+                    else
+                      assign remove_tag_url = "/collections/" | append: collection.handle
+                    endif
+                  -%}
+                  <a href="{{ remove_tag_url }}" class="active-filter-chip club-filter-chip" data-club-handle="{{ tag_handle }}" title="Remover filtro {{ tag }}">
+                    {{ tag }} ✕
+                  </a>
+                {%- endif -%}
+              {%- endfor -%}
+            {%- endfor -%}
+          {%- endif -%}
+
+          {%- if active_opcoes.size > 0 and active_opcoes[0] != blank -%}
+            {%- for opcao_handle in active_opcoes -%}
+              {%- for tag in collection_all_tags -%}
+                {%- assign tag_handle = tag | handle -%}
+                {%- if tag_handle == opcao_handle -%}
+                  {%- liquid
+                    assign new_opcoes = ""
+                    for other_opcao in active_opcoes
+                      if other_opcao != tag_handle
+                        if new_opcoes != ""
+                          assign new_opcoes = new_opcoes | append: ","
+                        endif
+                        assign new_opcoes = new_opcoes | append: other_opcao
+                      endif
+                    endfor
+
+                    assign query_parts_to_keep = ""
+                    for part in query_parts
+                      assign param_key_val = part | split: '='
+                      assign param_key = param_key_val[0] | urldecode
+                      if param_key != 'opcoes'
+                        if query_parts_to_keep != ""
+                          assign query_parts_to_keep = query_parts_to_keep | append: "&"
+                        endif
+                        assign query_parts_to_keep = query_parts_to_keep | append: part
+                      endif
+                    endfor
+
+                    assign final_query = ""
+                    if new_opcoes != ""
+                      assign final_query = "opcoes=" | append: new_opcoes
+                    endif
+                    if query_parts_to_keep != ""
+                      if final_query != ""
+                        assign final_query = final_query | append: "&"
+                      endif
+                      assign final_query = final_query | append: query_parts_to_keep
+                    endif
+
+                    if final_query != ""
+                      assign remove_opcao_url = "/collections/" | append: collection.handle | append: "?" | append: final_query
+                    else
+                      assign remove_opcao_url = "/collections/" | append: collection.handle
+                    endif
+                  -%}
+                  <a href="{{ remove_opcao_url }}" class="active-filter-chip opcao-filter-chip" data-opcao-handle="{{ tag_handle }}" title="Remover filtro {{ tag }}">
+                    {{ tag }} ✕
+                  </a>
+                {%- endif -%}
+              {%- endfor -%}
+            {%- endfor -%}
+          {%- endif -%}
+
+          {%- if active_epocas.size > 0 and active_epocas[0] != blank -%}
+            {%- for epoca_handle in active_epocas -%}
+              {%- for tag in collection_all_tags -%}
+                {%- assign tag_handle = tag | handle -%}
+                {%- if tag_handle == epoca_handle -%}
+                  {%- liquid
+                    assign new_epocas = ""
+                    for other_epoca in active_epocas
+                      if other_epoca != tag_handle
+                        if new_epocas != ""
+                          assign new_epocas = new_epocas | append: ","
+                        endif
+                        assign new_epocas = new_epocas | append: other_epoca
+                      endif
+                    endfor
+
+                    assign query_parts_to_keep = ""
+                    for part in query_parts
+                      assign param_key_val = part | split: '='
+                      assign param_key = param_key_val[0] | urldecode
+                      if param_key != 'epocas'
+                        if query_parts_to_keep != ""
+                          assign query_parts_to_keep = query_parts_to_keep | append: "&"
+                        endif
+                        assign query_parts_to_keep = query_parts_to_keep | append: part
+                      endif
+                    endfor
+
+                    assign final_query = ""
+                    if new_epocas != ""
+                      assign final_query = "epocas=" | append: new_epocas
+                    endif
+                    if query_parts_to_keep != ""
+                      if final_query != ""
+                        assign final_query = final_query | append: "&"
+                      endif
+                      assign final_query = final_query | append: query_parts_to_keep
+                    endif
+
+                    if final_query != ""
+                      assign remove_epoca_url = "/collections/" | append: collection.handle | append: "?" | append: final_query
+                    else
+                      assign remove_epoca_url = "/collections/" | append: collection.handle
+                    endif
+                  -%}
+                  <a href="{{ remove_epoca_url }}" class="active-filter-chip epoca-filter-chip" data-epoca-handle="{{ tag_handle }}" title="Remover filtro {{ tag }}">
+                    {{ tag }} ✕
+                  </a>
+                {%- endif -%}
+              {%- endfor -%}
+            {%- endfor -%}
+          {%- endif -%}
+
           {%- for filter in collection.filters -%}
             {%- for value in filter.active_values -%}
-              <a href="{{ value.url_to_remove }}" class="active-filter-chip">
+              <a href="{{ value.url_to_remove }}" class="active-filter-chip" title="Remover filtro {{ value.label }}">
                 {{ value.label }} ✕
               </a>
             {%- endfor -%}
             {%- if filter.type == "price_range" -%}
               {%- if filter.min_value.value != blank or filter.max_value.value != blank -%}
-                <a href="{{ filter.url_to_remove }}" class="active-filter-chip">
+                <a href="{{ filter.url_to_remove }}" class="active-filter-chip" title="Remover filtro de preço">
                   {%- if filter.min_value.value -%}{{ filter.min_value.value | money }}{%- else -%}0 €{%- endif -%} - 
                   {%- if filter.max_value.value -%}{{ filter.max_value.value | money }}{%- else -%}Max{%- endif -%} ✕
                 </a>
@@ -50,100 +273,445 @@
         </div>
       {%- endif -%}
 
-      <!-- Accordeon Filter Form -->
-      <form id="CollectionFiltersForm" class="filter-form">
-        <!-- Custom Collections Filter list -->
-        <div class="filter-dropdown" data-dropdown-name="collections">
-          <button type="button" class="dropdown-trigger">
-            <span>Coleções</span>
-            <span class="dropdown-arrow">▼</span>
-          </button>
-          <div class="dropdown-content">
-            <div class="filter-list">
-              {%- for col in collections -%}
-                <a href="{{ col.url }}" class="filter-item-link {% if collection.handle == col.handle %}active{% endif %}" style="display: block; padding: 0.4rem 0; color: var(--color-text); text-decoration: none; font-size: 0.95rem; font-weight: {% if collection.handle == col.handle %}800{% else %}500{% endif %};">
-                  <span>{{ col.title }}</span>
-                </a>
-              {%- endfor -%}
-            </div>
-          </div>
-        </div>
-
-        {%- for filter in collection.filters -%}
-          {%- assign filter_label_up = filter.label | upcase -%}
-          {%- if filter_label_up == 'DISPONIBILIDADE' or filter_label_up == 'AVAILABILITY' or filter_label_up == 'PESQUISA' or filter_label_up == 'SEARCH' -%}
-            {%- continue -%}
-          {%- endif -%}
-          <div class="filter-dropdown" data-dropdown-name="{{ filter.label | handleize }}">
-            <button type="button" class="dropdown-trigger">
-              <span>{{ filter.label }}</span>
-              {%- if filter.active_values.size > 0 -%}
-                <span class="active-count-badge">({{ filter.active_values.size }})</span>
-              {%- endif -%}
-              <span class="dropdown-arrow">▼</span>
-            </button>
-
-            <div class="dropdown-content">
-              {%- case filter.type -%}
-                {%- when 'boolean' or 'list' -%}
-                  <div class="filter-list">
-                    {%- for value in filter.values -%}
-                      <label class="filter-item-label {% if value.active %}active{% endif %}">
-                        <input
-                          type="checkbox"
-                          name="{{ value.param_name }}"
-                          value="{{ value.value }}"
-                          class="filter-checkbox"
-                          {% if value.active %}checked{% endif %}
-                          {% if value.count == 0 and value.active == false %}disabled{% endif %}
-                        >
-                        <span>{{ value.label }} ({{ value.count }})</span>
-                      </label>
-                    {%- endfor -%}
-                  </div>
-
-                {%- when 'price_range' -%}
-                  <div class="price-range-inputs">
-                    <div class="price-field">
-                      <span>Mínimo</span>
-                      <input
-                        name="{{ filter.min_value.param_name }}"
-                        id="Filter-{{ filter.label | escape }}-GTE"
-                        {%- if filter.min_value.value -%}
-                          value="{{ filter.min_value.value | money_without_currency | replace: ',', '' }}"
-                        {%- endif -%}
-                        type="number"
-                        placeholder="0"
-                        min="0"
-                        max="100"
-                      >
-                    </div>
-                    <div class="price-field">
-                      <span>Máximo</span>
-                      <input
-                        name="{{ filter.max_value.param_name }}"
-                        id="Filter-{{ filter.label | escape }}-LTE"
-                        {%- if filter.max_value.value -%}
-                          value="{{ filter.max_value.value | money_without_currency | replace: ',', '' }}"
-                        {%- endif -%}
-                        type="number"
-                        placeholder="100"
-                        min="0"
-                        max="100"
-                      >
-                    </div>
-                  </div>
-              {%- endcase -%}
-            </div>
-          </div>
-        {%- endfor -%}
-      </form>
+      <!-- Static Collections Sidebar Menu -->
+      <div class="static-collections-menu">
+        <h3 class="static-menu-title">Coleções</h3>
+        <ul class="static-collection-list">
+          <li>
+            <a href="/collections/all" class="static-collection-link {% if collection.handle == 'all' or collection.handle == blank %}active{% endif %}">
+              Todos os Produtos
+            </a>
+          </li>
+          {%- for col in collections -%}
+            <li>
+              <a href="{{ col.url }}" class="static-collection-link {% if collection.handle == col.handle %}active{% endif %}">
+                {{ col.title }}
+              </a>
+            </li>
+          {%- endfor -%}
+        </ul>
+      </div>
     </aside>
 
     <!-- Main Content -->
     <main class="catalog-content">
       <div class="catalog-controls">
         <h1 class="collection-title">{{ collection.title }}</h1>
+
+        <!-- Horizontal Accordeon Filter Form -->
+        <form id="CollectionFiltersForm" class="horizontal-filter-form">
+          <!-- Custom Clubes Tag Filter (Only appears after selecting a collection) -->
+          {%- if collection.handle != 'all' and collection.handle != blank -%}
+            {%- liquid
+              assign active_clubes_count = 0
+              if active_clubes.size > 0 and active_clubes[0] != blank
+                assign active_clubes_count = active_clubes.size
+              endif
+
+              # Determine if this collection has a "Seleções" tag — if so, label becomes "Seleções"
+              assign clubes_label = "Clubes"
+              for tag in collection_all_tags
+                assign tag_down_check = tag | downcase
+                if tag_down_check == "seleções" or tag_down_check == "selecoes" or tag_down_check == "seleção" or tag_down_check == "selecao"
+                  assign clubes_label = "Seleções"
+                  break
+                endif
+              endfor
+            -%}
+            <div class="filter-dropdown horizontal-dropdown" data-dropdown-name="clubes">
+              <button type="button" class="dropdown-trigger">
+                <span>{{ clubes_label }}</span>
+                {%- if active_clubes_count > 0 -%}
+                  <span class="active-count-badge">({{ active_clubes_count }})</span>
+                {%- endif -%}
+                <span class="dropdown-arrow">▼</span>
+              </button>
+              <div class="dropdown-content horizontal-content" style="max-height: 250px; overflow-y: auto;">
+                <div class="filter-list">
+                  {%- assign clubs_found = false -%}
+                  {%- assign option_keys_string = "camisola de adepto,camisolas de adepto,camisolas de adeptos,adepto,adeptos,camisola de jogador,camisolas de jogador,camisolas de jogadores,jogador,jogadores,edição especial,edições especiais,retro" -%}
+                  {%- assign option_keys_array = option_keys_string | split: "," -%}
+                  {%- for tag in collection_all_tags -%}
+                    {%- assign tag_down = tag | downcase -%}
+                    
+                    {%- assign is_size = false -%}
+                    {%- if sizes_array contains tag_down -%}
+                      {%- assign is_size = true -%}
+                    {%- endif -%}
+                    
+                    {%- assign is_generic = false -%}
+                    {%- if generic_array contains tag_down -%}
+                      {%- assign is_generic = true -%}
+                    {%- endif -%}
+                    
+                    {%- assign is_league = false -%}
+                    {%- if leagues_array contains tag_down -%}
+                      {%- assign is_league = true -%}
+                    {%- endif -%}
+
+                    {%- assign is_season = false -%}
+                    {%- assign tag_stripped_season = tag_down | remove: '/' | remove: ' ' -%}
+                    {%- assign tag_stripped_chars = tag_stripped_season | replace: '0', '' | replace: '1', '' | replace: '2', '' | replace: '3', '' | replace: '4', '' | replace: '5', '' | replace: '6', '' | replace: '7', '' | replace: '8', '' | replace: '9', '' -%}
+                    {%- if tag_stripped_chars == '' and tag_stripped_season != '' -%}
+                      {%- assign is_season = true -%}
+                    {%- endif -%}
+
+                    {%- assign is_option = false -%}
+                    {%- if option_keys_array contains tag_down -%}
+                      {%- assign is_option = true -%}
+                    {%- endif -%}
+                    
+                    {%- assign is_selecoes_tag = false -%}
+                    {%- if tag_down == "seleções" or tag_down == "selecoes" or tag_down == "seleção" or tag_down == "selecao" or tag_down == "clubes" or tag_down == "clube" -%}
+                      {%- assign is_selecoes_tag = true -%}
+                    {%- endif -%}
+                    
+                    {%- if is_size == false and is_generic == false and is_league == false and is_season == false and is_option == false and is_selecoes_tag == false -%}
+                      {%- assign clubs_found = true -%}
+                      {%- liquid
+                        assign tag_handle = tag | handle
+                        assign is_active = false
+                        if active_clubes contains tag_handle
+                          assign is_active = true
+                        endif
+
+                        assign new_clubes = ""
+                        if is_active
+                          for other_club in active_clubes
+                            if other_club != tag_handle
+                              if new_clubes != ""
+                                assign new_clubes = new_clubes | append: ","
+                              endif
+                              assign new_clubes = new_clubes | append: other_club
+                            endif
+                          endfor
+                        else
+                          for other_club in active_clubes
+                            if new_clubes != ""
+                              assign new_clubes = new_clubes | append: ","
+                            endif
+                              assign new_clubes = new_clubes | append: other_club
+                          endfor
+                          if new_clubes != ""
+                            assign new_clubes = new_clubes | append: ","
+                          endif
+                          assign new_clubes = new_clubes | append: tag_handle
+                        endif
+
+                        # Build query string
+                        assign query_parts_to_keep = ""
+                        for part in query_parts
+                          assign param_key_val = part | split: '='
+                          assign param_key = param_key_val[0] | urldecode
+                          if param_key != 'clubes'
+                            if query_parts_to_keep != ""
+                              assign query_parts_to_keep = query_parts_to_keep | append: "&"
+                            endif
+                            assign query_parts_to_keep = query_parts_to_keep | append: part
+                          endif
+                        endfor
+
+                        assign final_query = ""
+                        if new_clubes != ""
+                          assign final_query = "clubes=" | append: new_clubes
+                        endif
+                        if query_parts_to_keep != ""
+                          if final_query != ""
+                            assign final_query = final_query | append: "&"
+                          endif
+                          assign final_query = final_query | append: query_parts_to_keep
+                        endif
+
+                        if final_query != ""
+                          assign tag_filter_url = "/collections/" | append: collection.handle | append: "?" | append: final_query
+                        else
+                          assign tag_filter_url = "/collections/" | append: collection.handle
+                        endif
+                      -%}
+                      <a href="{{ tag_filter_url }}" class="filter-item-link {% if is_active %}active{% endif %}" data-club-handle="{{ tag_handle }}" style="display: flex; align-items: center; gap: 0.5rem; padding: 0.4rem 0; color: var(--color-text); text-decoration: none; font-size: 0.95rem; font-weight: {% if is_active %}800{% else %}500{% endif %};">
+                        <span class="custom-checkbox-indicator" style="width: 14px; height: 14px; border: 1px solid var(--color-border); border-radius: 3px; display: inline-flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 900; background: {% if is_active %}var(--color-text){% else %}transparent{% endif %}; color: var(--color-bg);">{% if is_active %}✓{% endif %}</span>
+                        <span>{{ tag }}</span>
+                      </a>
+                    {%- endif -%}
+                  {%- endfor -%}
+                  {%- if clubs_found == false -%}
+                    <p style="font-size: 0.85rem; color: var(--color-text-light); margin: 0; opacity: 0.7;">Sem {{ clubes_label | downcase }} nesta coleção.</p>
+                  {%- endif -%}
+                </div>
+              </div>
+            </div>
+          {%- endif -%}
+
+          <!-- Opção/Variante Tag Filter (Appears always) -->
+          {%- liquid
+            assign active_opcoes_count = 0
+            if active_opcoes.size > 0 and active_opcoes[0] != blank
+              assign active_opcoes_count = active_opcoes.size
+            endif
+            
+            # The predefined options list
+            assign option_keys_string = "camisola de adepto,camisolas de adepto,camisolas de adeptos,adepto,adeptos,camisola de jogador,camisolas de jogador,camisolas de jogadores,jogador,jogadores,edição especial,edições especiais,retro"
+            assign option_keys_array = option_keys_string | split: ","
+          -%}
+          <div class="filter-dropdown horizontal-dropdown" data-dropdown-name="opcoes">
+            <button type="button" class="dropdown-trigger">
+              <span>Opção/Variante</span>
+              {%- if active_opcoes_count > 0 -%}
+                <span class="active-count-badge">({{ active_opcoes_count }})</span>
+              {%- endif -%}
+              <span class="dropdown-arrow">▼</span>
+            </button>
+            <div class="dropdown-content horizontal-content" style="max-height: 250px; overflow-y: auto;">
+              <div class="filter-list">
+                {%- assign options_found = false -%}
+                {%- for tag in collection_all_tags -%}
+                  {%- assign tag_down = tag | downcase -%}
+                  {%- if option_keys_array contains tag_down -%}
+                    {%- assign options_found = true -%}
+                    {%- liquid
+                      assign tag_handle = tag | handle
+                      assign is_active = false
+                      if active_opcoes contains tag_handle
+                        assign is_active = true
+                      endif
+
+                      assign new_opcoes = ""
+                      if is_active
+                        for other_opcao in active_opcoes
+                          if other_opcao != tag_handle
+                            if new_opcoes != ""
+                              assign new_opcoes = new_opcoes | append: ","
+                            endif
+                            assign new_opcoes = new_opcoes | append: other_opcao
+                          endif
+                        endfor
+                      else
+                        for other_opcao in active_opcoes
+                          if new_opcoes != ""
+                            assign new_opcoes = new_opcoes | append: ","
+                          endif
+                          assign new_opcoes = new_opcoes | append: other_opcao
+                        endfor
+                        if new_opcoes != ""
+                          assign new_opcoes = new_opcoes | append: ","
+                        endif
+                        assign new_opcoes = new_opcoes | append: tag_handle
+                      endif
+
+                      # Build query string
+                      assign query_parts_to_keep = ""
+                      for part in query_parts
+                        assign param_key_val = part | split: '='
+                        assign param_key = param_key_val[0] | urldecode
+                        if param_key != 'opcoes'
+                          if query_parts_to_keep != ""
+                            assign query_parts_to_keep = query_parts_to_keep | append: "&"
+                          endif
+                          assign query_parts_to_keep = query_parts_to_keep | append: part
+                        endif
+                      endfor
+
+                      assign final_query = ""
+                      if new_opcoes != ""
+                        assign final_query = "opcoes=" | append: new_opcoes
+                      endif
+                      if query_parts_to_keep != ""
+                        if final_query != ""
+                          assign final_query = final_query | append: "&"
+                        endif
+                        assign final_query = final_query | append: query_parts_to_keep
+                      endif
+
+                      if final_query != ""
+                        assign tag_filter_url = "/collections/" | append: collection.handle | append: "?" | append: final_query
+                      else
+                        assign tag_filter_url = "/collections/" | append: collection.handle
+                      endif
+                    -%}
+                    <a href="{{ tag_filter_url }}" class="filter-item-link {% if is_active %}active{% endif %}" data-opcao-handle="{{ tag_handle }}" style="display: flex; align-items: center; gap: 0.5rem; padding: 0.4rem 0; color: var(--color-text); text-decoration: none; font-size: 0.95rem; font-weight: {% if is_active %}800{% else %}500{% endif %};">
+                      <span class="custom-checkbox-indicator" style="width: 14px; height: 14px; border: 1px solid var(--color-border); border-radius: 3px; display: inline-flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 900; background: {% if is_active %}var(--color-text){% else %}transparent{% endif %}; color: var(--color-bg);">{% if is_active %}✓{% endif %}</span>
+                      <span>{{ tag }}</span>
+                    </a>
+                  {%- endif -%}
+                {%- endfor -%}
+                {%- if options_found == false -%}
+                  <p style="font-size: 0.85rem; color: var(--color-text-light); margin: 0; opacity: 0.7;">Sem opções nesta coleção.</p>
+                {%- endif -%}
+              </div>
+            </div>
+          </div>
+
+          <!-- Época Tag Filter (Appears always) -->
+          {%- liquid
+            assign active_epocas_count = 0
+            if active_epocas.size > 0 and active_epocas[0] != blank
+              assign active_epocas_count = active_epocas.size
+            endif
+          -%}
+          <div class="filter-dropdown horizontal-dropdown" data-dropdown-name="epocas">
+            <button type="button" class="dropdown-trigger">
+              <span>Época</span>
+              {%- if active_epocas_count > 0 -%}
+                <span class="active-count-badge">({{ active_epocas_count }})</span>
+              {%- endif -%}
+              <span class="dropdown-arrow">▼</span>
+            </button>
+            <div class="dropdown-content horizontal-content" style="max-height: 250px; overflow-y: auto;">
+              <div class="filter-list">
+                {%- assign epocas_found = false -%}
+                {%- for tag in collection_all_tags -%}
+                  {%- assign tag_down = tag | downcase -%}
+                  {%- assign tag_stripped_season = tag_down | remove: '/' | remove: ' ' -%}
+                  {%- assign tag_stripped_chars = tag_stripped_season | replace: '0', '' | replace: '1', '' | replace: '2', '' | replace: '3', '' | replace: '4', '' | replace: '5', '' | replace: '6', '' | replace: '7', '' | replace: '8', '' | replace: '9', '' -%}
+                  {%- if tag_stripped_chars == '' and tag_stripped_season != '' -%}
+                    {%- assign epocas_found = true -%}
+                    {%- liquid
+                      assign tag_handle = tag | handle
+                      assign is_active = false
+                      if active_epocas contains tag_handle
+                        assign is_active = true
+                      endif
+
+                      assign new_epocas = ""
+                      if is_active
+                        for other_epoca in active_epocas
+                          if other_epoca != tag_handle
+                            if new_epocas != ""
+                              assign new_epocas = new_epocas | append: ","
+                            endif
+                            assign new_epocas = new_epocas | append: other_epoca
+                          endif
+                        endfor
+                      else
+                        for other_epoca in active_epocas
+                          if new_epocas != ""
+                            assign new_epocas = new_epocas | append: ","
+                          endif
+                          assign new_epocas = new_epocas | append: other_epoca
+                        endfor
+                        if new_epocas != ""
+                          assign new_epocas = new_epocas | append: ","
+                        endif
+                        assign new_epocas = new_epocas | append: tag_handle
+                      endif
+
+                      # Build query string
+                      assign query_parts_to_keep = ""
+                      for part in query_parts
+                        assign param_key_val = part | split: '='
+                        assign param_key = param_key_val[0] | urldecode
+                        if param_key != 'epocas'
+                          if query_parts_to_keep != ""
+                            assign query_parts_to_keep = query_parts_to_keep | append: "&"
+                          endif
+                          assign query_parts_to_keep = query_parts_to_keep | append: part
+                        endif
+                      endfor
+
+                      assign final_query = ""
+                      if new_epocas != ""
+                        assign final_query = "epocas=" | append: new_epocas
+                      endif
+                      if query_parts_to_keep != ""
+                        if final_query != ""
+                          assign final_query = final_query | append: "&"
+                        endif
+                        assign final_query = final_query | append: query_parts_to_keep
+                      endif
+
+                      if final_query != ""
+                        assign tag_filter_url = "/collections/" | append: collection.handle | append: "?" | append: final_query
+                      else
+                        assign tag_filter_url = "/collections/" | append: collection.handle
+                      endif
+                    -%}
+                    <a href="{{ tag_filter_url }}" class="filter-item-link {% if is_active %}active{% endif %}" data-epoca-handle="{{ tag_handle }}" style="display: flex; align-items: center; gap: 0.5rem; padding: 0.4rem 0; color: var(--color-text); text-decoration: none; font-size: 0.95rem; font-weight: {% if is_active %}800{% else %}500{% endif %};">
+                      <span class="custom-checkbox-indicator" style="width: 14px; height: 14px; border: 1px solid var(--color-border); border-radius: 3px; display: inline-flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 900; background: {% if is_active %}var(--color-text){% else %}transparent{% endif %}; color: var(--color-bg);">{% if is_active %}✓{% endif %}</span>
+                      <span>{{ tag }}</span>
+                    </a>
+                  {%- endif -%}
+                {%- endfor -%}
+                {%- if epocas_found == false -%}
+                  <p style="font-size: 0.85rem; color: var(--color-text-light); margin: 0; opacity: 0.7;">Sem épocas nesta coleção.</p>
+                {%- endif -%}
+              </div>
+            </div>
+          </div>
+
+          {%- for filter in collection.filters -%}
+            {%- assign filter_label_up = filter.label | upcase -%}
+            {%- if filter_label_up == 'DISPONIBILIDADE' or filter_label_up == 'AVAILABILITY' or filter_label_up == 'PESQUISA' or filter_label_up == 'SEARCH' -%}
+              {%- continue -%}
+            {%- endif -%}
+            <div class="filter-dropdown horizontal-dropdown" data-dropdown-name="{{ filter.label | handleize }}">
+              <button type="button" class="dropdown-trigger">
+                <span>{{ filter.label }}</span>
+                {%- if filter.active_values.size > 0 -%}
+                  <span class="active-count-badge">({{ filter.active_values.size }})</span>
+                {%- endif -%}
+                <span class="dropdown-arrow">▼</span>
+              </button>
+
+              <div class="dropdown-content horizontal-content">
+                {%- case filter.type -%}
+                  {%- when 'boolean' or 'list' -%}
+                    <div class="filter-list">
+                      {%- for value in filter.values -%}
+                        <label class="filter-item-label {% if value.active %}active{% endif %}">
+                          <input
+                            type="checkbox"
+                            name="{{ value.param_name }}"
+                            value="{{ value.value }}"
+                            class="filter-checkbox"
+                            {% if value.active %}checked{% endif %}
+                            {% if value.count == 0 and value.active == false %}disabled{% endif %}
+                          >
+                          <span>{{ value.label }} ({{ value.count }})</span>
+                        </label>
+                      {%- endfor -%}
+                    </div>
+
+                  {%- when 'price_range' -%}
+                    <div class="price-range-inputs">
+                      <div class="price-field">
+                        <span>Mínimo</span>
+                        <input
+                          name="{{ filter.min_value.param_name }}"
+                          id="Filter-{{ filter.label | escape }}-GTE"
+                          {%- if filter.min_value.value -%}
+                            value="{{ filter.min_value.value | money_without_currency | replace: ',', '' }}"
+                          {%- endif -%}
+                          type="number"
+                          placeholder="0"
+                          min="0"
+                          max="100"
+                        >
+                      </div>
+                      <div class="price-field">
+                        <span>Máximo</span>
+                        <input
+                          name="{{ filter.max_value.param_name }}"
+                          id="Filter-{{ filter.label | escape }}-LTE"
+                          {%- if filter.max_value.value -%}
+                            value="{{ filter.max_value.value | money_without_currency | replace: ',', '' }}"
+                          {%- endif -%}
+                          type="number"
+                          placeholder="100"
+                          min="0"
+                          max="100"
+                        >
+                      </div>
+                    </div>
+                {%- endcase -%}
+              </div>
+            </div>
+          {%- endfor -%}
+          
+          <a href="/collections/{{ collection.handle }}" class="clear-all-filters-btn" id="ClearAllFiltersBtn" title="Limpar todos os filtros de características e etiquetas" style="{% unless has_active_filters %}display: none;{% endunless %}">
+            <span>Limpar Filtros</span>
+            <span>✕</span>
+          </a>
+        </form>
 
         <div class="pagination-limit">
           <span>{{ 'catalog.items_per_page' | t }}</span>
@@ -169,38 +737,11 @@
           {%- endfor -%}
         </div>
 
-        <!-- Pagination -->
-        {%- if paginate.pages > 1 -%}
-          <div class="pagination">
-            {%- if paginate.previous -%}
-              <a href="{{ paginate.previous.url }}" class="pagination-btn">
-                ◀ {{ 'catalog.previous' | t }}
-              </a>
-            {%- else -%}
-              <button class="pagination-btn" disabled>◀ {{ 'catalog.previous' | t }}</button>
-            {%- endif -%}
-
-            <div class="page-numbers">
-              {%- for part in paginate.parts -%}
-                {%- if part.is_link -%}
-                  <a href="{{ part.url }}" class="page-number">{{ part.title }}</a>
-                {%- else -%}
-                  <span class="page-number {% if part.title == paginate.current_page %}active{% endif %}">
-                    {{ part.title }}
-                  </span>
-                {%- endif -%}
-              {%- endfor -%}
-            </div>
-
-            {%- if paginate.next -%}
-              <a href="{{ paginate.next.url }}" class="pagination-btn">
-                {{ 'catalog.next' | t }} ▶
-              </a>
-            {%- else -%}
-              <button class="pagination-btn" disabled>{{ 'catalog.next' | t }} ▶</button>
-            {%- endif -%}
-          </div>
-        {%- endif -%}
+        <!-- Dynamic Client-Side Pagination Container -->
+        <div id="CatalogPagination" class="pagination" style="display: none;" 
+             data-prev-text="◀ {{ 'catalog.previous' | t }}" 
+             data-next-text="{{ 'catalog.next' | t }} ▶">
+        </div>
       {%- endif -%}
     </main>
   </div>

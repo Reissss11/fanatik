@@ -5,7 +5,17 @@
 {% endcomment -%}
 
 {%- if card_product != blank -%}
-  <div class="jersey-card">
+  {%- assign available_sizes = "" -%}
+  {%- for variant in card_product.variants -%}
+    {%- if variant.available -%}
+      {%- assign size_down = variant.title | downcase -%}
+      {%- assign available_sizes = available_sizes | append: size_down | append: "," -%}
+    {%- endif -%}
+  {%- endfor -%}
+  <div class="jersey-card" 
+       data-tags="{{ card_product.tags | join: ',' | downcase | escape }}"
+       data-price="{{ card_product.price }}"
+       data-sizes="{{ available_sizes | escape }}">
     <a href="{{ card_product.url }}" class="jersey-card-link">
       <!-- Image Container -->
       <div class="jersey-image-container">

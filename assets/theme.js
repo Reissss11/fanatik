@@ -751,15 +751,36 @@ function initCollectionFilters() {
   const sidebar = document.getElementById('CatalogSidebar');
   const closeBtn = document.getElementById('CloseFiltersBtn');
 
+  // Client-Side Pagination state
+  let currentPage = 1;
+  const limitSelect = document.getElementById('CatalogLimitSelector');
+  let itemsPerPage = limitSelect ? parseInt(limitSelect.value) : 12;
+
   // Accordion triggers
   accordions.forEach(drop => {
     const trigger = drop.querySelector('.dropdown-trigger');
     if (trigger) {
-      trigger.addEventListener('click', () => {
+      trigger.addEventListener('click', (e) => {
+        e.stopPropagation();
+        // Close all other open dropdowns first
+        accordions.forEach(other => {
+          if (other !== drop) {
+            other.classList.remove('open');
+          }
+        });
         // Toggle active
         drop.classList.toggle('open');
       });
     }
+  });
+
+  // Close dropdowns when clicking outside
+  document.addEventListener('click', (e) => {
+    accordions.forEach(drop => {
+      if (!drop.contains(e.target)) {
+        drop.classList.remove('open');
+      }
+    });
   });
 
   // Mobile Filter Side overlays
@@ -777,10 +798,512 @@ function initCollectionFilters() {
     });
   }
 
+  // Intercept Clubes checkbox-link clicks
+  const clubLinks = container.querySelectorAll('.filter-dropdown[data-dropdown-name="clubes"] .filter-item-link');
+  clubLinks.forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      
+      // Toggle active class
+      link.classList.toggle('active');
+      const indicator = link.querySelector('.custom-checkbox-indicator');
+      if (indicator) {
+        if (link.classList.contains('active')) {
+          indicator.innerText = '✓';
+          indicator.style.background = 'var(--color-text)';
+        } else {
+          indicator.innerText = '';
+          indicator.style.background = 'transparent';
+        }
+      }
+      
+      // Update badge, query param, filter products, and update active chips
+      updateClubeQueryParamAndFilter();
+    });
+  });
+
+  // Intercept Opções checkbox-link clicks
+  const optionLinks = container.querySelectorAll('.filter-dropdown[data-dropdown-name="opcoes"] .filter-item-link');
+  optionLinks.forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      
+      // Toggle active class
+      link.classList.toggle('active');
+      const indicator = link.querySelector('.custom-checkbox-indicator');
+      if (indicator) {
+        if (link.classList.contains('active')) {
+          indicator.innerText = '✓';
+          indicator.style.background = 'var(--color-text)';
+        } else {
+          indicator.innerText = '';
+          indicator.style.background = 'transparent';
+        }
+      }
+      
+      updateOpcoesQueryParamAndFilter();
+    });
+  });
+
+  // Intercept Épocas checkbox-link clicks
+  const epocaLinks = container.querySelectorAll('.filter-dropdown[data-dropdown-name="epocas"] .filter-item-link');
+  epocaLinks.forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      
+      // Toggle active class
+      link.classList.toggle('active');
+      const indicator = link.querySelector('.custom-checkbox-indicator');
+      if (indicator) {
+        if (link.classList.contains('active')) {
+          indicator.innerText = '✓';
+          indicator.style.background = 'var(--color-text)';
+        } else {
+          indicator.innerText = '';
+          indicator.style.background = 'transparent';
+        }
+      }
+      
+      updateEpocasQueryParamAndFilter();
+    });
+  });
+
+  // Listen for clicks on active filter chips to remove them
+  container.addEventListener('click', (e) => {
+    const clubChip = e.target.closest('.active-filter-chip.club-filter-chip');
+    if (clubChip) {
+      e.preventDefault();
+      e.stopPropagation();
+      const handle = clubChip.getAttribute('data-club-handle');
+      const itemLink = container.querySelector(`.filter-dropdown[data-dropdown-name="clubes"] .filter-item-link[data-club-handle="${handle}"]`);
+      if (itemLink) {
+        itemLink.click();
+      }
+    }
+
+    const opChip = e.target.closest('.active-filter-chip.opcao-filter-chip');
+    if (opChip) {
+      e.preventDefault();
+      e.stopPropagation();
+      const handle = opChip.getAttribute('data-opcao-handle');
+      const itemLink = container.querySelector(`.filter-dropdown[data-dropdown-name="opcoes"] .filter-item-link[data-opcao-handle="${handle}"]`);
+      if (itemLink) {
+        itemLink.click();
+      }
+    }
+
+    const epChip = e.target.closest('.active-filter-chip.epoca-filter-chip');
+    if (epChip) {
+      e.preventDefault();
+      e.stopPropagation();
+      const handle = epChip.getAttribute('data-epoca-handle');
+      const itemLink = container.querySelector(`.filter-dropdown[data-dropdown-name="epocas"] .filter-item-link[data-epoca-handle="${handle}"]`);
+      if (itemLink) {
+        itemLink.click();
+      }
+    }
+  });
+
+  function updateClubeQueryParamAndFilter() {
+    currentPage = 1; // Reset to first page on filter update
+    const activeLinks = Array.from(container.querySelectorAll('.filter-dropdown[data-dropdown-name="clubes"] .filter-item-link.active'));
+    const activeHandles = activeLinks.map(link => link.getAttribute('data-club-handle'));
+    
+    // Update badge count in trigger
+    const dropdown = container.querySelector('.filter-dropdown[data-dropdown-name="clubes"]');
+    if (dropdown) {
+      const trigger = dropdown.querySelector('.dropdown-trigger');
+      if (trigger) {
+        let badgeSpan = trigger.querySelector('.active-count-badge');
+        if (activeHandles.length > 0) {
+          if (!badgeSpan) {
+            badgeSpan = document.createElement('span');
+            badgeSpan.className = 'active-count-badge';
+            const arrow = trigger.querySelector('.dropdown-arrow');
+            trigger.insertBefore(badgeSpan, arrow);
+          }
+          badgeSpan.innerText = `(${activeHandles.length})`;
+        } else {
+          if (badgeSpan) badgeSpan.remove();
+        }
+      }
+    }
+
+    // Update URL query parameters without reloading
+    const url = new URL(window.location.href);
+    if (activeHandles.length > 0) {
+      url.searchParams.set('clubes', activeHandles.join(','));
+    } else {
+      url.searchParams.delete('clubes');
+    }
+    window.history.replaceState(null, '', url.toString());
+
+    // Apply visibility filters to the product card elements
+    applyClubeFiltering();
+
+    // Update the dynamic active filter chips
+    updateActiveFilterChips();
+
+    // Show or hide the global Clear All Filters button dynamically
+    const clearFiltersBtn = container.querySelector('#ClearAllFiltersBtn');
+    if (clearFiltersBtn) {
+      const activeClubes = container.querySelectorAll('.filter-dropdown[data-dropdown-name="clubes"] .filter-item-link.active');
+      const activeOpcoes = container.querySelectorAll('.filter-dropdown[data-dropdown-name="opcoes"] .filter-item-link.active');
+      const activeEpocas = container.querySelectorAll('.filter-dropdown[data-dropdown-name="epocas"] .filter-item-link.active');
+      const standardChips = container.querySelectorAll('.active-filters-summary .active-filter-chip:not(.club-filter-chip):not(.opcao-filter-chip):not(.epoca-filter-chip)');
+      
+      if (activeClubes.length > 0 || activeOpcoes.length > 0 || activeEpocas.length > 0 || standardChips.length > 0) {
+        clearFiltersBtn.style.setProperty('display', 'inline-flex', 'important');
+      } else {
+        clearFiltersBtn.style.setProperty('display', 'none', 'important');
+      }
+    }
+  }
+
+  function updateOpcoesQueryParamAndFilter() {
+    currentPage = 1; // Reset to first page on filter update
+    const activeLinks = Array.from(container.querySelectorAll('.filter-dropdown[data-dropdown-name="opcoes"] .filter-item-link.active'));
+    const activeHandles = activeLinks.map(link => link.getAttribute('data-opcao-handle'));
+    
+    // Update badge count in trigger
+    const dropdown = container.querySelector('.filter-dropdown[data-dropdown-name="opcoes"]');
+    if (dropdown) {
+      const trigger = dropdown.querySelector('.dropdown-trigger');
+      if (trigger) {
+        let badgeSpan = trigger.querySelector('.active-count-badge');
+        if (activeHandles.length > 0) {
+          if (!badgeSpan) {
+            badgeSpan = document.createElement('span');
+            badgeSpan.className = 'active-count-badge';
+            const arrow = trigger.querySelector('.dropdown-arrow');
+            trigger.insertBefore(badgeSpan, arrow);
+          }
+          badgeSpan.innerText = `(${activeHandles.length})`;
+        } else {
+          if (badgeSpan) badgeSpan.remove();
+        }
+      }
+    }
+
+    // Update URL query parameters without reloading
+    const url = new URL(window.location.href);
+    if (activeHandles.length > 0) {
+      url.searchParams.set('opcoes', activeHandles.join(','));
+    } else {
+      url.searchParams.delete('opcoes');
+    }
+    window.history.replaceState(null, '', url.toString());
+
+    // Apply visibility filters to the product card elements
+    applyClubeFiltering();
+
+    // Update the dynamic active filter chips
+    updateActiveFilterChips();
+
+    // Show or hide the global Clear All Filters button dynamically
+    const clearFiltersBtn = container.querySelector('#ClearAllFiltersBtn');
+    if (clearFiltersBtn) {
+      const activeClubes = container.querySelectorAll('.filter-dropdown[data-dropdown-name="clubes"] .filter-item-link.active');
+      const activeOpcoes = container.querySelectorAll('.filter-dropdown[data-dropdown-name="opcoes"] .filter-item-link.active');
+      const activeEpocas = container.querySelectorAll('.filter-dropdown[data-dropdown-name="epocas"] .filter-item-link.active');
+      const standardChips = container.querySelectorAll('.active-filters-summary .active-filter-chip:not(.club-filter-chip):not(.opcao-filter-chip):not(.epoca-filter-chip)');
+      
+      if (activeClubes.length > 0 || activeOpcoes.length > 0 || activeEpocas.length > 0 || standardChips.length > 0) {
+        clearFiltersBtn.style.setProperty('display', 'inline-flex', 'important');
+      } else {
+        clearFiltersBtn.style.setProperty('display', 'none', 'important');
+      }
+    }
+  }
+
+  function updateEpocasQueryParamAndFilter() {
+    currentPage = 1; // Reset to first page on filter update
+    const activeLinks = Array.from(container.querySelectorAll('.filter-dropdown[data-dropdown-name="epocas"] .filter-item-link.active'));
+    const activeHandles = activeLinks.map(link => link.getAttribute('data-epoca-handle'));
+    
+    // Update badge count in trigger
+    const dropdown = container.querySelector('.filter-dropdown[data-dropdown-name="epocas"]');
+    if (dropdown) {
+      const trigger = dropdown.querySelector('.dropdown-trigger');
+      if (trigger) {
+        let badgeSpan = trigger.querySelector('.active-count-badge');
+        if (activeHandles.length > 0) {
+          if (!badgeSpan) {
+            badgeSpan = document.createElement('span');
+            badgeSpan.className = 'active-count-badge';
+            const arrow = trigger.querySelector('.dropdown-arrow');
+            trigger.insertBefore(badgeSpan, arrow);
+          }
+          badgeSpan.innerText = `(${activeHandles.length})`;
+        } else {
+          if (badgeSpan) badgeSpan.remove();
+        }
+      }
+    }
+
+    // Update URL query parameters without reloading
+    const url = new URL(window.location.href);
+    if (activeHandles.length > 0) {
+      url.searchParams.set('epocas', activeHandles.join(','));
+    } else {
+      url.searchParams.delete('epocas');
+    }
+    window.history.replaceState(null, '', url.toString());
+
+    // Apply visibility filters to the product card elements
+    applyClubeFiltering();
+
+    // Update the dynamic active filter chips
+    updateActiveFilterChips();
+
+    // Show or hide the global Clear All Filters button dynamically
+    const clearFiltersBtn = container.querySelector('#ClearAllFiltersBtn');
+    if (clearFiltersBtn) {
+      const activeClubes = container.querySelectorAll('.filter-dropdown[data-dropdown-name="clubes"] .filter-item-link.active');
+      const activeOpcoes = container.querySelectorAll('.filter-dropdown[data-dropdown-name="opcoes"] .filter-item-link.active');
+      const activeEpocas = container.querySelectorAll('.filter-dropdown[data-dropdown-name="epocas"] .filter-item-link.active');
+      const standardChips = container.querySelectorAll('.active-filters-summary .active-filter-chip:not(.club-filter-chip):not(.opcao-filter-chip):not(.epoca-filter-chip)');
+      
+      if (activeClubes.length > 0 || activeOpcoes.length > 0 || activeEpocas.length > 0 || standardChips.length > 0) {
+        clearFiltersBtn.style.setProperty('display', 'inline-flex', 'important');
+      } else {
+        clearFiltersBtn.style.setProperty('display', 'none', 'important');
+      }
+    }
+  }
+
+  function applyClubeFiltering() {
+    const activeClubLinks = Array.from(container.querySelectorAll('.filter-dropdown[data-dropdown-name="clubes"] .filter-item-link.active'));
+    const activeClubHandles = activeClubLinks.map(link => link.getAttribute('data-club-handle'));
+
+    const activeOpLinks = Array.from(container.querySelectorAll('.filter-dropdown[data-dropdown-name="opcoes"] .filter-item-link.active'));
+    const activeOpHandles = activeOpLinks.map(link => link.getAttribute('data-opcao-handle'));
+
+    const cards = container.querySelectorAll('.jersey-card');
+    const grid = container.querySelector('.catalog-grid');
+    const noResults = container.querySelector('.no-results');
+
+    const matchingCards = [];
+
+    cards.forEach(card => {
+      const cardTagsStr = card.getAttribute('data-tags') || '';
+      const cardTags = cardTagsStr.split(',').map(t => t.trim().toLowerCase());
+      
+      const tagHandles = cardTags.map(tag => {
+        return tag.toLowerCase()
+          .replace(/[^a-z0-9]+/g, '-')
+          .replace(/^-+|-+$/g, '');
+      });
+
+      // 1. Check Clubes match (logical OR within group)
+      let clubMatch = false;
+      if (activeClubHandles.length === 0) {
+        clubMatch = true;
+      } else {
+        clubMatch = activeClubHandles.some(handle => tagHandles.includes(handle));
+      }
+
+      // 2. Check Opção/Variante match (logical OR within group)
+      let opMatch = false;
+      if (activeOpHandles.length === 0) {
+        opMatch = true;
+      } else {
+        opMatch = activeOpHandles.some(handle => tagHandles.includes(handle));
+      }
+
+      // 3. Check Época match (logical OR within group)
+      const activeEpLinks = Array.from(container.querySelectorAll('.filter-dropdown[data-dropdown-name="epocas"] .filter-item-link.active'));
+      const activeEpHandles = activeEpLinks.map(link => link.getAttribute('data-epoca-handle'));
+      let epMatch = false;
+      if (activeEpHandles.length === 0) {
+        epMatch = true;
+      } else {
+        epMatch = activeEpHandles.some(handle => tagHandles.includes(handle));
+      }
+
+      // Strict logical AND between all groups
+      if (clubMatch && opMatch && epMatch) {
+        matchingCards.push(card);
+      } else {
+        card.style.display = 'none';
+      }
+    });
+
+    const totalMatching = matchingCards.length;
+    const totalPages = Math.ceil(totalMatching / itemsPerPage);
+    
+    // Clamp currentPage
+    if (currentPage > totalPages) currentPage = Math.max(1, totalPages);
+    if (currentPage < 1) currentPage = 1;
+
+    // Show only products belonging to the current page
+    matchingCards.forEach((card, index) => {
+      const startIdx = (currentPage - 1) * itemsPerPage;
+      const endIdx = currentPage * itemsPerPage - 1;
+      if (index >= startIdx && index <= endIdx) {
+        card.style.display = '';
+      } else {
+        card.style.display = 'none';
+      }
+    });
+
+    // Render the dynamic pagination bar
+    renderPagination(totalPages);
+
+    // Handle empty results display
+    if (totalMatching === 0) {
+      if (noResults) {
+        noResults.style.display = 'block';
+      } else {
+        const noResultsDiv = document.createElement('div');
+        noResultsDiv.className = 'no-results dynamic-no-results';
+        noResultsDiv.innerHTML = `
+          <h3>Não foram encontrados resultados.</h3>
+          <a href="${window.location.pathname}" class="clear-filters-link-btn">Limpar Filtros</a>
+        `;
+        if (grid) grid.parentNode.insertBefore(noResultsDiv, grid.nextSibling);
+      }
+      if (grid) grid.style.display = 'none';
+    } else {
+      const dynamicNoResults = container.querySelector('.dynamic-no-results');
+      if (dynamicNoResults) dynamicNoResults.remove();
+      if (noResults) noResults.style.display = 'none';
+      if (grid) grid.style.display = 'grid';
+    }
+  }
+
+  function renderPagination(totalPages) {
+    const pagDiv = document.getElementById('CatalogPagination');
+    if (!pagDiv) return;
+
+    if (totalPages <= 1) {
+      pagDiv.style.display = 'none';
+      pagDiv.innerHTML = '';
+      return;
+    }
+
+    pagDiv.style.display = 'flex';
+    
+    const prevText = pagDiv.getAttribute('data-prev-text') || '◀ Anterior';
+    const nextText = pagDiv.getAttribute('data-next-text') || 'Seguinte ▶';
+    
+    let html = '';
+    
+    // Previous button
+    if (currentPage > 1) {
+      html += `<a href="#" class="pagination-btn prev-page-btn">${prevText}</a>`;
+    } else {
+      html += `<button class="pagination-btn" disabled>${prevText}</button>`;
+    }
+    
+    // Page numbers
+    html += `<div class="page-numbers">`;
+    for (let i = 1; i <= totalPages; i++) {
+      if (i === currentPage) {
+        html += `<span class="page-number active">${i}</span>`;
+      } else {
+        html += `<a href="#" class="page-number page-num-btn" data-page="${i}">${i}</a>`;
+      }
+    }
+    html += `</div>`;
+    
+    // Next button
+    if (currentPage < totalPages) {
+      html += `<a href="#" class="pagination-btn next-page-btn">${nextText}</a>`;
+    } else {
+      html += `<button class="pagination-btn" disabled>${nextText}</button>`;
+    }
+    
+    pagDiv.innerHTML = html;
+  }
+
+  function updateActiveFilterChips() {
+    let summaryDiv = container.querySelector('.active-filters-summary');
+    if (!summaryDiv) {
+      const sidebar = container.querySelector('#CatalogSidebar');
+      if (!sidebar) return;
+      summaryDiv = document.createElement('div');
+      summaryDiv.className = 'active-filters-summary';
+      const staticMenu = sidebar.querySelector('.static-collections-menu');
+      if (staticMenu) {
+        sidebar.insertBefore(summaryDiv, staticMenu);
+      } else {
+        sidebar.appendChild(summaryDiv);
+      }
+    }
+
+    // Clear previous club filter chips
+    const existingClubChips = summaryDiv.querySelectorAll('.club-filter-chip');
+    existingClubChips.forEach(chip => chip.remove());
+
+    // Clear previous época filter chips
+    const existingEpocaChips = summaryDiv.querySelectorAll('.epoca-filter-chip');
+    existingEpocaChips.forEach(chip => chip.remove());
+
+    // Render updated club chips
+    const activeLinks = container.querySelectorAll('.filter-dropdown[data-dropdown-name="clubes"] .filter-item-link.active');
+    activeLinks.forEach(link => {
+      const handle = link.getAttribute('data-club-handle');
+      const name = link.querySelector('span:not(.custom-checkbox-indicator)').innerText.trim();
+      
+      const chip = document.createElement('a');
+      chip.href = '#';
+      chip.className = 'active-filter-chip club-filter-chip';
+      chip.setAttribute('data-club-handle', handle);
+      chip.title = `Remover filtro ${name}`;
+      chip.innerHTML = `${name} ✕`;
+      
+      summaryDiv.appendChild(chip);
+    });
+
+    // Render updated época chips
+    const activeEpocaLinks = container.querySelectorAll('.filter-dropdown[data-dropdown-name="epocas"] .filter-item-link.active');
+    activeEpocaLinks.forEach(link => {
+      const handle = link.getAttribute('data-epoca-handle');
+      const name = link.querySelector('span:not(.custom-checkbox-indicator)').innerText.trim();
+      
+      const chip = document.createElement('a');
+      chip.href = '#';
+      chip.className = 'active-filter-chip epoca-filter-chip';
+      chip.setAttribute('data-epoca-handle', handle);
+      chip.title = `Remover filtro ${name}`;
+      chip.innerHTML = `${name} ✕`;
+      
+      summaryDiv.appendChild(chip);
+    });
+
+    // Toggle summary display based on chip presence
+    const remainingChips = summaryDiv.querySelectorAll('.active-filter-chip');
+    if (remainingChips.length === 0) {
+      summaryDiv.style.display = 'none';
+    } else {
+      summaryDiv.style.display = 'flex';
+    }
+  }
+
+  // Run filter on initial load to support shared/saved URLs
+  applyClubeFiltering();
+
+  // Show or hide the global Clear All Filters button dynamically on initial load
+  const clearFiltersBtnOnLoad = container.querySelector('#ClearAllFiltersBtn');
+  if (clearFiltersBtnOnLoad) {
+    const activeClubes = container.querySelectorAll('.filter-dropdown[data-dropdown-name="clubes"] .filter-item-link.active');
+    const activeOpcoes = container.querySelectorAll('.filter-dropdown[data-dropdown-name="opcoes"] .filter-item-link.active');
+    const activeEpocas = container.querySelectorAll('.filter-dropdown[data-dropdown-name="epocas"] .filter-item-link.active');
+    const standardChips = container.querySelectorAll('.active-filters-summary .active-filter-chip:not(.club-filter-chip):not(.opcao-filter-chip):not(.epoca-filter-chip)');
+    if (activeClubes.length > 0 || activeOpcoes.length > 0 || activeEpocas.length > 0 || standardChips.length > 0) {
+      clearFiltersBtnOnLoad.style.setProperty('display', 'inline-flex', 'important');
+    } else {
+      clearFiltersBtnOnLoad.style.setProperty('display', 'none', 'important');
+    }
+  }
+
   // Sidebar dynamic form submit on filter change
   const filterForm = document.getElementById('CollectionFiltersForm');
   if (filterForm) {
-    // Submit form automatically on filter checkbox toggles
     const checkboxes = filterForm.querySelectorAll('.filter-checkbox');
     checkboxes.forEach(box => {
       box.addEventListener('change', () => submitFilterForm(filterForm));
@@ -810,28 +1333,55 @@ function initCollectionFilters() {
     }
   }
 
-  // Catalog item limits pagination select box
-  const limitSelect = document.getElementById('CatalogLimitSelector');
+  // Catalog item limits pagination select box (Client-side override)
   if (limitSelect) {
     limitSelect.addEventListener('change', () => {
       const val = limitSelect.value;
+      itemsPerPage = parseInt(val);
+      currentPage = 1;
+      applyClubeFiltering(); // Re-run pagination instantly!
       
-      // Save select limit in cart attributes and reload to refresh pagination
+      // Update Shopify cart attribute in background to remember choice on reload
       fetch('/cart/update.js', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ attributes: { pagination_limit: val } })
-      })
-      .then(() => {
-        // Reload page to reflect new paginate limit
-        window.location.reload();
       });
+    });
+  }
+
+  // Handle client-side pagination button clicks
+  const pagDiv = document.getElementById('CatalogPagination');
+  if (pagDiv) {
+    pagDiv.addEventListener('click', (e) => {
+      const pageBtn = e.target.closest('.page-num-btn');
+      const prevBtn = e.target.closest('.prev-page-btn');
+      const nextBtn = e.target.closest('.next-page-btn');
+      
+      if (pageBtn) {
+        e.preventDefault();
+        currentPage = parseInt(pageBtn.getAttribute('data-page'));
+        applyClubeFiltering();
+        const grid = container.querySelector('.catalog-grid');
+        if (grid) grid.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      } else if (prevBtn) {
+        e.preventDefault();
+        currentPage--;
+        applyClubeFiltering();
+        const grid = container.querySelector('.catalog-grid');
+        if (grid) grid.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      } else if (nextBtn) {
+        e.preventDefault();
+        currentPage++;
+        applyClubeFiltering();
+        const grid = container.querySelector('.catalog-grid');
+        if (grid) grid.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
     });
   }
 
   function submitFilterForm(form) {
     const params = new URLSearchParams(new FormData(form));
-    // Clean up empty params
     const cleanParams = new URLSearchParams();
     for (const [key, value] of params.entries()) {
       if (value.trim().length > 0) {
@@ -839,7 +1389,21 @@ function initCollectionFilters() {
       }
     }
     
-    // Redirect browser to URL with updated filter queries
+    // Preserve dynamic 'clubes' query parameter across standard page reloads
+    const currentUrl = new URL(window.location.href);
+    const clubes = currentUrl.searchParams.get('clubes');
+    if (clubes) {
+      cleanParams.append('clubes', clubes);
+    }
+    const opcoes = currentUrl.searchParams.get('opcoes');
+    if (opcoes) {
+      cleanParams.append('opcoes', opcoes);
+    }
+    const epocas = currentUrl.searchParams.get('epocas');
+    if (epocas) {
+      cleanParams.append('epocas', epocas);
+    }
+    
     window.location.search = cleanParams.toString();
   }
 }
