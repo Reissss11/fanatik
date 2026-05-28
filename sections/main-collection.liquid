@@ -279,13 +279,31 @@
         <ul class="static-collection-list">
           <li>
             <a href="/collections/all" class="static-collection-link {% if collection.handle == 'all' or collection.handle == blank %}active{% endif %}">
-              Todos os Produtos
+              <span class="collection-img-wrap">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="3" width="7" height="9"></rect>
+                  <rect x="14" y="3" width="7" height="5"></rect>
+                  <rect x="14" y="12" width="7" height="9"></rect>
+                  <rect x="3" y="16" width="7" height="5"></rect>
+                </svg>
+              </span>
+              <span class="collection-title-text">Todos os Produtos</span>
             </a>
           </li>
           {%- for col in collections -%}
             <li>
               <a href="{{ col.url }}" class="static-collection-link {% if collection.handle == col.handle %}active{% endif %}">
-                {{ col.title }}
+                <span class="collection-img-wrap">
+                  {%- if col.image -%}
+                    <img src="{{ col.image | image_url: width: 40, height: 40, crop: 'center' }}" alt="{{ col.title | escape }}" width="20" height="20" loading="lazy">
+                  {%- else -%}
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
+                      <line x1="7" y1="7" x2="7.01" y2="7"></line>
+                    </svg>
+                  {%- endif -%}
+                </span>
+                <span class="collection-title-text">{{ col.title }}</span>
               </a>
             </li>
           {%- endfor -%}

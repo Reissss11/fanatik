@@ -2298,7 +2298,9 @@ html[data-theme="dark"] .logo-dark-theme {
 }
 
 .static-collection-link {
-  display: block;
+  display: flex;
+  align-items: center;
+  gap: 12px;
   padding: 0.6rem 0.8rem;
   color: var(--color-text);
   text-decoration: none;
@@ -2309,10 +2311,52 @@ html[data-theme="dark"] .logo-dark-theme {
   border-left: 3px solid transparent;
 }
 
+.collection-img-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: rgba(var(--color-primary-rgb), 0.04);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-light);
+  flex-shrink: 0;
+  transition: all 0.25s ease;
+}
+
+.collection-img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.collection-img-wrap svg {
+  color: var(--color-text-light);
+  transition: stroke 0.25s ease;
+}
+
+.collection-title-text {
+  transition: transform 0.25s ease;
+}
+
 .static-collection-link:hover {
   background-color: rgba(var(--color-primary-rgb), 0.03);
   color: var(--color-accent);
-  padding-left: 1.2rem;
+}
+
+.static-collection-link:hover .collection-img-wrap {
+  border-color: var(--color-accent);
+  background: rgba(var(--color-primary-rgb), 0.08);
+}
+
+.static-collection-link:hover .collection-img-wrap svg {
+  stroke: var(--color-accent);
+}
+
+.static-collection-link:hover .collection-title-text {
+  transform: translateX(4px);
 }
 
 .static-collection-link.active {
@@ -2320,7 +2364,20 @@ html[data-theme="dark"] .logo-dark-theme {
   color: var(--color-accent);
   font-weight: 700;
   border-left-color: var(--color-accent);
-  padding-left: 1.2rem;
+}
+
+.static-collection-link.active .collection-img-wrap {
+  border-color: var(--color-accent);
+  background: rgba(var(--color-primary-rgb), 0.1);
+  box-shadow: 0 0 10px rgba(var(--color-primary-rgb), 0.05);
+}
+
+.static-collection-link.active .collection-img-wrap svg {
+  stroke: var(--color-accent);
+}
+
+.static-collection-link.active .collection-title-text {
+  transform: translateX(4px);
 }
 
 /* Horizontal Filters Bar */

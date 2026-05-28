@@ -473,6 +473,19 @@ document.addEventListener('DOMContentLoaded', function() {
   // Load custom reviews from localStorage
   let customReviews = JSON.parse(localStorage.getItem(localReviewsKey) || '[]');
 
+  // Dynamically calculate relative dates for custom reviews on page load
+  function getRelativeDateString(timestamp) {
+    if (!timestamp) return "Hoje";
+    const diffMs = Date.now() - timestamp;
+    const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+    if (diffDays <= 0) return "Hoje";
+    if (diffDays === 1) return "Ontem";
+    return `Há ${diffDays} dias`;
+  }
+  customReviews.forEach(rev => {
+    rev.date = getRelativeDateString(rev.timestamp);
+  });
+
   // UI state
   let currentFilter = 'all';
   let currentSort = 'recent';
@@ -745,7 +758,6 @@ document.addEventListener('DOMContentLoaded', function() {
               <div class="review-author-meta">
                 <span class="review-author-name">
                   ${review.name}
-                  ${review.verified ? '<span class="verified-badge">✓ Compra Verificada</span>' : ''}
                 </span>
                 <span class="review-date-text">${review.date}</span>
               </div>
