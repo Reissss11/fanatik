@@ -1,0 +1,1025 @@
+<!-- Sections: Homepage Reviews Carousel -->
+<section class="homepage-reviews-section" id="HomepageReviews-{{ section.id }}" data-section-id="{{ section.id }}">
+  <div class="reviews-container">
+    <div class="reviews-header-block">
+      <div class="reviews-title-wrap">
+        <span class="reviews-badge">Avaliações Clientes</span>
+        <h2 class="reviews-title">O que dizem os nossos clientes</h2>
+      </div>
+      
+      <div class="reviews-stats-summary">
+        <div class="stats-avg-score" style="display: flex; align-items: center; gap: 0.6rem;">
+          <span class="score-num" id="GlobalAvgRating" style="font-size: 3rem; font-weight: 900; line-height: 1;">4.7</span>
+          <span class="score-star-single" style="color: #ffc107; font-size: 2.8rem; line-height: 1; margin-top: -4px;">★</span>
+        </div>
+        <div class="stats-total-text" id="GlobalTotalCountText" style="font-size: 0.88rem; color: var(--color-text-light); opacity: 0.8; margin-top: 0.3rem;">Excelente (baseado em 283 avaliações)</div>
+      </div>
+    </div>
+    
+    <!-- Carousel Track Wrapper -->
+    <div class="reviews-carousel-outer">
+      <button type="button" class="carousel-nav-btn prev" id="CarouselPrevBtn" aria-label="Avaliação anterior">
+        <svg viewBox="0 0 24 24"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
+      </button>
+      
+      <div class="reviews-carousel-track" id="ReviewsCarouselTrack">
+        <!-- Rendered in JS -->
+      </div>
+      
+      <button type="button" class="carousel-nav-btn next" id="CarouselNextBtn" aria-label="Avaliação seguinte">
+        <svg viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
+      </button>
+    </div>
+
+    <!-- Carousel Progress dots -->
+    <div class="carousel-dots-indicator" id="CarouselDotsIndicator"></div>
+    
+    <div class="reviews-bottom-action" style="display: flex; justify-content: center; margin-top: 1rem; margin-bottom: 2rem;">
+      <button type="button" class="write-review-btn-global" id="GlobalReviewFormBtn">
+        <span>Partilhe a sua Experiência</span>
+        <span>✍️</span>
+      </button>
+    </div>
+
+    <!-- Write Review Modal Dialog Overlay -->
+    <div class="global-review-modal-overlay" id="GlobalReviewModal">
+      <div class="global-review-modal-card">
+        <button type="button" class="close-modal-btn" id="CloseGlobalReviewModalBtn" aria-label="Fechar formulário">✕</button>
+        
+        <h3 class="modal-form-title">Escrever uma Avaliação</h3>
+        <p class="modal-form-subtitle">Partilhe a sua opinião com a nossa comunidade.</p>
+
+        <form id="HomepageSubmitReviewForm">
+          <div class="modal-form-group">
+            <label for="ModalName">Nome Completo *</label>
+            <input type="text" id="ModalName" class="modal-input" placeholder="Ex: Carlos Mendes" required autocomplete="off">
+          </div>
+
+          <div class="modal-form-group">
+            <label>Classificação *</label>
+            <div class="modal-rating-stars" id="ModalRatingStars">
+              <button type="button" class="modal-star-btn active" data-rating="1">
+                <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+              </button>
+              <button type="button" class="modal-star-btn active" data-rating="2">
+                <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+              </button>
+              <button type="button" class="modal-star-btn active" data-rating="3">
+                <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+              </button>
+              <button type="button" class="modal-star-btn active" data-rating="4">
+                <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+              </button>
+              <button type="button" class="modal-star-btn active" data-rating="5">
+                <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="modal-form-group">
+            <label for="ModalComment">Comentário *</label>
+            <textarea id="ModalComment" class="modal-input" rows="4" placeholder="Fale da sua experiência com a camisola, envio e atendimento..." required autocomplete="off"></textarea>
+          </div>
+
+          <button type="submit" class="modal-submit-btn">Enviar Avaliação</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Sections Styles Scoped for Homepage Reviews -->
+<style>
+.homepage-reviews-section {
+  padding: 4rem 2rem;
+  background: transparent;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.reviews-container {
+  width: 100%;
+}
+
+.reviews-header-block {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 3rem;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+
+.reviews-title-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.reviews-badge {
+  display: inline-block;
+  align-self: flex-start;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--color-accent);
+  background: rgba(var(--color-primary-rgb), 0.05);
+  border: 1px solid rgba(var(--color-primary-rgb), 0.08);
+  padding: 0.3rem 0.8rem;
+  border-radius: 20px;
+  letter-spacing: 0.5px;
+}
+
+.reviews-title {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: var(--color-text);
+  margin: 0;
+  letter-spacing: -0.8px;
+}
+
+.reviews-stats-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  align-items: flex-end;
+}
+
+@media (max-width: 768px) {
+  .reviews-header-block {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .reviews-stats-summary {
+    align-items: flex-start;
+  }
+  .reviews-title {
+    font-size: 1.8rem;
+  }
+}
+
+.stats-avg-score {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.stats-avg-score .score-num {
+  font-size: 2.4rem;
+  font-weight: 900;
+  color: var(--color-text);
+  line-height: 1;
+}
+
+.stats-avg-score .score-stars {
+  display: flex;
+  gap: 0.15rem;
+}
+
+.stats-avg-score .score-stars svg {
+  width: 18px;
+  height: 18px;
+  fill: #ffc107;
+}
+
+.stats-avg-score .score-stars svg.empty {
+  fill: rgba(var(--color-primary-rgb), 0.15);
+}
+
+.stats-total-text {
+  font-size: 0.88rem;
+  color: var(--color-text-light);
+  font-weight: 500;
+  opacity: 0.8;
+}
+
+/* Carousel Styles */
+.reviews-carousel-outer {
+  display: flex;
+  align-items: center;
+  position: relative;
+  gap: 1.5rem;
+}
+
+.reviews-carousel-track {
+  display: flex;
+  gap: 1.8rem;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  padding: 1.5rem 0.5rem;
+  width: 100%;
+}
+
+.reviews-carousel-track::-webkit-scrollbar {
+  display: none;
+}
+
+.carousel-nav-btn {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.25s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  flex-shrink: 0;
+  z-index: 10;
+}
+
+.carousel-nav-btn:hover {
+  background: var(--color-text);
+  color: var(--color-bg);
+  border-color: var(--color-text);
+  transform: scale(1.05);
+}
+
+@media (max-width: 992px) {
+  .carousel-nav-btn {
+    display: none; /* Swipe on mobile */
+  }
+}
+
+/* Card item */
+.homepage-review-card {
+  flex: 0 0 calc(33.333% - 1.2rem);
+  scroll-snap-align: start;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 20px;
+  padding: 2rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  transition: all 0.3s ease;
+  min-height: 250px;
+}
+
+.homepage-review-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+  border-color: rgba(var(--color-primary-rgb), 0.15);
+}
+
+@media (max-width: 1200px) {
+  .homepage-review-card {
+    flex: 0 0 calc(50% - 0.9rem);
+  }
+}
+
+@media (max-width: 768px) {
+  .homepage-review-card {
+    flex: 0 0 100%;
+  }
+}
+
+.card-header-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.card-rating-stars {
+  display: flex;
+  gap: 0.1rem;
+}
+
+.card-rating-stars svg {
+  width: 14px;
+  height: 14px;
+  fill: #ffc107;
+}
+
+.card-rating-stars svg.empty {
+  fill: rgba(var(--color-primary-rgb), 0.12);
+}
+
+.card-date {
+  font-size: 0.8rem;
+  color: var(--color-text-light);
+  opacity: 0.7;
+}
+
+.card-review-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--color-text);
+  margin: 0;
+  line-height: 1.3;
+}
+
+.card-review-comment {
+  font-size: 0.92rem;
+  line-height: 1.6;
+  color: var(--color-text);
+  opacity: 0.9;
+  flex: 1;
+}
+
+.card-author-line {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  border-top: 1px dashed rgba(var(--color-primary-rgb), 0.06);
+  padding-top: 1rem;
+}
+
+.card-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(var(--color-primary-rgb), 0.08);
+  font-weight: 700;
+  font-size: 0.82rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-accent);
+}
+
+.card-author-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.card-author-name {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.card-verified-badge {
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #28a745;
+}
+
+/* Indicator dots */
+.carousel-dots-indicator {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.carousel-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(var(--color-primary-rgb), 0.15);
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.carousel-dot.active {
+  background: var(--color-accent);
+  transform: scale(1.2);
+  width: 18px;
+  border-radius: 4px;
+}
+
+.reviews-bottom-action {
+  display: flex;
+  justify-content: center;
+}
+
+.write-review-btn-global {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
+  padding: 0.8rem 2.2rem;
+  border-radius: 30px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+}
+
+.write-review-btn-global:hover {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(var(--color-primary-rgb), 0.15);
+}
+
+/* Modal form overlay styles */
+.global-review-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+  z-index: 10000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  animation: fadeIn 0.25s ease-out;
+}
+
+.global-review-modal-overlay.open {
+  display: flex;
+}
+
+.global-review-modal-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 24px;
+  padding: 2.2rem;
+  width: 100%;
+  max-width: 520px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+  position: relative;
+  animation: modalScaleUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.global-review-modal-card::-webkit-scrollbar {
+  width: 6px;
+}
+
+.global-review-modal-card::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.global-review-modal-card::-webkit-scrollbar-thumb {
+  background-color: rgba(var(--color-primary-rgb), 0.15);
+  border-radius: 4px;
+}
+
+@keyframes modalScaleUp {
+  from {
+    transform: scale(0.9) translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+  }
+}
+
+.close-modal-btn {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  background: transparent;
+  border: none;
+  color: var(--color-text);
+  font-size: 1.3rem;
+  cursor: pointer;
+  opacity: 0.6;
+  transition: opacity 0.2s;
+}
+
+.close-modal-btn:hover {
+  opacity: 1;
+}
+
+.modal-form-title {
+  font-size: 1.4rem;
+  font-weight: 800;
+  margin-top: 0;
+  margin-bottom: 0.4rem;
+  color: var(--color-text);
+}
+
+.modal-form-subtitle {
+  font-size: 0.88rem;
+  color: var(--color-text-light);
+  margin-top: 0;
+  margin-bottom: 1.8rem;
+}
+
+.modal-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-bottom: 1.2rem;
+  text-align: left;
+}
+
+.modal-form-group label {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.modal-input {
+  background: rgba(var(--color-primary-rgb), 0.02);
+  border: 1px solid var(--color-border);
+  padding: 0.8rem 1rem;
+  border-radius: 12px;
+  color: var(--color-text);
+  outline: none;
+  font-size: 0.92rem;
+  transition: all 0.2s;
+}
+
+.modal-input:focus {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px rgba(var(--color-primary-rgb), 0.05);
+}
+
+.modal-input-help {
+  font-size: 0.78rem;
+  color: var(--color-text-light);
+  opacity: 0.85;
+  line-height: 1.4;
+  margin-top: 0.2rem;
+}
+
+.modal-rating-stars {
+  display: flex;
+  gap: 0.4rem;
+  margin: 0.2rem 0;
+}
+
+.modal-star-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.modal-star-btn svg {
+  width: 32px;
+  height: 32px;
+  fill: rgba(var(--color-primary-rgb), 0.15);
+  transition: fill 0.2s, transform 0.1s;
+}
+
+.modal-star-btn:hover svg,
+.modal-star-btn.active svg {
+  fill: #ffc107;
+  transform: scale(1.1);
+}
+
+.modal-submit-btn {
+  width: 100%;
+  background: var(--color-accent);
+  color: #ffffff;
+  border: 1px solid var(--color-accent);
+  padding: 0.9rem;
+  border-radius: 30px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  margin-top: 1rem;
+  box-shadow: 0 4px 12px rgba(var(--color-primary-rgb), 0.1);
+}
+
+.modal-submit-btn:hover {
+  background: var(--color-text);
+  border-color: var(--color-text);
+  color: var(--color-bg);
+}
+</style>
+
+<!-- Sections Javascript Scoped for Homepage Reviews -->
+<script>
+function initHomepageReviews() {
+  const section = document.querySelector('.homepage-reviews-section');
+  if (!section) return;
+
+  const globalReviewsKey = 'fanatik_global_homepage_reviews';
+  const deletedReviewsKey = 'fanatik_deleted_review_ids';
+
+  // Admin moderation check
+  const urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.get('admin') === 'true') {
+    localStorage.setItem('fanatik_admin_moderation', 'true');
+  } else if (urlParams.get('admin') === 'false') {
+    localStorage.removeItem('fanatik_admin_moderation');
+  }
+  const isAdminMode = localStorage.getItem('fanatik_admin_moderation') === 'true';
+  let deletedReviewIds = JSON.parse(localStorage.getItem(deletedReviewsKey) || '[]');
+
+  // Base overall mock stats
+  const baseTotalCount = 283;
+  const baseAvgRating = 4.7;
+  const baseDistribution = {
+    5: 226,
+    4: 45,
+    3: 9,
+    2: 2,
+    1: 1
+  };
+
+  // PT-PT Name pools for deterministic generator
+  const firstNames = [
+    "Carlos", "Ana", "Luís", "Vítor", "Beatriz", "José", "Rui", "Cláudia", "Tiago", "Diana",
+    "Marco", "Sara", "Pedro", "Maria", "João", "Filipa", "Ricardo", "Inês", "Miguel", "Sofia",
+    "António", "Rita", "Francisco", "Mariana", "Gonçalo", "Leonor", "Diogo", "Madalena", "Gustavo", "Carolina",
+    "Daniel", "Catarina", "Nuno", "Patrícia", "André", "Joana", "Jorge", "Marta", "Manuel", "Camila"
+  ];
+  const lastNames = [
+    "Mendes", "Henriques", "Abreu", "Pereira", "Santos", "Rodrigues", "Moreira", "Silva", "Gomes", "Costa",
+    "Antunes", "Oliveira", "Martins", "Sousa", "Fernandes", "Lopes", "Pinto", "Carvalho", "Teixeira", "Ribeiro",
+    "Correia", "Cardoso", "Ferreira", "Almeida", "Marques", "Alves", "Rocha", "Pires", "Cruz", "Fonseca",
+    "Soares", "Cunha"
+  ];
+
+  // PT-PT Short snappy review templates
+  const templates = [
+    { rating: 5, title: "Excelente qualidade!", comment: "Camisola fantástica. Tecido soberbo, personalização oficial e envio super rápido." },
+    { rating: 5, title: "Edição especial incrível", comment: "Os detalhes retro estão perfeitos. O apoio ao cliente ajudou-me imenso." },
+    { rating: 4, title: "Linda, mas pequeno atraso", comment: "Acabamentos excelentes. O envio atrasou 1 dia, mas a qualidade compensa a 100%." },
+    { rating: 5, title: "Loja de confiança", comment: "É o terceiro pedido e a qualidade nunca falha. Tecido leve e muito resistente." },
+    { rating: 4, title: "Excelente tecido", comment: "Emblemas impecáveis. O tamanho ficou um pouco justo, mas serve bem. Chegou rápido." },
+    { rating: 5, title: "Como a oficial!", comment: "Qualidade idêntica à oficial por um preço imbatível. Chegou muito bem embalada." },
+    { rating: 5, title: "Personalização de topo", comment: "O nome e número vêm com a fonte oficial. Tudo muito limpo e bem colado." },
+    { rating: 5, title: "Super confortável", comment: "A versão de adepto é super confortável para o dia a dia. Costuras impecáveis." },
+    { rating: 4, title: "Qualidade 10/10", comment: "Camisola de jogador premium. Demorou 2 dias a mais, mas a camisola é espetacular." },
+    { rating: 5, title: "Brutal!", comment: "A edição especial é linda. Todos os bordados perfeitos. Voltarei a comprar." },
+    { rating: 5, title: "Atendimento exemplar", comment: "Tive dúvidas no tamanho e responderam-me em minutos. Super atenciosos!" },
+    { rating: 5, title: "Perfeição nos detalhes", comment: "Os acabamentos são de alta qualidade. Excelente caimento e muito respirável." },
+    { rating: 5, title: "Espetacular!", comment: "Muito melhor do que esperava. O tecido é super fresco e os detalhes incríveis." },
+    { rating: 4, title: "Demorou mas valeu a pena", comment: "Chegou um pouco fora do prazo estimado, mas a camisola é linda e de grande qualidade." },
+    { rating: 5, title: "Compra perfeita", comment: "Tudo cinco estrelas. Rapidez no envio e produto impecável." },
+    { rating: 5, title: "Recomendo vivamente", comment: "O tecido é espetacular e a estampagem de alta durabilidade. Já lavei e está como nova!" },
+    { rating: 5, title: "Cores fantásticas", comment: "As cores e os emblemas estão espetaculares. Veste muito bem." },
+    { rating: 4, title: "Muito boa qualidade", comment: "Super macia e confortável. Um ligeiro atraso na transportadora mas correu tudo bem." },
+    { rating: 5, title: "Preço/Qualidade imbatível", comment: "Por este preço não se encontra nada melhor. A qualidade é simplesmente fantástica." },
+    { rating: 5, title: "Estou impressionado", comment: "Não esperava que fosse tão idêntica à original. Os detalhes são incríveis!" },
+    { rating: 5, title: "Melhor do que esperava", comment: "O tecido de jogador assenta super bem. Muito leve e respirável." },
+    { rating: 5, title: "Recomendo sem dúvidas", comment: "Envio rápido, embalagem excelente e camisola perfeita. 5 estrelas!" },
+    { rating: 4, title: "Boa compra", comment: "Gostei muito. Tecido bom e acabamentos de qualidade. Chegou tudo certinho." },
+    { rating: 5, title: "Top, top!", comment: "A personalização ficou excelente. O lettering oficial faz toda a diferença." }
+  ];
+
+  // Base list
+  const baseReviewsPool = [];
+  
+  // Seed function
+  function seededRandom(seed) {
+    const x = Math.sin(seed) * 10000;
+    return x - Math.floor(x);
+  }
+
+  // Generate 80 reviews deterministically using deterministic seeded random indexes
+  for (let i = 0; i < 80; i++) {
+    const nameIdx = Math.floor(seededRandom(i * 12.3 + 1.1) * firstNames.length);
+    const lastIdx = Math.floor(seededRandom(i * 45.6 + 2.2) * lastNames.length);
+    const tempIdx = Math.floor(seededRandom(i * 78.9 + 3.3) * templates.length);
+    const daysAgo = Math.floor(seededRandom(i * 99.1 + 4.4) * 5); // 0 (Hoje) to 4 days ago
+
+    baseReviewsPool.push({
+      id: `global_seeded_${i}`,
+      name: `${firstNames[nameIdx]} ${lastNames[lastIdx]}`,
+      rating: templates[tempIdx].rating,
+      title: templates[tempIdx].title,
+      comment: templates[tempIdx].comment,
+      daysAgo: daysAgo,
+      verified: true
+    });
+  }
+
+  // Sort baseReviewsPool so more recent reviews are first
+  baseReviewsPool.sort((a, b) => a.daysAgo - b.daysAgo);
+
+  // Format dates nicely
+  baseReviewsPool.forEach(rev => {
+    if (rev.daysAgo === 0) {
+      rev.date = "Hoje";
+    } else if (rev.daysAgo === 1) {
+      rev.date = "Ontem";
+    } else {
+      rev.date = `Há ${rev.daysAgo} dias`;
+    }
+  });
+
+  // Load custom reviews from localStorage
+  let customReviews = JSON.parse(localStorage.getItem(globalReviewsKey) || '[]');
+  let activeModalRating = 5;
+
+  // Modal open / close handlers
+  const openModalBtn = document.getElementById('GlobalReviewFormBtn');
+  const modalOverlay = document.getElementById('GlobalReviewModal');
+  const closeModalBtn = document.getElementById('CloseGlobalReviewModalBtn');
+
+  if (openModalBtn && modalOverlay) {
+    openModalBtn.addEventListener('click', () => {
+      modalOverlay.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    });
+
+    // Auto-open modal if URL parameter ?review=true is present
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.has('review')) {
+      modalOverlay.classList.add('open');
+      document.body.style.overflow = 'hidden';
+      
+      const orderIdParam = urlParams.get('order_id');
+      if (orderIdParam) {
+        const orderInput = document.getElementById('ModalOrderId');
+        if (orderInput) orderInput.value = decodeURIComponent(orderIdParam);
+      }
+    }
+  }
+
+  if (closeModalBtn && modalOverlay) {
+    closeModalBtn.addEventListener('click', () => {
+      modalOverlay.classList.remove('open');
+      document.body.style.overflow = '';
+    });
+    
+    // Click outside modal card to close
+    modalOverlay.addEventListener('click', (e) => {
+      if (e.target === modalOverlay) {
+        modalOverlay.classList.remove('open');
+        document.body.style.overflow = '';
+      }
+    });
+  }
+
+  // Handle modal rating select stars
+  const modalStarBtns = document.querySelectorAll('#ModalRatingStars .modal-star-btn');
+  modalStarBtns.forEach(btn => {
+    btn.addEventListener('click', function() {
+      const rating = parseInt(this.getAttribute('data-rating'));
+      activeModalRating = rating;
+      
+      modalStarBtns.forEach(b => {
+        const bRating = parseInt(b.getAttribute('data-rating'));
+        if (bRating <= rating) {
+          b.classList.add('active');
+        } else {
+          b.classList.remove('active');
+        }
+      });
+    });
+  });
+
+  // Handle form submit
+  const modalForm = document.getElementById('HomepageSubmitReviewForm');
+  if (modalForm) {
+    modalForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const name = document.getElementById('ModalName').value.trim();
+      const comment = document.getElementById('ModalComment').value.trim();
+      
+      if (!name || !comment) return;
+
+      const newReview = {
+        id: 'global_custom_' + Date.now(),
+        name: name,
+        rating: activeModalRating,
+        title: "",
+        comment: comment,
+        date: "Hoje",
+        verified: true,
+        orderId: "",
+        timestamp: Date.now()
+      };
+
+      // Add to custom reviews list
+      customReviews.unshift(newReview);
+      localStorage.setItem(globalReviewsKey, JSON.stringify(customReviews));
+
+      // Reset & close modal
+      modalForm.reset();
+      modalOverlay.classList.remove('open');
+      document.body.style.overflow = '';
+      activeModalRating = 5;
+      modalStarBtns.forEach(b => b.classList.add('active'));
+
+      // Show popup notification
+      showSuccessPopup("Avaliação submetida com sucesso! Obrigado pelo feedback.");
+
+      // Re-run stats & render
+      calculateStatsAndRender();
+    });
+  }
+
+  function showSuccessPopup(message) {
+    const popup = document.createElement('div');
+    popup.className = 'review-submitted-success-popup';
+    popup.innerHTML = `
+      <span>✓</span>
+      <span>${message}</span>
+    `;
+    document.body.appendChild(popup);
+    
+    setTimeout(() => {
+      popup.style.opacity = '0';
+      popup.style.transform = 'translateY(20px)';
+      popup.style.transition = 'all 0.4s ease';
+      setTimeout(() => popup.remove(), 400);
+    }, 3600);
+  }
+
+  // Calculate and Render
+  function calculateStatsAndRender() {
+    // Recalculate deleted reviews offset
+    let deletedCount = 0;
+    deletedReviewIds.forEach(id => {
+      deletedCount++;
+    });
+    const totalCount = Math.max(0, baseTotalCount + customReviews.length - deletedCount);
+    
+    const filteredBasePool = baseReviewsPool.filter(rev => !deletedReviewIds.includes(rev.id));
+    const filteredCustomPool = customReviews.filter(rev => !deletedReviewIds.includes(rev.id));
+    
+    let totalSum = baseTotalCount * baseAvgRating;
+    baseReviewsPool.forEach(rev => {
+      if (deletedReviewIds.includes(rev.id)) {
+        totalSum -= rev.rating;
+      }
+    });
+    filteredCustomPool.forEach(rev => {
+      totalSum += rev.rating;
+    });
+
+    const avgRating = totalCount > 0 ? (totalSum / totalCount).toFixed(1) : "0.0";
+
+    // Update Header
+    const scoreNumEl = document.getElementById('GlobalAvgRating');
+    const totalTextEl = document.getElementById('GlobalTotalCountText');
+    if (scoreNumEl) scoreNumEl.innerText = avgRating;
+    if (totalTextEl) totalTextEl.innerText = `Excelente (baseado em ${totalCount} avaliações)`;
+
+    // Render Cards in Carousel Track
+    renderCarouselCards();
+  }
+
+  // Global admin delete function
+  window.deleteReview = function(id) {
+    if (!confirm("Tem a certeza que deseja eliminar esta avaliação de forma permanente?")) return;
+    
+    if (!deletedReviewIds.includes(id)) {
+      deletedReviewIds.push(id);
+      localStorage.setItem(deletedReviewsKey, JSON.stringify(deletedReviewIds));
+    }
+    
+    customReviews = customReviews.filter(rev => rev.id !== id);
+    localStorage.setItem(globalReviewsKey, JSON.stringify(customReviews));
+    
+    showSuccessPopup("Avaliação eliminada com sucesso!");
+    calculateStatsAndRender();
+  };
+
+  function renderCarouselCards() {
+    const track = document.getElementById('ReviewsCarouselTrack');
+    if (!track) return;
+
+    // Filter out moderated reviews
+    const filteredBasePool = baseReviewsPool.filter(rev => !deletedReviewIds.includes(rev.id));
+    const filteredCustomPool = customReviews.filter(rev => !deletedReviewIds.includes(rev.id));
+
+    // Custom user-submitted reviews go first
+    const mergedPool = [...filteredCustomPool, ...filteredBasePool];
+
+    let trackHtml = '';
+    mergedPool.forEach(rev => {
+      // Stars
+      let starsHtml = '';
+      for (let i = 1; i <= 5; i++) {
+        if (i <= rev.rating) {
+          starsHtml += '<svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>';
+        } else {
+          starsHtml += '<svg class="empty" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>';
+        }
+      }
+
+      const initials = rev.name.split(' ').map(w => w[0]).join('').toUpperCase().substring(0, 2);
+
+      trackHtml += `
+        <div class="homepage-review-card" style="position: relative;">
+          ${isAdminMode ? `<button type="button" class="admin-delete-review-btn" onclick="deleteReview('${rev.id}')" style="position: absolute; top: 12px; right: 12px; background: #dc3545; color: white; border: none; border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-size: 11px; cursor: pointer; z-index: 100; box-shadow: 0 2px 5px rgba(0,0,0,0.2); transition: all 0.2s;" title="Eliminar Avaliação (Moderação Admin)">🗑️</button>` : ''}
+          <div class="card-header-line">
+            <div class="card-rating-stars">
+              ${starsHtml}
+            </div>
+            <span class="card-date">${rev.date}</span>
+          </div>
+          
+          ${rev.title ? `<h4 class="card-review-title">${rev.title}</h4>` : ''}
+          <p class="card-review-comment">${rev.comment}</p>
+          
+          <div class="card-author-line">
+            <div class="card-avatar">${initials}</div>
+            <div class="card-author-details">
+              <span class="card-author-name">${rev.name}</span>
+              ${rev.verified ? '<span class="card-verified-badge">Compra Verificada</span>' : ''}
+            </div>
+          </div>
+        </div>
+      `;
+    });
+
+    track.innerHTML = trackHtml;
+
+    // Render Indicator Dots
+    renderIndicatorDots(mergedPool.length);
+  }
+
+  function renderIndicatorDots(count) {
+    const dotsContainer = document.getElementById('CarouselDotsIndicator');
+    const track = document.getElementById('ReviewsCarouselTrack');
+    if (!dotsContainer || !track) return;
+
+    let viewSize = 3;
+    if (window.innerWidth <= 768) {
+      viewSize = 1;
+    } else if (window.innerWidth <= 1200) {
+      viewSize = 2;
+    }
+
+    const steps = Math.ceil(count / viewSize);
+
+    let dotsHtml = '';
+    for (let i = 0; i < steps; i++) {
+      dotsHtml += `<span class="carousel-dot ${i === 0 ? 'active' : ''}" data-step="${i}"></span>`;
+    }
+    dotsContainer.innerHTML = dotsHtml;
+
+    // Add click event to dots
+    dotsContainer.querySelectorAll('.carousel-dot').forEach(dot => {
+      dot.addEventListener('click', function() {
+        const step = parseInt(this.getAttribute('data-step'));
+        const scrollWidth = track.clientWidth;
+        track.scrollLeft = step * scrollWidth;
+        
+        dotsContainer.querySelectorAll('.carousel-dot').forEach(d => d.classList.remove('active'));
+        this.classList.add('active');
+      });
+    });
+
+    // Sync active dot on scroll
+    track.addEventListener('scroll', () => {
+      const scrollLeft = track.scrollLeft;
+      const scrollWidth = track.clientWidth;
+      const activeStep = Math.round(scrollLeft / scrollWidth);
+      
+      dotsContainer.querySelectorAll('.carousel-dot').forEach((dot, index) => {
+        if (index === activeStep) {
+          dot.classList.add('active');
+        } else {
+          dot.classList.remove('active');
+        }
+      });
+    });
+  }
+
+  // Prev / Next button click handlers
+  const prevBtn = document.getElementById('CarouselPrevBtn');
+  const nextBtn = document.getElementById('CarouselNextBtn');
+  const track = document.getElementById('ReviewsCarouselTrack');
+
+  if (prevBtn && nextBtn && track) {
+    prevBtn.addEventListener('click', () => {
+      track.scrollLeft -= track.clientWidth;
+    });
+    
+    nextBtn.addEventListener('click', () => {
+      track.scrollLeft += track.clientWidth;
+    });
+  }
+
+  // Listen to window resize to rebuild dots properly
+  window.addEventListener('resize', () => {
+    const customReviewsLength = JSON.parse(localStorage.getItem(globalReviewsKey) || '[]').length;
+    renderIndicatorDots(baseReviewsPool.length + customReviewsLength);
+  });
+
+  // Run initial calculation & render
+  calculateStatsAndRender();
+}
+
+if (document.readyState === 'complete' || document.readyState === 'interactive') {
+  initHomepageReviews();
+} else {
+  document.addEventListener('DOMContentLoaded', initHomepageReviews);
+}
+</script>
+
+{% schema %}
+{
+  "name": "Avaliações Homepage",
+  "settings": [],
+  "presets": [
+    {
+      "name": "Avaliações Homepage",
+      "category": "Reviews"
+    }
+  ]
+}
+{% endschema %}

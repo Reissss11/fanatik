@@ -37,11 +37,16 @@
         "products_to_show": 8,
         "view_all_label": "Ver Tudo"
       }
+    },
+    "homepage_reviews": {
+      "type": "homepage-reviews",
+      "settings": {}
     }
   },
   "order": [
     "slideshow",
     "featured_popular",
-    "featured_new"
+    "featured_new",
+    "homepage_reviews"
   ]
 }

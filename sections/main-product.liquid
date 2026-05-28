@@ -266,7 +266,590 @@
 
     </div>
   </div>
+
+  <!-- Reviews Section -->
+  <hr class="reviews-divider">
+  
+  <div class="jersey-reviews-section" id="ProductReviewsSection" data-product-id="{{ product.id }}">
+    <h3 class="reviews-section-title">Avaliações de Clientes</h3>
+    
+    <div class="reviews-layout">
+      <!-- Left Column: Summary Card -->
+      <div class="reviews-summary-card">
+        <div class="summary-rating-number" id="SummaryAvgRating">4.7</div>
+        
+        <div class="summary-stars-container" id="SummaryAvgStars"></div>
+        
+        <div class="summary-total-text" id="SummaryTotalCountText">Baseado em 247 avaliações</div>
+        
+        <div class="rating-distribution" id="RatingDistributionBars"></div>
+        
+        <button type="button" class="write-review-trigger-btn" id="WriteReviewTriggerBtn">
+          <span>Escrever uma Avaliação</span>
+          <span>✍️</span>
+        </button>
+        
+        <!-- Write Review Form Wrapper -->
+        <div class="write-review-form-wrapper" id="WriteReviewFormWrapper">
+          <h4 class="review-form-title">A sua Avaliação</h4>
+          
+          <form id="SubmitProductReviewForm">
+            <div class="review-form-group">
+              <label>Nome Completo *</label>
+              <input type="text" id="ReviewFormName" class="review-form-input" placeholder="Ex: João Silva" required>
+            </div>
+            
+            <div class="review-form-group">
+              <label>Classificação *</label>
+              <div class="rating-select-stars" id="RatingSelectStars">
+                <button type="button" class="star-rating-btn active" data-rating="1">
+                  <svg class="star-icon" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                </button>
+                <button type="button" class="star-rating-btn active" data-rating="2">
+                  <svg class="star-icon" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                </button>
+                <button type="button" class="star-rating-btn active" data-rating="3">
+                  <svg class="star-icon" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                </button>
+                <button type="button" class="star-rating-btn active" data-rating="4">
+                  <svg class="star-icon" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                </button>
+                <button type="button" class="star-rating-btn active" data-rating="5">
+                  <svg class="star-icon" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                </button>
+              </div>
+            </div>
+            
+            <div class="review-form-group">
+              <label>Comentário *</label>
+              <textarea id="ReviewFormComment" class="review-form-input" rows="4" placeholder="Escreva aqui a sua opinião sobre o produto..." required></textarea>
+            </div>
+            
+            <button type="submit" class="review-form-submit-btn">Submeter Avaliação</button>
+          </form>
+        </div>
+      </div>
+      
+      <!-- Right Column: Controls & List -->
+      <div class="reviews-list-column">
+        <div class="reviews-controls-bar">
+          <div class="reviews-filters-tabs" id="ReviewsFilterTabs">
+            <button type="button" class="review-filter-tab active" data-filter="all">Todas as Estrelas</button>
+            <button type="button" class="review-filter-tab" data-filter="5">5 estrelas</button>
+            <button type="button" class="review-filter-tab" data-filter="4">4 estrelas</button>
+          </div>
+          
+          <select class="reviews-sort-select" id="ReviewsSortSelect">
+            <option value="recent">Mais Recentes</option>
+            <option value="high">Classificação Alta</option>
+            <option value="low">Classificação Baixa</option>
+          </select>
+        </div>
+        
+        <!-- List container -->
+        <div id="ReviewsListContainer"></div>
+        
+        <!-- Load More Button -->
+        <button type="button" class="load-more-reviews-btn" id="LoadMoreReviewsBtn">
+          <span>Carregar Mais Avaliações</span>
+          <span>▼</span>
+        </button>
+      </div>
+    </div>
+  </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const reviewsSection = document.getElementById('ProductReviewsSection');
+  if (!reviewsSection) return;
+
+  const productId = reviewsSection.getAttribute('data-product-id');
+  const localReviewsKey = 'fanatik_reviews_' + productId;
+  const deletedProdKey = 'fanatik_deleted_product_review_ids';
+  let deletedProdIds = JSON.parse(localStorage.getItem(deletedProdKey) || '[]');
+  const isAdminMode = localStorage.getItem('fanatik_admin_moderation') === 'true';
+
+  // Initial base mock statistics
+  const baseTotalReviews = 247;
+  const baseAvgRating = 4.7;
+  
+  // Base star distributions
+  const baseStarsDistribution = {
+    5: 198,
+    4: 39,
+    3: 7,
+    2: 2,
+    1: 1
+  };
+
+  // Base mock pool of actual reviews (in PT-PT)
+  const baseReviewsPool = [
+    {
+      id: "base_1",
+      name: "João Silva",
+      rating: 5,
+      title: "Qualidade fantástica, recomendo!",
+      comment: "Encomendei a versão jogador e os detalhes são simplesmente impressionantes. O tecido é muito respirável e a personalização do nome/número está perfeita. Chegou em 5 dias.",
+      date: "Há 3 dias",
+      helpfulCount: 24,
+      verified: true
+    },
+    {
+      id: "base_2",
+      name: "Ricardo Santos",
+      rating: 4,
+      title: "Excelente qualidade, mas pequeno atraso",
+      comment: "A camisola é linda e o tecido é super confortável, a qualidade é incrível. O único detalhe foi que a entrega atrasou 2 dias em relação ao prazo estimado, mas o apoio ao cliente foi super atencioso e resolveu logo. Recomendo muito!",
+      date: "Há 1 semana",
+      helpfulCount: 18,
+      verified: true
+    },
+    {
+      id: "base_3",
+      name: "Mariana Costa",
+      rating: 5,
+      title: "Excelente, melhor do que esperava",
+      comment: "Comprei para oferecer ao meu namorado e ele adorou! A versão adepto é muito confortável para usar no dia a dia. A qualidade dos emblemas é excelente. Recomendo sem dúvida.",
+      date: "Há 2 semanas",
+      helpfulCount: 15,
+      verified: true
+    },
+    {
+      id: "base_4",
+      name: "Tiago Ferreira",
+      rating: 4,
+      title: "Tamanho ligeiramente justo, mas linda!",
+      comment: "A camisola tem uma qualidade brutal, os acabamentos da versão jogador são de topo. Apenas aconselho a encomendar um tamanho acima do habitual se preferirem um corte mais largo, pois fica um pouco justa no peito. Muito satisfeito!",
+      date: "Há 2 semanas",
+      helpfulCount: 11,
+      verified: true
+    },
+    {
+      id: "base_5",
+      name: "Diogo Martins",
+      rating: 5,
+      title: "Personalização impecável e tecido top",
+      comment: "Já é a terceira camisola que compro na Fanatik e como sempre a qualidade não desilude. Personalização oficial muito bem colada e resistente às lavagens. Envio rápido para Lisboa.",
+      date: "Há 3 semanas",
+      helpfulCount: 9,
+      verified: true
+    },
+    {
+      id: "base_6",
+      name: "Pedro Neves",
+      rating: 4,
+      title: "Camisola excelente, envio demorou um pouco",
+      comment: "A nível de tecido, costuras e emblemas está nota 10, parece mesmo de loja oficial. O envio demorou cerca de uma semana e meia (2 dias fora do prazo estimado), mas valeu a pena a espera. Voltarei a comprar.",
+      date: "Há 1 mês",
+      helpfulCount: 14,
+      verified: true
+    },
+    {
+      id: "base_7",
+      name: "Gonçalo Rocha",
+      rating: 5,
+      title: "Qualidade excelente, super confortável",
+      comment: "Superou todas as minhas expectativas. O corte é perfeito e o tecido é levíssimo. A edição especial que encomendei é mesmo espetacular, cheia de detalhes lindos. Recomendo a loja.",
+      date: "Há 1 mês",
+      helpfulCount: 7,
+      verified: true
+    },
+    {
+      id: "base_8",
+      name: "Sofia Pinto",
+      rating: 5,
+      title: "Completamente satisfeita, 5 estrelas!",
+      comment: "Sem palavras para a qualidade desta camisola de adepto. O tecido é suave, os bordados estão super limpos e a entrega foi super rápida. Excelente compra.",
+      date: "Há 1 mês",
+      helpfulCount: 5,
+      verified: true
+    }
+  ];
+
+  // Helper arrays for helpful tracking
+  let helpfulClicked = JSON.parse(localStorage.getItem('fanatik_helpful_clicked') || '[]');
+
+  // Load custom reviews from localStorage
+  let customReviews = JSON.parse(localStorage.getItem(localReviewsKey) || '[]');
+
+  // UI state
+  let currentFilter = 'all';
+  let currentSort = 'recent';
+  let itemsToShow = 4;
+  let activeFormRating = 5;
+
+  // Toggle write review form
+  const writeTriggerBtn = document.getElementById('WriteReviewTriggerBtn');
+  const formWrapper = document.getElementById('WriteReviewFormWrapper');
+  if (writeTriggerBtn && formWrapper) {
+    writeTriggerBtn.addEventListener('click', function() {
+      formWrapper.classList.toggle('open');
+      if (formWrapper.classList.contains('open')) {
+        formWrapper.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    });
+  }
+
+  // Handle rating select stars
+  const starBtns = document.querySelectorAll('#RatingSelectStars .star-rating-btn');
+  starBtns.forEach(btn => {
+    btn.addEventListener('click', function() {
+      const rating = parseInt(this.getAttribute('data-rating'));
+      activeFormRating = rating;
+      
+      starBtns.forEach(b => {
+        const bRating = parseInt(b.getAttribute('data-rating'));
+        if (bRating <= rating) {
+          b.classList.add('active');
+        } else {
+          b.classList.remove('active');
+        }
+      });
+    });
+  });
+
+  // Handle review form submission
+  const reviewForm = document.getElementById('SubmitProductReviewForm');
+  if (reviewForm) {
+    reviewForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const name = document.getElementById('ReviewFormName').value.trim();
+      const comment = document.getElementById('ReviewFormComment').value.trim();
+      
+      if (!name || !comment) return;
+
+      // Create new review object
+      const newReview = {
+        id: 'custom_' + Date.now(),
+        name: name,
+        rating: activeFormRating,
+        title: "",
+        comment: comment,
+        date: "Hoje",
+        helpfulCount: 0,
+        verified: true,
+        orderId: "",
+        timestamp: Date.now()
+      };
+
+      // Add to custom reviews array and save to localStorage
+      customReviews.unshift(newReview);
+      localStorage.setItem(localReviewsKey, JSON.stringify(customReviews));
+
+      // Reset form & close wrapper
+      reviewForm.reset();
+      formWrapper.classList.remove('open');
+      activeFormRating = 5;
+      starBtns.forEach(b => b.classList.add('active'));
+
+      // Show success notification popup
+      showSuccessPopup("Avaliação submetida com sucesso! Obrigado pela preferência.");
+
+      // Re-run stats calculation and re-render list
+      calculateStatsAndRender();
+    });
+  }
+
+  // Show dynamic green success notification popup at bottom-right
+  function showSuccessPopup(message) {
+    const popup = document.createElement('div');
+    popup.className = 'review-submitted-success-popup';
+    popup.innerHTML = `
+      <span>✓</span>
+      <span>${message}</span>
+    `;
+    document.body.appendChild(popup);
+    
+    // Auto-remove after 4 seconds
+    setTimeout(() => {
+      popup.style.opacity = '0';
+      popup.style.transform = 'translateY(20px)';
+      popup.style.transition = 'all 0.4s ease';
+      setTimeout(() => popup.remove(), 400);
+    }, 3600);
+  }
+
+  // Calculate overall statistics and render summary + review list
+  function calculateStatsAndRender() {
+    let deletedCount = 0;
+    deletedProdIds.forEach(id => {
+      deletedCount++;
+    });
+    const totalCount = Math.max(0, baseTotalReviews + customReviews.length - deletedCount);
+    
+    let totalSum = baseTotalReviews * baseAvgRating;
+    baseReviewsPool.forEach(rev => {
+      if (deletedProdIds.includes(rev.id)) {
+        totalSum -= rev.rating;
+      }
+    });
+
+    const starCounts = { ...baseStarsDistribution };
+    baseReviewsPool.forEach(rev => {
+      if (deletedProdIds.includes(rev.id)) {
+        starCounts[rev.rating] = Math.max(0, (starCounts[rev.rating] || 0) - 1);
+      }
+    });
+
+    const filteredCustomPool = customReviews.filter(rev => !deletedProdIds.includes(rev.id));
+    filteredCustomPool.forEach(rev => {
+      totalSum += rev.rating;
+      starCounts[rev.rating] = (starCounts[rev.rating] || 0) + 1;
+    });
+
+    const avgRating = totalCount > 0 ? (totalSum / totalCount).toFixed(1) : "0.0";
+
+    // Update Overall Summary values in DOM
+    const avgRatingEl = document.getElementById('SummaryAvgRating');
+    const totalCountTextEl = document.getElementById('SummaryTotalCountText');
+    if (avgRatingEl) avgRatingEl.innerText = avgRating;
+    if (totalCountTextEl) totalCountTextEl.innerText = `Baseado em ${totalCount} avaliações`;
+
+    // Render summary average stars
+    const avgStarsEl = document.getElementById('SummaryAvgStars');
+    if (avgStarsEl) {
+      let starsHtml = '';
+      const fullStars = Math.floor(parseFloat(avgRating));
+      const hasHalf = parseFloat(avgRating) - fullStars >= 0.5;
+      for (let i = 1; i <= 5; i++) {
+        if (i <= fullStars) {
+          starsHtml += '<svg class="star-icon" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>';
+        } else if (i === fullStars + 1 && hasHalf) {
+          starsHtml += '<svg class="star-icon" viewBox="0 0 24 24"><defs><linearGradient id="halfStar"><stop offset="50%" stop-color="#ffc107"/><stop offset="50%" stop-color="rgba(var(--color-primary-rgb), 0.15)"/></linearGradient></defs><path fill="url(#halfStar)" d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>';
+        } else {
+          starsHtml += '<svg class="star-icon empty" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>';
+        }
+      }
+      avgStarsEl.innerHTML = starsHtml;
+    }
+
+    // Render distribution rows (from 5 down to 1 star)
+    const distBarsEl = document.getElementById('RatingDistributionBars');
+    if (distBarsEl) {
+      let barsHtml = '';
+      for (let s = 5; s >= 1; s--) {
+        const count = starCounts[s] || 0;
+        const percent = totalCount > 0 ? ((count / totalCount) * 100).toFixed(0) : 0;
+        barsHtml += `
+          <div class="distribution-row">
+            <span class="distribution-label">${s} ★</span>
+            <div class="distribution-bar-bg">
+              <div class="distribution-bar-fill" style="width: ${percent}%"></div>
+            </div>
+            <span class="distribution-count">${count}</span>
+          </div>
+        `;
+      }
+      distBarsEl.innerHTML = barsHtml;
+    }
+
+    renderReviewsList();
+  }
+
+  // Global admin product review delete function
+  window.deleteProductReview = function(id) {
+    if (!confirm("Tem a certeza que deseja eliminar esta avaliação de forma permanente?")) return;
+    
+    if (!deletedProdIds.includes(id)) {
+      deletedProdIds.push(id);
+      localStorage.setItem(deletedProdKey, JSON.stringify(deletedProdIds));
+    }
+    
+    customReviews = customReviews.filter(rev => rev.id !== id);
+    localStorage.setItem(localReviewsKey, JSON.stringify(customReviews));
+    
+    showSuccessPopup("Avaliação eliminada com sucesso!");
+    calculateStatsAndRender();
+  };
+
+  // Function to process filtering, sorting, pagination, and output to HTML
+  function renderReviewsList() {
+    const listContainer = document.getElementById('ReviewsListContainer');
+    const loadMoreBtn = document.getElementById('LoadMoreReviewsBtn');
+    if (!listContainer) return;
+
+    // Filter out moderated reviews
+    const filteredBase = baseReviewsPool.filter(rev => !deletedProdIds.includes(rev.id));
+    const filteredCustom = customReviews.filter(rev => !deletedProdIds.includes(rev.id));
+
+    let mergedPool = [...filteredCustom, ...filteredBase];
+
+    // 1. Apply Filtering
+    if (currentFilter !== 'all') {
+      const filterStars = parseInt(currentFilter);
+      mergedPool = mergedPool.filter(r => r.rating === filterStars);
+    }
+
+    // 2. Apply Sorting
+    if (currentSort === 'recent') {
+      mergedPool.sort((a, b) => {
+        const aVal = a.timestamp || 0;
+        const bVal = b.timestamp || 0;
+        if (aVal !== bVal) return bVal - aVal;
+        return 0;
+      });
+    } else if (currentSort === 'high') {
+      mergedPool.sort((a, b) => b.rating - a.rating);
+    } else if (currentSort === 'low') {
+      mergedPool.sort((a, b) => a.rating - b.rating);
+    }
+
+    const totalMatching = mergedPool.length;
+
+    // Handle empty state
+    if (totalMatching === 0) {
+      listContainer.innerHTML = `
+        <div class="no-reviews-placeholder">
+          Sem avaliações correspondentes com ${currentFilter} ★ para este produto.
+        </div>
+      `;
+      if (loadMoreBtn) loadMoreBtn.style.display = 'none';
+      return;
+    }
+
+    // Slice for pagination
+    const itemsToDisplay = mergedPool.slice(0, itemsToShow);
+
+    // Show or hide Load More button
+    if (loadMoreBtn) {
+      if (itemsToShow >= totalMatching) {
+        loadMoreBtn.style.display = 'none';
+      } else {
+        loadMoreBtn.style.display = 'inline-flex';
+      }
+    }
+
+    // Build list HTML
+    let listHtml = '';
+    itemsToDisplay.forEach(review => {
+      let reviewStarsHtml = '';
+      for (let i = 1; i <= 5; i++) {
+        if (i <= review.rating) {
+          reviewStarsHtml += '<svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>';
+        } else {
+          reviewStarsHtml += '<svg class="empty" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>';
+        }
+      }
+
+      const initials = review.name.split(' ').map(w => w[0]).join('').toUpperCase().substring(0, 2);
+      const isHelpfulActive = helpfulClicked.includes(review.id);
+
+      listHtml += `
+        <div class="review-item-card" data-review-id="${review.id}" style="position: relative;">
+          ${isAdminMode ? `<button type="button" class="admin-delete-review-btn" onclick="deleteProductReview('${review.id}')" style="position: absolute; top: 12px; right: 12px; background: #dc3545; color: white; border: none; border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-size: 11px; cursor: pointer; z-index: 100; box-shadow: 0 2px 5px rgba(0,0,0,0.2); transition: all 0.2s;" title="Eliminar Avaliação (Moderação Admin)">🗑️</button>` : ''}
+          <div class="review-card-header">
+            <div class="review-author-info">
+              <div class="review-author-avatar">${initials}</div>
+              <div class="review-author-meta">
+                <span class="review-author-name">
+                  ${review.name}
+                  ${review.verified ? '<span class="verified-badge">✓ Compra Verificada</span>' : ''}
+                </span>
+                <span class="review-date-text">${review.date}</span>
+              </div>
+            </div>
+            
+            <div class="review-card-rating">
+              <div class="review-stars">
+                ${reviewStarsHtml}
+              </div>
+            </div>
+          </div>
+          
+          ${review.title ? `<h5 class="review-card-title">${review.title}</h5>` : ''}
+          <p class="review-card-content">${review.comment}</p>
+          
+          <div class="review-card-footer">
+            <span>Esta avaliação foi útil para si?</span>
+            <button type="button" class="review-helpful-btn ${isHelpfulActive ? 'active' : ''}" data-review-id="${review.id}">
+              <span>👍 Útil</span>
+              <span class="helpful-badge-count">(${review.helpfulCount})</span>
+            </button>
+          </div>
+        </div>
+      `;
+    });
+
+    listContainer.innerHTML = listHtml;
+
+    // Bind event listeners to helpful buttons
+    listContainer.querySelectorAll('.review-helpful-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const revId = this.getAttribute('data-review-id');
+        const isAlreadyActive = this.classList.contains('active');
+        
+        if (isAlreadyActive) {
+          helpfulClicked = helpfulClicked.filter(id => id !== revId);
+          this.classList.remove('active');
+        } else {
+          helpfulClicked.push(revId);
+          this.classList.add('active');
+        }
+        
+        localStorage.setItem('fanatik_helpful_clicked', JSON.stringify(helpfulClicked));
+        incrementHelpfulCount(revId, !isAlreadyActive);
+      });
+    });
+  }
+
+  // Increment helpful count helper
+  function incrementHelpfulCount(revId, isIncrement) {
+    let found = false;
+    customReviews.forEach(r => {
+      if (r.id === revId) {
+        r.helpfulCount += isIncrement ? 1 : -1;
+        found = true;
+      }
+    });
+
+    if (found) {
+      localStorage.setItem(localReviewsKey, JSON.stringify(customReviews));
+    } else {
+      baseReviewsPool.forEach(r => {
+        if (r.id === revId) {
+          r.helpfulCount += isIncrement ? 1 : -1;
+        }
+      });
+    }
+
+    renderReviewsList();
+  }
+
+  // Bind controls event listeners
+  const filterTabs = document.querySelectorAll('#ReviewsFilterTabs .review-filter-tab');
+  filterTabs.forEach(tab => {
+    tab.addEventListener('click', function() {
+      filterTabs.forEach(t => t.classList.remove('active'));
+      this.classList.add('active');
+      currentFilter = this.getAttribute('data-filter');
+      itemsToShow = 4;
+      renderReviewsList();
+    });
+  });
+
+  const sortSelect = document.getElementById('ReviewsSortSelect');
+  if (sortSelect) {
+    sortSelect.addEventListener('change', function() {
+      currentSort = this.value;
+      itemsToShow = 4;
+      renderReviewsList();
+    });
+  }
+
+  const loadMoreBtn = document.getElementById('LoadMoreReviewsBtn');
+  if (loadMoreBtn) {
+    loadMoreBtn.addEventListener('click', function() {
+      itemsToShow += 4;
+      renderReviewsList();
+    });
+  }
+
+  // Initial Calculation & Render
+  calculateStatsAndRender();
+});
+</script>
 
 <script type="application/json" id="ProductVariantsJson">
   [
