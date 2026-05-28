@@ -12,8 +12,14 @@
       {%- assign available_sizes = available_sizes | append: size_down | append: "," -%}
     {%- endif -%}
   {%- endfor -%}
+  {%- assign tag_handles = "" -%}
+  {%- for tag in card_product.tags -%}
+    {%- assign tag_handle = tag | handle -%}
+    {%- assign tag_handles = tag_handles | append: tag_handle | append: "," -%}
+  {%- endfor -%}
   <div class="jersey-card" 
        data-tags="{{ card_product.tags | join: ',' | downcase | escape }}"
+       data-tags-handles="{{ tag_handles | escape }}"
        data-price="{{ card_product.price }}"
        data-sizes="{{ available_sizes | escape }}">
     <a href="{{ card_product.url }}" class="jersey-card-link">

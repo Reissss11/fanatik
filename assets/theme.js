@@ -1089,14 +1089,19 @@ function initCollectionFilters() {
     const matchingCards = [];
 
     cards.forEach(card => {
-      const cardTagsStr = card.getAttribute('data-tags') || '';
-      const cardTags = cardTagsStr.split(',').map(t => t.trim().toLowerCase());
-      
-      const tagHandles = cardTags.map(tag => {
-        return tag.toLowerCase()
-          .replace(/[^a-z0-9]+/g, '-')
-          .replace(/^-+|-+$/g, '');
-      });
+      const cardTagHandlesStr = card.getAttribute('data-tags-handles') || '';
+      let tagHandles = [];
+      if (cardTagHandlesStr) {
+        tagHandles = cardTagHandlesStr.split(',').map(t => t.trim().toLowerCase()).filter(t => t !== '');
+      } else {
+        const cardTagsStr = card.getAttribute('data-tags') || '';
+        const cardTags = cardTagsStr.split(',').map(t => t.trim().toLowerCase());
+        tagHandles = cardTags.map(tag => {
+          return tag.toLowerCase()
+            .replace(/[^a-z0-9]+/g, '-')
+            .replace(/^-+|-+$/g, '');
+        });
+      }
 
       // 1. Check Clubes match (logical OR within group)
       let clubMatch = false;
